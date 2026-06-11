@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Matteportalen</title>
+    <style>
+        body { font-family: sans-serif; background: #eef2f5; margin: 0; padding: 20px; text-align: center; }
+        .hidden { display: none; }
+        .button { padding: 15px 30px; background: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2rem; margin: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="meny">
+        <h1>Matteportalen</h1>
+        <button class="button" onclick="visa('studion')">Öppna Mattestudion</button>
+    </div>
+
+    <div id="studion" class="hidden">
+        <button onclick="location.reload()">Tillbaka till start</button>
+        <h2>Mattestudion</h2>
+        <div id="test-yta">Här kommer uppgifterna finnas.</div>
+    </div>
+
+    <script>
+        function visa(id) {
+            document.getElementById('meny').classList.add('hidden');
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById('test-yta').innerText = "Knapparna fungerar nu!";
+        }
+    </script>
+</body>
+</html>
