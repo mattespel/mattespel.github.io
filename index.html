@@ -376,8 +376,8 @@
         </div>
         <div class="game-card">
             <div>
-                <h3>Mattestudion (Åk 2, SVÅR)</h3>
-                <p>Svårare uppgifter från bedömningsstödet för Åk 2. Talets grannar, högre talföljder, multiplikation och mer.</p>
+                <h3>Mattestudion (Åk 2)</h3>
+                <p>Uppgifter från bedömningsstödet för Åk 2. Talets grannar, högre talföljder, multiplikation och mer.</p>
             </div>
             <button class="start-game-btn color-4" id="btn-game4">Starta Mattestudion Åk 2</button>
         </div>
@@ -785,7 +785,7 @@ function chk(iId, fId, ans) {
 }
 
 // =====================
-// SPEL 4 (ÅK 2) LOGIK
+// SPEL 4 (ÅK 2) LOGIK (MED DEN NYA AFFÄREN)
 // =====================
 let ans4_grannar=[], ans4_talfoljd=[], ans4_tallinjer=[], ans4_likheter=[], ans4_multi=[], ans4_problem=[];
 
@@ -850,7 +850,7 @@ function g4_gen_tallinjer() {
     for(let i=0; i<5; i++) {
         let isHigh = Math.random()>0.5;
         let min = isHigh ? 50 : 0, max = isHigh ? 100 : 100;
-        let steps = isHigh ? 10 : 20; // antal småstreck
+        let steps = isHigh ? 10 : 20;
         let stepVal = (max-min)/steps;
         let targetIdx = getRandomInt(1, steps-1);
         let target = min + targetIdx * stepVal;
@@ -897,7 +897,7 @@ function g4_gen_likheter() {
 function g4_gen_multi() {
     let c = document.getElementById('game4-container-multi'); c.innerHTML=''; ans4_multi=[];
     for(let i=0; i<5; i++) {
-        let isAddForm = (i===4); // Sista uppgiften är addition till multiplikation
+        let isAddForm = (i===4);
         let html = `<div class="game3-task-card"><strong>${String.fromCharCode(97+i)})</strong> &nbsp;&nbsp;`;
         let inp = `<input class="game3-quiz-input" id="g4-i-mul-${i}"><span class="game3-feedback-mark" id="g4-fb-mul-${i}"></span>`;
         if(isAddForm) {
@@ -913,12 +913,11 @@ function g4_gen_multi() {
     }
 }
 
-function function g4_gen_problem() {
+function g4_gen_problem() {
     let c = document.getElementById('game4-container-problem'); 
     c.innerHTML = ''; 
     ans4_problem = [];
     
-    // Skapa innehållet i "Leksaksaffären"
     let availableItems = [
         {n: "Nallen", e: "🧸", p: getRandomInt(40, 80)},
         {n: "Bilen", e: "🚗", p: getRandomInt(30, 60)},
@@ -927,13 +926,11 @@ function function g4_gen_problem() {
         {n: "Pusslet", e: "🧩", p: getRandomInt(50, 80)}
     ];
 
-    // Välj 3 slumpmässiga saker som köps i Uppgift 1
     let q1_items = [...availableItems].sort(()=>Math.random()-0.5).slice(0,3);
     let q1_sum = q1_items[0].p + q1_items[1].p + q1_items[2].p;
-    let betalarMed = (q1_sum < 100) ? 100 : 200; // Bestämmer om hen betalar med 100-lapp eller 200-lapp
+    let betalarMed = (q1_sum < 100) ? 100 : 200; 
     ans4_problem.push(betalarMed - q1_sum);
 
-    // --- RITA UPP BILDEN AV AFFÄREN ---
     let shopHtml = `
         <div style="background:#fff3e0; border:3px dashed #ffb74d; padding:20px; border-radius:15px; margin-bottom:25px; width:100%; box-sizing:border-box; text-align:center;">
             <h3 style="margin-top:0; color:#ef6c00; font-size:1.5rem;">🧸 Leksaksaffären 🚗</h3>
@@ -949,7 +946,6 @@ function function g4_gen_problem() {
     });
     shopHtml += `</div></div>`;
 
-    // --- UPPGIFT 1 ---
     let h1 = `
         <div class="game3-task-card" style="flex-direction:column; align-items:flex-start;">
             ${shopHtml}
@@ -963,7 +959,6 @@ function function g4_gen_problem() {
             </div>
         </div>`;
     
-    // --- UPPGIFT 2 (Delningsdivision) ---
     let kids = ["Sami, Anna, Filip och Leia", "Maja, Hugo och Leo", "Nora och Elias"];
     let numKids = [4, 3, 2];
     let kIdx = getRandomInt(0,2);
@@ -981,25 +976,6 @@ function function g4_gen_problem() {
                 <span class="game3-feedback-mark" id="g4-fb-prob-1" style="font-size:1.5rem;"></span>
             </div>
         </div>`;
-    
-    c.innerHTML = h1 + h2;
-} {
-    let c = document.getElementById('game4-container-problem'); c.innerHTML=''; ans4_problem=[];
-    
-    // Q1: Köp 3 saker med 200 kr
-    let items = [{n:"bilen", p:getRandomInt(30,60)}, {n:"bollen", p:getRandomInt(20,40)}, {n:"nallen", p:getRandomInt(50,80)}];
-    let sum = items[0].p + items[1].p + items[2].p; // Alltid under 200
-    ans4_problem.push(200 - sum);
-    let h1 = `<div class="game3-task-card" style="flex-direction:column;align-items:flex-start;"><strong>Uppgift 1.</strong><br>Anton köper ${items[0].n} (${items[0].p} kr), ${items[1].n} (${items[1].p} kr) och ${items[2].n} (${items[2].p} kr). Han lämnar fram 200 kr. Hur mycket får han tillbaka?<br><div style="margin-top:10px;"><input class="game3-quiz-input" id="g4-i-prob-0" style="width:80px;"> kr <span class="game3-feedback-mark" id="g4-fb-prob-0"></span></div></div>`;
-    
-    // Q2: Dela lika
-    let kids = ["Sami, Anna, Filip och Leia", "Maja, Hugo och Leo", "Nora och Elias"];
-    let numKids = [4, 3, 2];
-    let kIdx = getRandomInt(0,2);
-    let perKid = getRandomInt(5, 12);
-    let total = numKids[kIdx] * perKid;
-    ans4_problem.push(perKid);
-    let h2 = `<div class="game3-task-card" style="flex-direction:column;align-items:flex-start;"><strong>Uppgift 2.</strong><br>${kids[kIdx]} ska dela på ${total} kronor. Hur många kronor får varje barn?<br><div style="margin-top:10px;"><input class="game3-quiz-input" id="g4-i-prob-1" style="width:80px;"> kr <span class="game3-feedback-mark" id="g4-fb-prob-1"></span></div></div>`;
     
     c.innerHTML = h1 + h2;
 }
