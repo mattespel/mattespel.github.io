@@ -6,280 +6,108 @@
     <title>Matte-Portalen</title>
     <style>
         :root {
-            --primary: #4a90e2;
-            --secondary: #f5a623;
-            --success: #2ecc71;
-            --error: #e74c3c;
-            --dark: #333;
-            --light: #f9f9f9;
-            --portal-bg: #eef2f5;
-            --tioruta-primary: #2196F3;
-            --tioruta-secondary: #FF9800;
-            --dot-base: #2196F3;
-            --dot-action: #FF9800;
-            --ak2-primary: #9c27b0;
-            --ak2-bg: #f3e5f5;
+            --primary: #4a90e2; --secondary: #f5a623; --success: #2ecc71; --error: #e74c3c;
+            --dark: #333; --light: #f9f9f9; --portal-bg: #eef2f5;
+            --tioruta-primary: #2196F3; --tioruta-secondary: #FF9800;
+            --dot-base: #2196F3; --dot-action: #FF9800;
+            --ak2-primary: #9c27b0; --ak2-bg: #f3e5f5;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--portal-bg);
-            color: var(--dark);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            transition: background-color 0.3s ease;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--portal-bg); color: var(--dark); margin: 0; padding: 0; min-height: 100vh; transition: background-color 0.3s ease; }
         .hidden { display: none !important; }
 
-        /* --- PORTAL --- */
-        .portal-header {
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+        /* PORTAL */
+        .portal-header { background-color: var(--primary); color: white; text-align: center; padding: 2rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .portal-header h1 { margin: 0; font-size: 2.5rem; }
         .portal-header p { margin: 5px 0 0 0; opacity: 0.9; }
-
-        .menu-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .game-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+        .menu-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .game-card { background: white; border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 6px 15px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
         .game-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .game-card h3 { margin-top: 0; color: #333; font-size: 1.5rem; }
         .game-card p { color: #666; font-size: 1rem; line-height: 1.4; margin-bottom: 20px; }
-
-        .start-game-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+        
+        .start-game-btn { color: white; border: none; padding: 12px 20px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: opacity 0.2s; }
+        .start-game-btn:hover { opacity: 0.9; }
         .start-game-btn.color-1 { background-color: #4caf50; }
         .start-game-btn.color-2 { background-color: #2196F3; }
         .start-game-btn.color-3 { background-color: #f5a623; }
         .start-game-btn.color-4 { background-color: var(--ak2-primary); }
-
-        .portal-back-btn {
-            background-color: #607d8b;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-top: 20px;
-            transition: background 0.2s;
-        }
+        
+        .portal-back-btn { background-color: #607d8b; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; margin-top: 20px; transition: background 0.2s; }
         .portal-back-btn:hover { background-color: #455a64; }
 
-        /* --- SPEL 1 --- */
+        /* SPEL 1 */
         .game1-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px; }
-        .game1-container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            text-align: center;
-            max-width: 500px;
-            width: 95%;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .game1-menu-btn {
-            display: block; width: 100%; padding: 20px; margin: 15px 0;
-            font-size: 1.5rem; border: none; border-radius: 12px;
-            cursor: pointer; color: white; font-weight: bold; transition: transform 0.2s, box-shadow 0.2s;
-        }
+        .game1-container { background-color: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); text-align: center; max-width: 500px; width: 95%; min-height: 400px; display: flex; flex-direction: column; justify-content: center; }
+        .game1-menu-btn { display: block; width: 100%; padding: 20px; margin: 15px 0; font-size: 1.5rem; border: none; border-radius: 12px; cursor: pointer; color: white; font-weight: bold; transition: transform 0.2s; }
         .game1-btn-plus { background-color: #4caf50; box-shadow: 0 5px #2e7d32; }
-        .game1-btn-plus:hover { transform: translateY(-2px); box-shadow: 0 7px #2e7d32; }
-        .game1-btn-plus:active { transform: translateY(0); box-shadow: 0 2px #2e7d32; }
         .game1-btn-minus { background-color: #f44336; box-shadow: 0 5px #c62828; }
-        .game1-btn-minus:hover { transform: translateY(-2px); box-shadow: 0 7px #c62828; }
-        .game1-btn-minus:active { transform: translateY(0); box-shadow: 0 2px #c62828; }
-
-        .game1-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; background: #eceff1; padding: 10px;
-            border-radius: 10px; font-weight: bold; color: #455a64;
-        }
+        .game1-menu-btn:hover { transform: translateY(-2px); }
+        .game1-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #eceff1; padding: 10px; border-radius: 10px; font-weight: bold; color: #455a64; }
         .game1-timer { font-family: monospace; font-size: 1.4rem; color: #d84315; }
-        .game1-question-box {
-            font-size: 4rem; font-weight: bold; color: #37474f;
-            margin: 20px 0; padding: 20px;
-            border: 3px dashed #b0bec5; border-radius: 15px; background-color: #fafafa;
-        }
+        .game1-question-box { font-size: 4rem; font-weight: bold; color: #37474f; margin: 20px 0; padding: 20px; border: 3px dashed #b0bec5; border-radius: 15px; background-color: #fafafa; }
         .game1-options-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        button.game1-num-btn {
-            background-color: #0288d1; color: white; border: none;
-            padding: 15px 0; font-size: 1.5rem; border-radius: 8px;
-            cursor: pointer; font-weight: bold; transition: background 0.2s;
-        }
-        button.game1-num-btn:hover { background-color: #0277bd; }
-        button.game1-num-btn:active { background-color: #01579b; }
+        button.game1-num-btn { background-color: #0288d1; color: white; border: none; padding: 15px 0; font-size: 1.5rem; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .game1-result-time { font-size: 3rem; color: #d84315; font-weight: bold; margin: 20px 0; }
 
-        /* --- SPEL 2 --- */
+        /* SPEL 2 */
         .game2-wrapper { display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
-        .game2-container {
-            background-color: white; padding: 30px; border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 650px; width: 100%; text-align: center;
-        }
-        .game2-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #eee;
-        }
+        .game2-container { background-color: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 650px; width: 100%; text-align: center; }
+        .game2-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #eee; }
         .game2-mode-selector { display: flex; gap: 10px; }
-        .game2-mode-btn {
-            padding: 8px 15px; border: 2px solid var(--tioruta-primary);
-            background: white; color: var(--tioruta-primary);
-            border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.2s;
-        }
+        .game2-mode-btn { padding: 8px 15px; border: 2px solid var(--tioruta-primary); background: white; color: var(--tioruta-primary); border-radius: 20px; cursor: pointer; font-weight: bold; }
         .game2-mode-btn.active { background: var(--tioruta-primary); color: white; }
-        .game2-score-board {
-            font-size: 20px; font-weight: bold; color: var(--secondary); display: flex; align-items: center; gap: 10px;
-        }
+        .game2-score-board { font-size: 20px; font-weight: bold; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
         .game2-progress-bar { width: 100px; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
         .game2-progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.5s ease; }
-
         .game2-ten-frames { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-        .game2-frame {
-            display: grid; grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(2, 1fr); gap: 5px;
-            border: 2px solid #555; padding: 5px; background: white;
-        }
-        .game2-dot {
-            width: 30px; height: 30px; border-radius: 50%;
-            background-color: transparent; border: 2px dashed #ccc; transition: all 0.3s;
-        }
+        .game2-frame { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr); gap: 5px; border: 2px solid #555; padding: 5px; background: white; }
+        .game2-dot { width: 30px; height: 30px; border-radius: 50%; background-color: transparent; border: 2px dashed #ccc; transition: all 0.3s; }
         .game2-dot.filled { background-color: var(--dot-base); border: 2px solid var(--dot-base); }
         .game2-dot.action { background-color: var(--dot-action); border: 2px solid var(--dot-action); transform: scale(1.1); }
         .game2-dot.removed { background-color: #e0e0e0; opacity: 0.3; border: 2px solid #ccc; }
-
-        .game2-math-problem {
-            font-size: 42px; margin-bottom: 10px; display: flex;
-            align-items: center; justify-content: center; gap: 15px;
-        }
-        .game2-split-container {
-            position: relative; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center;
-        }
-        .game2-subtrahend-circle {
-            width: 60px; height: 60px; border: 3px solid var(--tioruta-primary);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 28px; font-weight: bold; background: white; z-index: 2;
-        }
-        .game2-branches {
-            display: flex; justify-content: center; gap: 60px; margin-top: 10px;
-            width: 150px; border-top: 3px solid #ccc; position: relative;
-        }
-        .game2-branches::before {
-            content: ''; position: absolute; top: -10px; left: 50%; height: 10px; width: 3px; background: #ccc;
-        }
+        .game2-math-problem { font-size: 42px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .game2-split-container { position: relative; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
+        .game2-subtrahend-circle { width: 60px; height: 60px; border: 3px solid var(--tioruta-primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold; background: white; z-index: 2; }
+        .game2-branches { display: flex; justify-content: center; gap: 60px; margin-top: 10px; width: 150px; border-top: 3px solid #ccc; position: relative; }
+        .game2-branches::before { content: ''; position: absolute; top: -10px; left: 50%; height: 10px; width: 3px; background: #ccc; }
         .game2-split-inputs { display: flex; justify-content: center; gap: 40px; margin-top: 10px; }
-        .game2-step-input, .game2-main-result {
-            text-align: center; border: 2px solid #ccc; border-radius: 8px; font-size: 24px; font-family: inherit;
-        }
+        .game2-step-input, .game2-main-result { text-align: center; border: 2px solid #ccc; border-radius: 8px; font-size: 24px; font-family: inherit; }
         .game2-step-input { width: 50px; height: 50px; }
         .game2-main-result { width: 70px; height: 60px; font-size: 32px; border-width: 3px; }
         .game2-step-input.correct { border-color: var(--success); background-color: #e8f5e9; }
         .game2-step-input.wrong { border-color: var(--error); background-color: #ffebee; }
         .game2-equation-row { font-size: 28px; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .game2-controls { margin-top: 30px; }
-        .game2-btn-check {
-            padding: 12px 30px; font-size: 18px; cursor: pointer; border: none;
-            border-radius: 8px; font-weight: bold; background-color: var(--tioruta-primary); color: white; transition: background 0.2s;
-        }
-        .game2-btn-check:hover { background-color: #1976D2; }
+        .game2-btn-check { padding: 12px 30px; font-size: 18px; cursor: pointer; border: none; border-radius: 8px; font-weight: bold; background-color: var(--tioruta-primary); color: white; margin-top: 20px; }
         .game2-feedback { margin-top: 15px; font-weight: bold; font-size: 18px; height: 24px; }
 
-        /* --- MATTESTUDION (Gemensam layout) --- */
+        /* MATTESTUDION (Gemensam) */
         .game3-wrapper { display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .game3-nav { margin: 20px 0; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .game3-nav button {
-            background-color: white; border: 2px solid var(--primary); color: var(--primary);
-            padding: 10px 20px; font-size: 1rem; font-weight: bold;
-            border-radius: 25px; cursor: pointer; transition: all 0.2s ease;
-        }
-        .game3-nav button.ak2-btn {
-            border-color: var(--ak2-primary); color: var(--ak2-primary);
-        }
-        .game3-nav button:hover, .game3-nav button.active {
-            background-color: var(--primary); color: white; box-shadow: 0 4px 8px rgba(74,144,226,0.3);
-        }
-        .game3-nav button.ak2-btn:hover, .game3-nav button.ak2-btn.active {
-            background-color: var(--ak2-primary); color: white; box-shadow: 0 4px 8px rgba(156,39,176,0.3);
-        }
-        .game3-main {
-            width: 100%; max-width: 800px; background: white; padding: 30px;
-            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 40px; box-sizing: border-box;
-        }
+        .game3-nav button { background-color: white; border: 2px solid var(--primary); color: var(--primary); padding: 10px 20px; font-size: 1rem; font-weight: bold; border-radius: 25px; cursor: pointer; }
+        .game3-nav button.ak2-btn { border-color: var(--ak2-primary); color: var(--ak2-primary); }
+        .game3-nav button:hover, .game3-nav button.active { background-color: var(--primary); color: white; }
+        .game3-nav button.ak2-btn:hover, .game3-nav button.ak2-btn.active { background-color: var(--ak2-primary); color: white; }
+        .game3-main { width: 100%; max-width: 800px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 40px; box-sizing: border-box; }
         .game3-page { display: none; }
         .game3-page.active { display: block; }
         .game3-main h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.5rem; }
         #portal-game3 .game3-main h2 { color: var(--primary); }
         #portal-game4 .game3-main h2 { color: var(--ak2-primary); }
-
-        .game3-controls { margin-bottom: 20px; display: flex; gap: 15px; }
-        .game3-btn-generate {
-            background-color: var(--secondary); color: white; border: none;
-            padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 8px;
-            cursor: pointer; transition: background 0.2s;
-        }
-        .game3-btn-generate:hover { background-color: #e09216; }
-        .game3-btn-correct {
-            background-color: var(--primary); color: white; border: none;
-            padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 8px;
-            cursor: pointer; transition: background 0.2s; margin-top: 20px; width: 100%;
-        }
+        .game3-btn-generate { background-color: var(--secondary); color: white; border: none; padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; margin-bottom: 15px; }
+        .game3-btn-correct { background-color: var(--primary); color: white; border: none; padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; width: 100%; }
         #portal-game4 .game3-btn-correct { background-color: var(--ak2-primary); }
-        .game3-btn-correct:hover { opacity: 0.9; }
-
         .game3-quiz-container { display: flex; flex-direction: column; gap: 20px; }
-        .game3-task-card {
-            background: var(--light); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary);
-            font-size: 1.2rem; display: flex; align-items: center; flex-wrap: wrap; gap: 15px; position: relative;
-        }
+        .game3-task-card { background: var(--light); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); font-size: 1.2rem; display: flex; align-items: center; flex-wrap: wrap; gap: 15px; position: relative; }
         #portal-game4 .game3-task-card { border-left-color: var(--ak2-primary); }
-
-        .game3-quiz-input {
-            width: 60px; padding: 5px 10px; font-size: 1.1rem; text-align: center;
-            border: 2px dashed #999; border-radius: 4px; background: #fff; transition: all 0.3s ease;
-        }
+        .game3-quiz-input { width: 60px; padding: 5px 10px; font-size: 1.1rem; text-align: center; border: 2px dashed #999; border-radius: 4px; background: #fff; }
         .game3-quiz-input.correct { background-color: #d4edda !important; border-color: var(--success) !important; color: #155724; }
         .game3-quiz-input.incorrect { background-color: #f8d7da !important; border-color: var(--error) !important; color: #721c24; }
         .game3-feedback-mark { font-weight: bold; margin-left: 5px; }
         .game3-feedback-mark.correct { color: var(--success); }
         .game3-feedback-mark.incorrect { color: var(--error); }
 
-        /* Tallinjer */
+        /* Element för Mattestudion */
         .game3-number-line-wrapper { width: 100%; margin-top: 50px; margin-bottom: 45px; }
         .game3-number-line { position: relative; height: 40px; border-bottom: 3px solid var(--dark); margin: 20px 10px 10px 10px; }
         .game3-line-mark { position: absolute; bottom: 0; width: 2px; height: 15px; background: var(--dark); }
@@ -288,61 +116,25 @@
         .game3-line-pointer { position: absolute; bottom: 5px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 80px; }
         .game3-line-pointer input { margin-bottom: 5px; z-index: 10; }
         .game3-line-pointer::after { content: "↓"; font-size: 1.6rem; color: #d0021b; font-weight: bold; line-height: 1; }
-
-        /* Diverse layouter */
-        .game3-cloud-container {
-            background: #e1f5fe; border: 2px dotted #4fc3f7; padding: 15px; border-radius: 50px;
-            display: inline-flex; gap: 15px; font-weight: bold; letter-spacing: 2px; margin-right: 15px;
-        }
-        .game3-order-inputs { display: inline-flex; gap: 8px; align-items: center; }
-        .game3-order-inputs input { width: 45px; }
-
+        .game3-cloud-container { background: #e1f5fe; border: 2px dotted #4fc3f7; padding: 15px; border-radius: 50px; display: inline-flex; gap: 15px; font-weight: bold; letter-spacing: 2px; }
         .game3-split-tree { display: inline-flex; flex-direction: column; align-items: center; margin: 10px; }
-        .game3-tree-top {
-            width: 60px; height: 60px; border: 2px solid var(--dark); background: white;
-            display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold;
-            margin-bottom: 20px; position: relative;
-        }
+        .game3-tree-top { width: 60px; height: 60px; border: 2px solid var(--dark); background: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; margin-bottom: 20px; position: relative; }
         .game3-tree-top::before, .game3-tree-top::after { content: ""; position: absolute; top: 58px; width: 2px; height: 22px; background: var(--dark); }
         .game3-tree-top::before { left: 30px; transform: rotate(30deg); transform-origin: top left; }
         .game3-tree-top::after { right: 30px; transform: rotate(-30deg); transform-origin: top right; }
         .game3-tree-bottom-row { display: flex; gap: 30px; align-items: flex-start; }
-        .game3-tree-box {
-            width: 60px; height: 60px; border: 2px solid var(--dark); background: white;
-            display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold;
-        }
-        .game3-tree-bottom-row input { width: 40px; height: 40px; font-size: 1.3rem; border: 2px dashed #999; padding: 0; }
-        .game3-tree-feedback-container { display: flex; flex-direction: column; align-items: center; position: relative; }
-        .game3-tree-feedback-container .game3-feedback-mark { position: absolute; bottom: -25px; margin: 0; }
-
-        /* Problemlösning (Åk 1) */
+        .game3-tree-box { width: 60px; height: 60px; border: 2px solid var(--dark); background: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; }
         .game3-shop-grid { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 15px 0; width: 100%; }
-        .game3-shop-item {
-            border: 3px solid #ccc; border-radius: 12px; padding: 15px 10px; cursor: pointer;
-            text-align: center; width: 90px; background: white; transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); user-select: none;
-        }
-        .game3-shop-item:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .game3-shop-item { border: 3px solid #ccc; border-radius: 12px; padding: 15px 10px; cursor: pointer; text-align: center; width: 90px; background: white; user-select: none; }
         .game3-shop-item.selected { border-color: var(--primary); background-color: #e1f5fe; transform: scale(1.05); }
         .game3-shop-item.correct { border-color: var(--success); background-color: #d4edda; }
         .game3-shop-item.incorrect { border-color: var(--error); background-color: #f8d7da; }
         .game3-emoji { font-size: 2.5rem; margin-bottom: 5px; }
-        .game3-price { font-weight: bold; font-size: 1.1rem; color: #444; }
-
-        /* Grannar (Åk 2) */
         .g4-grannar-row { display: flex; gap: 0px; align-items: center; margin: 10px 0; }
-        .g4-grannar-box {
-            width: 60px; height: 50px; border: 2px solid var(--dark); display: flex; 
-            align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold;
-            background: #eee; margin-right: -2px;
-        }
-        .g4-grannar-box input {
-            width: 100%; height: 100%; border: none; text-align: center; font-size: 1.2rem;
-            background: white; margin: 0; padding: 0; box-sizing: border-box; outline: none;
-        }
+        .g4-grannar-box { width: 60px; height: 50px; border: 2px solid var(--dark); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; background: #eee; margin-right: -2px; }
+        .g4-grannar-box input { width: 100%; height: 100%; border: none; text-align: center; font-size: 1.2rem; background: white; outline: none; }
         .g4-grannar-box input.correct { background-color: #d4edda; }
         .g4-grannar-box input.incorrect { background-color: #f8d7da; }
-
     </style>
 </head>
 <body>
@@ -356,30 +148,30 @@
         <div class="game-card">
             <div>
                 <h3>Lilla plus &amp; minus</h3>
-                <p>Träna på snabbhet i huvudräkning inom talområdet 0–10. Svara på 30 slumpmässiga uppgifter så snabbt du kan!</p>
+                <p>Träna på snabbhet i huvudräkning 0–10. 30 uppgifter på tid!</p>
             </div>
-            <button class="start-game-btn color-1" id="btn-game1">Starta Lilla plus/minus</button>
+            <button class="start-game-btn color-1" onclick="showView('portal-game1'); game1_showMenu();">Starta Lilla plus/minus</button>
         </div>
         <div class="game-card">
             <div>
                 <h3>Tiotalsövergång</h3>
-                <p>Lär dig strategin för tiotalsövergångar med hjälp av interaktiva tiorutor. Räkna först till 10 och sedan resten.</p>
+                <p>Lär dig strategin med hjälp av interaktiva tiorutor.</p>
             </div>
-            <button class="start-game-btn color-2" id="btn-game2">Starta Tiotalsövergång</button>
+            <button class="start-game-btn color-2" onclick="showView('portal-game2'); document.body.style.backgroundColor='#f0f4f8'; game2_initGame();">Starta Tiotalsövergång</button>
         </div>
         <div class="game-card">
             <div>
                 <h3>Mattestudion (Åk 1)</h3>
-                <p>Blandade uppgifter ur bedömningsstödet för Åk 1. Tallinjer, likheter, sifferträd och problemlösning.</p>
+                <p>Uppgifter ur bedömningsstödet Åk 1. Tallinjer, sifferträd m.m.</p>
             </div>
-            <button class="start-game-btn color-3" id="btn-game3">Starta Mattestudion Åk 1</button>
+            <button class="start-game-btn color-3" onclick="showView('portal-game3'); document.body.style.backgroundColor='#eef2f5'; game3_switchPage('tallinjer');">Starta Mattestudion Åk 1</button>
         </div>
         <div class="game-card">
             <div>
                 <h3>Mattestudion (Åk 2)</h3>
-                <p>Uppgifter från bedömningsstödet för Åk 2. Talets grannar, högre talföljder, multiplikation och mer.</p>
+                <p>Uppgifter från bedömningsstödet Åk 2. Inklusive den nya leksaksaffären!</p>
             </div>
-            <button class="start-game-btn color-4" id="btn-game4">Starta Mattestudion Åk 2</button>
+            <button class="start-game-btn color-4" onclick="showView('portal-game4'); document.body.style.backgroundColor='var(--ak2-bg)'; game4_switchPage('grannar');">Starta Mattestudion Åk 2</button>
         </div>
     </div>
 </div>
@@ -389,10 +181,10 @@
         <div class="game1-container">
             <div id="game1-menu-view">
                 <h2>Välj Spel</h2>
-                <button class="game1-menu-btn game1-btn-plus" id="game1-start-plus">Lilla Plus (+)</button>
-                <button class="game1-menu-btn game1-btn-minus" id="game1-start-minus">Lilla Minus (-)</button>
+                <button class="game1-menu-btn game1-btn-plus" onclick="game1_startGame('plus')">Lilla Plus (+)</button>
+                <button class="game1-menu-btn game1-btn-minus" onclick="game1_startGame('minus')">Lilla Minus (-)</button>
                 <br>
-                <button class="portal-back-btn" id="game1-back-portal">← Till huvudmenyn</button>
+                <button class="portal-back-btn" onclick="returnToPortal()">← Till huvudmenyn</button>
             </div>
             <div id="game1-active-view" class="hidden">
                 <div class="game1-header">
@@ -402,14 +194,14 @@
                 </div>
                 <div class="game1-question-box" id="game1-question">?</div>
                 <div class="game1-options-grid" id="game1-options"></div>
-                <button class="portal-back-btn" id="game1-abort-btn">Avbryt / Tillbaka</button>
+                <button class="portal-back-btn" onclick="game1_showMenu()">Avbryt / Tillbaka</button>
             </div>
             <div id="game1-end-view" class="hidden">
                 <h2>Bra jobbat!</h2>
                 <p>Din tid blev:</p>
                 <div class="game1-result-time" id="game1-final-time">00:00</div>
-                <button class="game1-menu-btn game1-btn-plus" id="game1-play-again">Spela igen</button>
-                <button class="portal-back-btn" id="game1-end-back">Tillbaka till spelmeny</button>
+                <button class="game1-menu-btn game1-btn-plus" onclick="game1_startGame(game1_currentMode)">Spela igen</button>
+                <button class="portal-back-btn" onclick="game1_showMenu()">Tillbaka till spelmeny</button>
             </div>
         </div>
     </div>
@@ -420,8 +212,8 @@
         <div class="game2-container">
             <div class="game2-header">
                 <div class="game2-mode-selector">
-                    <button class="game2-mode-btn active" id="game2-btnAdd">Addition (+)</button>
-                    <button class="game2-mode-btn" id="game2-btnSub">Subtraktion (-)</button>
+                    <button class="game2-mode-btn active" id="game2-btnAdd" onclick="game2_setMode('add')">Addition (+)</button>
+                    <button class="game2-mode-btn" id="game2-btnSub" onclick="game2_setMode('sub')">Subtraktion (-)</button>
                 </div>
                 <div class="game2-score-board">
                     <span>Poäng: <span id="game2-scoreText">0</span>/20</span>
@@ -450,9 +242,9 @@
             </div>
             <div class="game2-feedback" id="game2-feedback"></div>
             <div class="game2-controls">
-                <button class="game2-btn-check" id="game2-checkBtn">Kontrollera</button>
+                <button class="game2-btn-check" onclick="game2_checkAnswer()">Kontrollera</button>
                 <br>
-                <button class="portal-back-btn" id="game2-back-portal">← Till huvudmenyn</button>
+                <button class="portal-back-btn" onclick="returnToPortal()">← Till huvudmenyn</button>
             </div>
         </div>
     </div>
@@ -462,54 +254,53 @@
     <div class="game3-wrapper">
         <div class="portal-header" style="width:100%; max-width:800px; border-radius:12px; margin-bottom:10px;">
             <h1>Mattestudion (Åk 1)</h1>
-            <p>Slumpa fram uppgifter och testa dina svar</p>
         </div>
         <div class="game3-nav">
-            <button id="game3-btn-tallinjer" class="active">Tallinjer</button>
-            <button id="game3-btn-storleksordna">Storleksordna</button>
-            <button id="game3-btn-likheter">Likhetstecknet</button>
-            <button id="game3-btn-delaupp">Dela upp talet</button>
-            <button id="game3-btn-talfoljd">Talföljder</button>
-            <button id="game3-btn-problem">Problemlösning</button>
+            <button id="game3-btn-tallinjer" class="active" onclick="game3_switchPage('tallinjer')">Tallinjer</button>
+            <button id="game3-btn-storleksordna" onclick="game3_switchPage('storleksordna')">Storleksordna</button>
+            <button id="game3-btn-likheter" onclick="game3_switchPage('likheter')">Likhetstecknet</button>
+            <button id="game3-btn-delaupp" onclick="game3_switchPage('delaupp')">Dela upp talet</button>
+            <button id="game3-btn-talfoljd" onclick="game3_switchPage('talfoljd')">Talföljder</button>
+            <button id="game3-btn-problem" onclick="game3_switchPage('problem')">Problemlösning</button>
         </div>
         <div class="game3-main">
             <section id="game3-page-tallinjer" class="game3-page active">
                 <h2>Hitta talet på tallinjen</h2>
-                <button class="game3-btn-generate" id="gen3-tallinjer">Slumpa 5 nya uppgifter</button>
-                <div id="game3-container-tallinjer" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr3-tallinjer">Rätta mina svar</button>
+                <button class="game3-btn-generate" onclick="g3_gen_tallinjer()">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-tallinjer" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game3_correctQuiz('tallinjer')">Rätta mina svar</button>
             </section>
             <section id="game3-page-storleksordna" class="game3-page">
                 <h2>Storleksordna talen (Minsta först)</h2>
-                <button class="game3-btn-generate" id="gen3-storleksordna">Slumpa 5 nya uppgifter</button>
-                <div id="game3-container-storleksordna" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr3-storleksordna">Rätta mina svar</button>
+                <button class="game3-btn-generate" onclick="g3_gen_storleksordna()">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-storleksordna" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game3_correctQuiz('storleksordna')">Rätta mina svar</button>
             </section>
             <section id="game3-page-likheter" class="game3-page">
                 <h2>Skriv talet som saknas</h2>
-                <button class="game3-btn-generate" id="gen3-likheter">Slumpa 5 nya uppgifter</button>
-                <div id="game3-container-likheter" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr3-likheter">Rätta mina svar</button>
+                <button class="game3-btn-generate" onclick="g3_gen_likheter()">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-likheter" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game3_correctQuiz('likheter')">Rätta mina svar</button>
             </section>
             <section id="game3-page-delaupp" class="game3-page">
                 <h2>Dela upp talet</h2>
-                <button class="game3-btn-generate" id="gen3-delaupp">Slumpa 5 nya uppgifter</button>
-                <div id="game3-container-delaupp" class="game3-quiz-container" style="flex-direction:row; flex-wrap:wrap; justify-content:space-around; gap:30px; margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr3-delaupp">Rätta mina svar</button>
+                <button class="game3-btn-generate" onclick="g3_gen_delaupp()">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-delaupp" class="game3-quiz-container" style="flex-direction:row; flex-wrap:wrap; justify-content:space-around;"></div>
+                <button class="game3-btn-correct" onclick="game3_correctQuiz('delaupp')">Rätta mina svar</button>
             </section>
             <section id="game3-page-talfoljd" class="game3-page">
                 <h2>Fortsätt talföljden</h2>
-                <button class="game3-btn-generate" id="gen3-talfoljd">Slumpa 5 nya uppgifter</button>
-                <div id="game3-container-talfoljd" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr3-talfoljd">Rätta mina svar</button>
+                <button class="game3-btn-generate" onclick="g3_gen_talfoljd()">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-talfoljd" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game3_correctQuiz('talfoljd')">Rätta mina svar</button>
             </section>
             <section id="game3-page-problem" class="game3-page">
                 <h2>Problemlösningsuppgifter</h2>
-                <button class="game3-btn-generate" id="gen3-problem">Slumpa 2 nya uppgifter</button>
-                <div id="game3-container-problem" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr3-problem">Rätta mina svar</button>
+                <button class="game3-btn-generate" onclick="g3_gen_problem()">Slumpa 2 nya uppgifter</button>
+                <div id="game3-container-problem" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game3_correctQuiz('problem')">Rätta mina svar</button>
             </section>
-            <center><button class="portal-back-btn" id="game3-back-portal" style="width:100%; padding:12px;">← Till huvudmenyn</button></center>
+            <center><button class="portal-back-btn" onclick="returnToPortal()" style="width:100%; padding:12px;">← Till huvudmenyn</button></center>
         </div>
     </div>
 </div>
@@ -518,54 +309,53 @@
     <div class="game3-wrapper">
         <div class="portal-header" style="width:100%; max-width:800px; border-radius:12px; margin-bottom:10px; background-color:var(--ak2-primary);">
             <h1>Mattestudion (Åk 2)</h1>
-            <p>Slumpa fram uppgifter från höstterminen åk 2</p>
         </div>
         <div class="game3-nav">
-            <button class="ak2-btn active" id="game4-btn-grannar">Talets grannar</button>
-            <button class="ak2-btn" id="game4-btn-talfoljd">Talföljder</button>
-            <button class="ak2-btn" id="game4-btn-tallinjer">Tallinjer</button>
-            <button class="ak2-btn" id="game4-btn-likheter">Likheter (+/-)</button>
-            <button class="ak2-btn" id="game4-btn-multi">Multiplikation</button>
-            <button class="ak2-btn" id="game4-btn-problem">Problemlösning</button>
+            <button class="ak2-btn active" id="game4-btn-grannar" onclick="game4_switchPage('grannar')">Talets grannar</button>
+            <button class="ak2-btn" id="game4-btn-talfoljd" onclick="game4_switchPage('talfoljd')">Talföljder</button>
+            <button class="ak2-btn" id="game4-btn-tallinjer" onclick="game4_switchPage('tallinjer')">Tallinjer</button>
+            <button class="ak2-btn" id="game4-btn-likheter" onclick="game4_switchPage('likheter')">Likheter (+/-)</button>
+            <button class="ak2-btn" id="game4-btn-multi" onclick="game4_switchPage('multi')">Multiplikation</button>
+            <button class="ak2-btn" id="game4-btn-problem" onclick="game4_switchPage('problem')">Problemlösning</button>
         </div>
         <div class="game3-main">
             <section id="game4-page-grannar" class="game3-page active">
                 <h2>Skriv talets grannar</h2>
-                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-grannar">Slumpa 5 nya uppgifter</button>
-                <div id="game4-container-grannar" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr4-grannar">Rätta mina svar</button>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" onclick="g4_gen_grannar()">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-grannar" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game4_correctQuiz('grannar')">Rätta mina svar</button>
             </section>
             <section id="game4-page-talfoljd" class="game3-page">
                 <h2>Fortsätt talföljden</h2>
-                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-talfoljd">Slumpa 5 nya uppgifter</button>
-                <div id="game4-container-talfoljd" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr4-talfoljd">Rätta mina svar</button>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" onclick="g4_gen_talfoljd()">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-talfoljd" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game4_correctQuiz('talfoljd')">Rätta mina svar</button>
             </section>
             <section id="game4-page-tallinjer" class="game3-page">
                 <h2>Vilket tal pekar pilen på?</h2>
-                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-tallinjer">Slumpa 5 nya uppgifter</button>
-                <div id="game4-container-tallinjer" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr4-tallinjer">Rätta mina svar</button>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" onclick="g4_gen_tallinjer()">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-tallinjer" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game4_correctQuiz('tallinjer')">Rätta mina svar</button>
             </section>
             <section id="game4-page-likheter" class="game3-page">
                 <h2>Skriv talet som saknas</h2>
-                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-likheter">Slumpa 5 nya uppgifter</button>
-                <div id="game4-container-likheter" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr4-likheter">Rätta mina svar</button>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" onclick="g4_gen_likheter()">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-likheter" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game4_correctQuiz('likheter')">Rätta mina svar</button>
             </section>
             <section id="game4-page-multi" class="game3-page">
                 <h2>Beräkna multiplikation</h2>
-                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-multi">Slumpa 5 nya uppgifter</button>
-                <div id="game4-container-multi" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr4-multi">Rätta mina svar</button>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" onclick="g4_gen_multi()">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-multi" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game4_correctQuiz('multi')">Rätta mina svar</button>
             </section>
             <section id="game4-page-problem" class="game3-page">
                 <h2>Problemlösning (Åk 2)</h2>
-                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-problem">Slumpa 2 nya uppgifter</button>
-                <div id="game4-container-problem" class="game3-quiz-container" style="margin-top:15px;"></div>
-                <button class="game3-btn-correct" id="corr4-problem">Rätta mina svar</button>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" onclick="g4_gen_problem()">Slumpa 2 nya uppgifter</button>
+                <div id="game4-container-problem" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" onclick="game4_correctQuiz('problem')">Rätta mina svar</button>
             </section>
-            <center><button class="portal-back-btn" id="game4-back-portal" style="width:100%; padding:12px;">← Till huvudmenyn</button></center>
+            <center><button class="portal-back-btn" onclick="returnToPortal()" style="width:100%; padding:12px;">← Till huvudmenyn</button></center>
         </div>
     </div>
 </div>
@@ -605,33 +395,21 @@ function returnToPortal() {
     showView('portal-menu-view');
 }
 
-document.getElementById('btn-game1').addEventListener('click', () => { showView('portal-game1'); game1_showMenu(); });
-document.getElementById('btn-game2').addEventListener('click', () => { showView('portal-game2'); document.body.style.backgroundColor = '#f0f4f8'; game2_initGame(); });
-document.getElementById('btn-game3').addEventListener('click', () => { showView('portal-game3'); document.body.style.backgroundColor = '#eef2f5'; game3_switchPage('tallinjer'); });
-document.getElementById('btn-game4').addEventListener('click', () => { showView('portal-game4'); document.body.style.backgroundColor = 'var(--ak2-bg)'; game4_switchPage('grannar'); });
-document.getElementById('game2-back-portal').addEventListener('click', returnToPortal);
-document.getElementById('game3-back-portal').addEventListener('click', returnToPortal);
-document.getElementById('game4-back-portal').addEventListener('click', returnToPortal);
-
 function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
 // =====================
-// SPEL 1 & 2 (Behållen befintlig logik)
+// SPEL 1 & 2
 // =====================
-/* Spel 1 */
 let game1_currentMode='', game1_num1, game1_num2, game1_correctAnswer, game1_count=0, game1_startTime, game1_timerInterval;
 const game1_maxCount = 30;
+
 const game1_grid = document.getElementById('game1-options');
-for (let i = 0; i <= 10; i++) {
-    const btn = document.createElement('button'); btn.className = 'game1-num-btn'; btn.innerText = i;
-    btn.addEventListener('click', () => game1_checkAnswer(i)); game1_grid.appendChild(btn);
+if (game1_grid) {
+    for (let i = 0; i <= 10; i++) {
+        const btn = document.createElement('button'); btn.className = 'game1-num-btn'; btn.innerText = i;
+        btn.onclick = () => game1_checkAnswer(i); game1_grid.appendChild(btn);
+    }
 }
-document.getElementById('game1-back-portal').addEventListener('click', returnToPortal);
-document.getElementById('game1-abort-btn').addEventListener('click', game1_showMenu);
-document.getElementById('game1-end-back').addEventListener('click', game1_showMenu);
-document.getElementById('game1-start-plus').addEventListener('click', () => game1_startGame('plus'));
-document.getElementById('game1-start-minus').addEventListener('click', () => game1_startGame('minus'));
-document.getElementById('game1-play-again').addEventListener('click', () => game1_startGame(game1_currentMode));
 
 function game1_showMenu() { game1_stopTimer(); document.getElementById('game1-menu-view').classList.remove('hidden'); document.getElementById('game1-active-view').classList.add('hidden'); document.getElementById('game1-end-view').classList.add('hidden'); document.body.style.backgroundColor = '#e0f7fa'; }
 function game1_startGame(mode) { game1_currentMode = mode; game1_count = 0; document.getElementById('game1-menu-view').classList.add('hidden'); document.getElementById('game1-end-view').classList.add('hidden'); document.getElementById('game1-active-view').classList.remove('hidden'); document.getElementById('game1-title').innerText = mode === 'plus' ? 'Lilla Plus' : 'Lilla Minus'; document.body.style.backgroundColor = mode === 'plus' ? '#e8f5e9' : '#ffebee'; game1_updateProgress(); game1_startTime = Date.now(); game1_timerInterval = setInterval(game1_updateTimer, 100); game1_generateQuestion(); }
@@ -649,32 +427,29 @@ function game1_updateTimer() { const diff = Date.now() - game1_startTime; const 
 function game1_stopTimer() { clearInterval(game1_timerInterval); }
 function game1_endGame() { game1_stopTimer(); document.getElementById('game1-active-view').classList.add('hidden'); document.getElementById('game1-end-view').classList.remove('hidden'); const diff = Date.now() - game1_startTime; const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000), cs = Math.floor((diff % 1000) / 10); document.getElementById('game1-final-time').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(cs).padStart(2,'0')}`; launchConfetti(3000); }
 
-/* Spel 2 */
 let game2_mode='add', game2_score=0, game2_A, game2_B, game2_p1, game2_p2, game2_res, game2_lastA=0, game2_lastB=0;
-document.getElementById('game2-btnAdd').addEventListener('click', () => game2_setMode('add'));
-document.getElementById('game2-btnSub').addEventListener('click', () => game2_setMode('sub'));
-document.getElementById('game2-checkBtn').addEventListener('click', game2_checkAnswer);
-['game2-inputPart1','game2-inputPart2'].forEach(id => document.getElementById(id).addEventListener('input', game2_updateVisuals));
-document.getElementById('game2-inputPart1').addEventListener('keydown', (e) => { if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputPart2').focus(); }});
-document.getElementById('game2-inputPart2').addEventListener('keydown', (e) => { if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputResult').focus(); }});
-document.getElementById('game2-inputResult').addEventListener('keydown', function(e) { if(e.key==='Enter' && !this.disabled){ e.preventDefault(); game2_checkAnswer(); }});
+
+['game2-inputPart1','game2-inputPart2'].forEach(id => {
+    let el = document.getElementById(id);
+    if(el) el.addEventListener('input', game2_updateVisuals);
+});
+let g2_p1 = document.getElementById('game2-inputPart1');
+if(g2_p1) g2_p1.addEventListener('keydown', (e) => { if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputPart2').focus(); }});
+let g2_p2 = document.getElementById('game2-inputPart2');
+if(g2_p2) g2_p2.addEventListener('keydown', (e) => { if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputResult').focus(); }});
+let g2_resEl = document.getElementById('game2-inputResult');
+if(g2_resEl) g2_resEl.addEventListener('keydown', function(e) { if(e.key==='Enter' && !this.disabled){ e.preventDefault(); game2_checkAnswer(); }});
 
 function game2_setMode(newMode) { if (game2_mode !== newMode) { game2_score = 0; document.getElementById('game2-scoreText').innerText = 0; document.getElementById('game2-progressFill').style.width = '0%'; } game2_mode = newMode; document.getElementById('game2-btnAdd').className = newMode === 'add' ? 'game2-mode-btn active' : 'game2-mode-btn'; document.getElementById('game2-btnSub').className = newMode === 'sub' ? 'game2-mode-btn active' : 'game2-mode-btn'; document.getElementById('game2-mainOp').innerText = newMode === 'add' ? '+' : '-'; document.getElementById('game2-eqOp1').innerText = newMode === 'add' ? '+' : '-'; document.getElementById('game2-eqOp2').innerText = newMode === 'add' ? '+' : '-'; document.getElementById('game2-instructionText').innerText = newMode === 'add' ? 'Addera först till 10, addera sedan resten.' : 'Subtrahera först till 10, subtrahera sedan resten.'; game2_initGame(); }
-function game2_initGame() { let att = 0; do { if (game2_mode === 'add') { game2_A = getRandomInt(2,9); game2_B = getRandomInt(11-game2_A, 9); game2_p1 = 10-game2_A; game2_p2 = game2_B-game2_p1; game2_res = game2_A+game2_B; } else { game2_A = getRandomInt(11,18); game2_B = getRandomInt(game2_A-9, 9); game2_p1 = game2_A-10; game2_p2 = game2_B-game2_p1; game2_res = game2_A-game2_B; } att++; } while (game2_A === game2_lastA && game2_B === game2_lastB && att < 10); game2_lastA = game2_A; game2_lastB = game2_B; document.getElementById('game2-numA').innerText = game2_A; document.getElementById('game2-numB').innerText = game2_B; document.getElementById('game2-eqA').innerText = game2_A; ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(id => { const el = document.getElementById(id); el.value = ''; el.className = id === 'game2-inputResult' ? 'game2-main-result' : 'game2-step-input'; el.disabled = false; el.style.borderColor = '#ccc'; }); document.getElementById('game2-eqPart1').innerText = '__'; document.getElementById('game2-eqPart2').innerText = '__'; document.getElementById('game2-feedback').innerText = ''; document.getElementById('game2-checkBtn').style.display = 'inline-block'; game2_updateVisuals(); document.getElementById('game2-inputPart1').focus(); }
+function game2_initGame() { let att = 0; do { if (game2_mode === 'add') { game2_A = getRandomInt(2,9); game2_B = getRandomInt(11-game2_A, 9); game2_p1 = 10-game2_A; game2_p2 = game2_B-game2_p1; game2_res = game2_A+game2_B; } else { game2_A = getRandomInt(11,18); game2_B = getRandomInt(game2_A-9, 9); game2_p1 = game2_A-10; game2_p2 = game2_B-game2_p1; game2_res = game2_A-game2_B; } att++; } while (game2_A === game2_lastA && game2_B === game2_lastB && att < 10); game2_lastA = game2_A; game2_lastB = game2_B; document.getElementById('game2-numA').innerText = game2_A; document.getElementById('game2-numB').innerText = game2_B; document.getElementById('game2-eqA').innerText = game2_A; ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(id => { const el = document.getElementById(id); el.value = ''; el.className = id === 'game2-inputResult' ? 'game2-main-result' : 'game2-step-input'; el.disabled = false; el.style.borderColor = '#ccc'; }); document.getElementById('game2-eqPart1').innerText = '__'; document.getElementById('game2-eqPart2').innerText = '__'; document.getElementById('game2-feedback').innerText = ''; game2_updateVisuals(); document.getElementById('game2-inputPart1').focus(); }
 function game2_updateVisuals() { const v1 = parseInt(document.getElementById('game2-inputPart1').value) || 0; const v2 = parseInt(document.getElementById('game2-inputPart2').value) || 0; document.getElementById('game2-eqPart1').innerText = v1 || '__'; document.getElementById('game2-eqPart2').innerText = v2 || '__'; const c = document.getElementById('game2-tenFrames'); c.innerHTML = ''; const f1 = document.createElement('div'); f1.className = 'game2-frame'; const f2 = document.createElement('div'); f2.className = 'game2-frame'; const dts = []; for (let i = 0; i < 20; i++) { const dot = document.createElement('div'); dot.className = 'game2-dot'; dts.push(dot); if (i < 10) f1.appendChild(dot); else f2.appendChild(dot); } if (game2_mode === 'add') { for (let i = 0; i < game2_A; i++) dts[i].classList.add('filled'); for (let i = 0; i < Math.min(v1, 10 - game2_A); i++) { if (game2_A+i<20) dts[game2_A+i].classList.add('action'); } for (let i = 0; i < v2; i++) { if (10+i<20) dts[10+i].classList.add('action'); } } else { for (let i = 0; i < game2_A; i++) dts[i].classList.add('filled'); let rm = 0; for (let i = 0; i < v1; i++) { let idx = game2_A-1-rm; if(idx>=0&&idx>=10){dts[idx].className='game2-dot removed'; rm++;} } for (let i = 0; i < v2; i++) { let idx = game2_A-1-rm; if(idx>=0&&idx<10){dts[idx].className='game2-dot removed'; rm++;} } } c.appendChild(f1); c.appendChild(f2); }
-function game2_checkAnswer() { const v1 = parseInt(document.getElementById('game2-inputPart1').value); const v2 = parseInt(document.getElementById('game2-inputPart2').value); const res = parseInt(document.getElementById('game2-inputResult').value); let ok = true; if (v1 !== game2_p1) { document.getElementById('game2-inputPart1').className = 'game2-step-input wrong'; ok = false; } else { document.getElementById('game2-inputPart1').className = 'game2-step-input correct'; } if (v2 !== game2_p2) { document.getElementById('game2-inputPart2').className = 'game2-step-input wrong'; ok = false; } else { document.getElementById('game2-inputPart2').className = 'game2-step-input correct'; } if (res !== game2_res) { document.getElementById('game2-inputResult').style.borderColor = '#f44336'; ok = false; } else { document.getElementById('game2-inputResult').style.borderColor = '#4CAF50'; } const fb = document.getElementById('game2-feedback'); if (ok) { fb.innerText = 'Rätt svar! Snyggt jobbat!'; fb.style.color = '#4CAF50'; document.getElementById('game2-checkBtn').style.display = 'none'; ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(id => document.getElementById(id).disabled = true); game2_score++; document.getElementById('game2-scoreText').innerText = game2_score; document.getElementById('game2-progressFill').style.width = (game2_score / 20 * 100) + '%'; if (game2_score >= 20) { fb.innerText = 'GRATTIS! Du klarade 20 poäng!'; launchConfetti(5000); game2_score = 0; setTimeout(() => { document.getElementById('game2-scoreText').innerText = 0; document.getElementById('game2-progressFill').style.width = '0%'; game2_initGame(); }, 6000); } else { setTimeout(game2_initGame, 2000); } } else { fb.innerText = 'Något blev fel, titta på prickarna och försök igen.'; fb.style.color = '#f44336'; } }
+function game2_checkAnswer() { const v1 = parseInt(document.getElementById('game2-inputPart1').value); const v2 = parseInt(document.getElementById('game2-inputPart2').value); const res = parseInt(document.getElementById('game2-inputResult').value); let ok = true; if (v1 !== game2_p1) { document.getElementById('game2-inputPart1').className = 'game2-step-input wrong'; ok = false; } else { document.getElementById('game2-inputPart1').className = 'game2-step-input correct'; } if (v2 !== game2_p2) { document.getElementById('game2-inputPart2').className = 'game2-step-input wrong'; ok = false; } else { document.getElementById('game2-inputPart2').className = 'game2-step-input correct'; } if (res !== game2_res) { document.getElementById('game2-inputResult').style.borderColor = '#f44336'; ok = false; } else { document.getElementById('game2-inputResult').style.borderColor = '#4CAF50'; } const fb = document.getElementById('game2-feedback'); if (ok) { fb.innerText = 'Rätt svar! Snyggt jobbat!'; fb.style.color = '#4CAF50'; ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(id => document.getElementById(id).disabled = true); game2_score++; document.getElementById('game2-scoreText').innerText = game2_score; document.getElementById('game2-progressFill').style.width = (game2_score / 20 * 100) + '%'; if (game2_score >= 20) { fb.innerText = 'GRATTIS! Du klarade 20 poäng!'; launchConfetti(5000); game2_score = 0; setTimeout(() => { document.getElementById('game2-scoreText').innerText = 0; document.getElementById('game2-progressFill').style.width = '0%'; game2_initGame(); }, 6000); } else { setTimeout(game2_initGame, 2000); } } else { fb.innerText = 'Något blev fel, titta på prickarna och försök igen.'; fb.style.color = '#f44336'; } }
 
 // =====================
 // SPEL 3 (ÅK 1) LOGIK
 // =====================
 let ans3_tallinjer=[], ans3_storleksordna=[], ans3_likheter=[], ans3_delaupp=[], ans3_talfoljd=[], ans3_problem=[];
 const leksaker1 = [{e:"🚗"},{e:"📖"},{e:"🧸"},{e:"🧩"},{e:"⚽"},{e:"🖍️"},{e:"🎲"},{e:"🧢"}];
-
-['tallinjer','storleksordna','likheter','delaupp','talfoljd','problem'].forEach(id => {
-    document.getElementById('game3-btn-'+id).addEventListener('click', () => game3_switchPage(id));
-    document.getElementById('gen3-'+id).addEventListener('click', window['g3_gen_'+id]);
-    document.getElementById('corr3-'+id).addEventListener('click', () => game3_correctQuiz(id));
-});
 
 function game3_switchPage(id) {
     document.querySelectorAll('#portal-game3 .game3-page').forEach(p => p.classList.remove('active'));
@@ -762,6 +537,7 @@ function g3_tog(idx, el) {
     else if(document.querySelectorAll(`#g3-shop-${idx} .selected`).length < 2) el.classList.add('selected');
     el.classList.remove('correct','incorrect'); document.getElementById(`g3-fb-prob-${idx}`).innerText='';
 }
+
 function game3_correctQuiz(id) {
     if(id==='tallinjer'){ ans3_tallinjer.forEach((a,i)=>chk(`g3-i-tallinjer-${i}`,`g3-fb-tallinjer-${i}`,a)); }
     if(id==='storleksordna'){ ans3_storleksordna.forEach((arr,i)=>arr.forEach((a,j)=>chk(`g3-i-ord-${i}-${j}`,`g3-fb-ord-${i}-${j}`,a))); }
@@ -785,15 +561,9 @@ function chk(iId, fId, ans) {
 }
 
 // =====================
-// SPEL 4 (ÅK 2) LOGIK (MED DEN NYA AFFÄREN)
+// SPEL 4 (ÅK 2) LOGIK
 // =====================
 let ans4_grannar=[], ans4_talfoljd=[], ans4_tallinjer=[], ans4_likheter=[], ans4_multi=[], ans4_problem=[];
-
-['grannar','talfoljd','tallinjer','likheter','multi','problem'].forEach(id => {
-    document.getElementById('game4-btn-'+id).addEventListener('click', () => game4_switchPage(id));
-    document.getElementById('gen4-'+id).addEventListener('click', window['g4_gen_'+id]);
-    document.getElementById('corr4-'+id).addEventListener('click', () => game4_correctQuiz(id));
-});
 
 function game4_switchPage(id) {
     document.querySelectorAll('#portal-game4 .game3-page').forEach(p => p.classList.remove('active'));
@@ -986,8 +756,8 @@ function game4_correctQuiz(id) {
             ansArr.forEach(obj => {
                 let inp = document.getElementById(`g4-i-grannar-${i}-${obj.idx}`);
                 let fb = document.getElementById(`g4-fb-grannar-${i}-${obj.idx}`);
-                if(parseInt(inp.value) === obj.val) { inp.className="correct"; fb.innerText="✓"; fb.className="game3-feedback-mark correct"; }
-                else { inp.className="incorrect"; fb.innerText="✗"; fb.className="game3-feedback-mark incorrect"; }
+                if(parseInt(inp.value) === obj.val) { inp.className="game3-quiz-input correct"; fb.innerText="✓"; fb.className="game3-feedback-mark correct"; }
+                else { inp.className="game3-quiz-input incorrect"; fb.innerText="✗"; fb.className="game3-feedback-mark incorrect"; }
             });
         });
     }
