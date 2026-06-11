@@ -2,32 +2,1113 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <title>Matteportalen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matte-Portalen</title>
     <style>
-        body { font-family: sans-serif; background: #eef2f5; margin: 0; padding: 20px; text-align: center; }
-        .hidden { display: none; }
-        .button { padding: 15px 30px; background: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2rem; margin: 10px; }
+        :root {
+            --primary: #4a90e2;
+            --secondary: #f5a623;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --dark: #333;
+            --light: #f9f9f9;
+            --portal-bg: #eef2f5;
+            --tioruta-primary: #2196F3;
+            --tioruta-secondary: #FF9800;
+            --dot-base: #2196F3;
+            --dot-action: #FF9800;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--portal-bg);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        .hidden { display: none !important; }
+
+        /* --- PORTAL --- */
+        .portal-header {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .portal-header h1 { margin: 0; font-size: 2.5rem; }
+        .portal-header p { margin: 5px 0 0 0; opacity: 0.9; }
+
+        .menu-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .game-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .game-card h3 { margin-top: 0; color: #333; font-size: 1.5rem; }
+        .game-card p { color: #666; font-size: 1rem; line-height: 1.4; margin-bottom: 20px; }
+
+        .start-game-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .start-game-btn.color-1 { background-color: #4caf50; }
+        .start-game-btn.color-2 { background-color: #2196F3; }
+        .start-game-btn.color-3 { background-color: #f5a623; }
+
+        .portal-back-btn {
+            background-color: #607d8b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+        .portal-back-btn:hover { background-color: #455a64; }
+
+        /* --- SPEL 1 --- */
+        .game1-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px; }
+        .game1-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            max-width: 500px;
+            width: 95%;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .game1-menu-btn {
+            display: block; width: 100%; padding: 20px; margin: 15px 0;
+            font-size: 1.5rem; border: none; border-radius: 12px;
+            cursor: pointer; color: white; font-weight: bold; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .game1-btn-plus { background-color: #4caf50; box-shadow: 0 5px #2e7d32; }
+        .game1-btn-plus:hover { transform: translateY(-2px); box-shadow: 0 7px #2e7d32; }
+        .game1-btn-plus:active { transform: translateY(0); box-shadow: 0 2px #2e7d32; }
+        .game1-btn-minus { background-color: #f44336; box-shadow: 0 5px #c62828; }
+        .game1-btn-minus:hover { transform: translateY(-2px); box-shadow: 0 7px #c62828; }
+        .game1-btn-minus:active { transform: translateY(0); box-shadow: 0 2px #c62828; }
+
+        .game1-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; background: #eceff1; padding: 10px;
+            border-radius: 10px; font-weight: bold; color: #455a64;
+        }
+        .game1-timer { font-family: monospace; font-size: 1.4rem; color: #d84315; }
+        .game1-question-box {
+            font-size: 4rem; font-weight: bold; color: #37474f;
+            margin: 20px 0; padding: 20px;
+            border: 3px dashed #b0bec5; border-radius: 15px; background-color: #fafafa;
+        }
+        .game1-options-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        button.game1-num-btn {
+            background-color: #0288d1; color: white; border: none;
+            padding: 15px 0; font-size: 1.5rem; border-radius: 8px;
+            cursor: pointer; font-weight: bold; transition: background 0.2s;
+        }
+        button.game1-num-btn:hover { background-color: #0277bd; }
+        button.game1-num-btn:active { background-color: #01579b; }
+        .game1-result-time { font-size: 3rem; color: #d84315; font-weight: bold; margin: 20px 0; }
+
+        /* --- SPEL 2 --- */
+        .game2-wrapper { display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+        .game2-container {
+            background-color: white; padding: 30px; border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 650px; width: 100%; text-align: center;
+        }
+        .game2-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #eee;
+        }
+        .game2-mode-selector { display: flex; gap: 10px; }
+        .game2-mode-btn {
+            padding: 8px 15px; border: 2px solid var(--tioruta-primary);
+            background: white; color: var(--tioruta-primary);
+            border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.2s;
+        }
+        .game2-mode-btn.active { background: var(--tioruta-primary); color: white; }
+        .game2-score-board {
+            font-size: 20px; font-weight: bold; color: var(--secondary); display: flex; align-items: center; gap: 10px;
+        }
+        .game2-progress-bar { width: 100px; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+        .game2-progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.5s ease; }
+
+        .game2-ten-frames { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+        .game2-frame {
+            display: grid; grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(2, 1fr); gap: 5px;
+            border: 2px solid #555; padding: 5px; background: white;
+        }
+        .game2-dot {
+            width: 30px; height: 30px; border-radius: 50%;
+            background-color: transparent; border: 2px dashed #ccc; transition: all 0.3s;
+        }
+        .game2-dot.filled { background-color: var(--dot-base); border: 2px solid var(--dot-base); }
+        .game2-dot.action { background-color: var(--dot-action); border: 2px solid var(--dot-action); transform: scale(1.1); }
+        .game2-dot.removed { background-color: #e0e0e0; opacity: 0.3; border: 2px solid #ccc; }
+
+        .game2-math-problem {
+            font-size: 42px; margin-bottom: 10px; display: flex;
+            align-items: center; justify-content: center; gap: 15px;
+        }
+        .game2-split-container {
+            position: relative; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center;
+        }
+        .game2-subtrahend-circle {
+            width: 60px; height: 60px; border: 3px solid var(--tioruta-primary);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 28px; font-weight: bold; background: white; z-index: 2;
+        }
+        .game2-branches {
+            display: flex; justify-content: center; gap: 60px; margin-top: 10px;
+            width: 150px; border-top: 3px solid #ccc; position: relative;
+        }
+        .game2-branches::before {
+            content: ''; position: absolute; top: -10px; left: 50%; height: 10px; width: 3px; background: #ccc;
+        }
+        .game2-split-inputs { display: flex; justify-content: center; gap: 40px; margin-top: 10px; }
+        .game2-step-input, .game2-main-result {
+            text-align: center; border: 2px solid #ccc; border-radius: 8px; font-size: 24px; font-family: inherit;
+        }
+        .game2-step-input { width: 50px; height: 50px; }
+        .game2-main-result { width: 70px; height: 60px; font-size: 32px; border-width: 3px; }
+        .game2-step-input.correct { border-color: var(--success); background-color: #e8f5e9; }
+        .game2-step-input.wrong { border-color: var(--error); background-color: #ffebee; }
+        .game2-equation-row { font-size: 28px; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .game2-controls { margin-top: 30px; }
+        .game2-btn-check {
+            padding: 12px 30px; font-size: 18px; cursor: pointer; border: none;
+            border-radius: 8px; font-weight: bold; background-color: var(--tioruta-primary); color: white; transition: background 0.2s;
+        }
+        .game2-btn-check:hover { background-color: #1976D2; }
+        .game2-feedback { margin-top: 15px; font-weight: bold; font-size: 18px; height: 24px; }
+
+        .game2-confetti {
+            position: fixed; top: -10px; width: 10px; height: 10px; z-index: 9999; animation: game2-fall linear forwards;
+        }
+        @keyframes game2-fall { to { transform: translateY(105vh) rotate(720deg); } }
+
+        /* --- SPEL 3 --- */
+        .game3-wrapper { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .game3-nav { margin: 20px 0; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .game3-nav button {
+            background-color: white; border: 2px solid var(--primary); color: var(--primary);
+            padding: 10px 20px; font-size: 1rem; font-weight: bold;
+            border-radius: 25px; cursor: pointer; transition: all 0.2s ease;
+        }
+        .game3-nav button:hover, .game3-nav button.active {
+            background-color: var(--primary); color: white; box-shadow: 0 4px 8px rgba(74,144,226,0.3);
+        }
+        .game3-main {
+            width: 100%; max-width: 800px; background: white; padding: 30px;
+            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 40px; box-sizing: border-box;
+        }
+        .game3-page { display: none; }
+        .game3-page.active { display: block; }
+        .game3-main h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.5rem; }
+        .game3-controls { margin-bottom: 20px; display: flex; gap: 15px; }
+        .game3-btn-generate {
+            background-color: var(--secondary); color: white; border: none;
+            padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 8px;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .game3-btn-generate:hover { background-color: #e09216; }
+        .game3-btn-correct {
+            background-color: var(--primary); color: white; border: none;
+            padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 8px;
+            cursor: pointer; transition: background 0.2s; margin-top: 20px; width: 100%;
+        }
+        .game3-btn-correct:hover { background-color: #357abd; }
+        .game3-quiz-container { display: flex; flex-direction: column; gap: 20px; }
+        .game3-task-card {
+            background: var(--light); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary);
+            font-size: 1.2rem; display: flex; align-items: center; flex-wrap: wrap; gap: 15px; position: relative;
+        }
+        .game3-quiz-input {
+            width: 60px; padding: 5px 10px; font-size: 1.1rem; text-align: center;
+            border: 2px dashed #999; border-radius: 4px; background: #fff; transition: all 0.3s ease;
+        }
+        .game3-quiz-input.correct { background-color: #d4edda !important; border-color: var(--success) !important; color: #155724; }
+        .game3-quiz-input.incorrect { background-color: #f8d7da !important; border-color: var(--error) !important; color: #721c24; }
+        .game3-feedback-mark { font-weight: bold; margin-left: 5px; }
+        .game3-feedback-mark.correct { color: var(--success); }
+        .game3-feedback-mark.incorrect { color: var(--error); }
+
+        .game3-number-line-wrapper { width: 100%; margin-top: 50px; margin-bottom: 45px; }
+        .game3-number-line { position: relative; height: 40px; border-bottom: 3px solid var(--dark); margin: 20px 10px 10px 10px; }
+        .game3-line-mark { position: absolute; bottom: 0; width: 2px; height: 15px; background: var(--dark); }
+        .game3-line-mark.major { height: 25px; width: 3px; }
+        .game3-line-label { position: absolute; top: 45px; transform: translateX(-50%); font-size: 0.9rem; font-weight: bold; }
+        .game3-line-pointer { position: absolute; bottom: 5px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 80px; }
+        .game3-line-pointer input { margin-bottom: 5px; z-index: 10; }
+        .game3-line-pointer::after { content: "↓"; font-size: 1.6rem; color: #d0021b; font-weight: bold; line-height: 1; }
+
+        .game3-cloud-container {
+            background: #e1f5fe; border: 2px dotted #4fc3f7; padding: 15px; border-radius: 50px;
+            display: inline-flex; gap: 15px; font-weight: bold; letter-spacing: 2px; margin-right: 15px;
+        }
+        .game3-order-inputs { display: inline-flex; gap: 8px; align-items: center; }
+        .game3-order-inputs input { width: 45px; }
+
+        .game3-split-tree { display: inline-flex; flex-direction: column; align-items: center; margin: 10px; }
+        .game3-tree-top {
+            width: 60px; height: 60px; border: 2px solid var(--dark); background: white;
+            display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold;
+            margin-bottom: 20px; position: relative;
+        }
+        .game3-tree-top::before, .game3-tree-top::after {
+            content: ""; position: absolute; top: 58px; width: 2px; height: 22px; background: var(--dark);
+        }
+        .game3-tree-top::before { left: 30px; transform: rotate(30deg); transform-origin: top left; }
+        .game3-tree-top::after { right: 30px; transform: rotate(-30deg); transform-origin: top right; }
+        .game3-tree-bottom-row { display: flex; gap: 30px; align-items: flex-start; }
+        .game3-tree-box {
+            width: 60px; height: 60px; border: 2px solid var(--dark); background: white;
+            display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold;
+        }
+        .game3-tree-bottom-row input { width: 40px; height: 40px; font-size: 1.3rem; border: 2px dashed #999; padding: 0; }
+        .game3-tree-feedback-container { display: flex; flex-direction: column; align-items: center; position: relative; }
+        .game3-tree-feedback-container .game3-feedback-mark { position: absolute; bottom: -25px; margin: 0; }
+
+        .game3-shop-grid { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 15px 0; width: 100%; }
+        .game3-shop-item {
+            border: 3px solid #ccc; border-radius: 12px; padding: 15px 10px; cursor: pointer;
+            text-align: center; width: 90px; background: white; transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); user-select: none;
+        }
+        .game3-shop-item:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .game3-shop-item.selected { border-color: var(--primary); background-color: #e1f5fe; transform: scale(1.05); }
+        .game3-shop-item.correct { border-color: var(--success); background-color: #d4edda; }
+        .game3-shop-item.incorrect { border-color: var(--error); background-color: #f8d7da; }
+        .game3-emoji { font-size: 2.5rem; margin-bottom: 5px; }
+        .game3-price { font-weight: bold; font-size: 1.1rem; color: #444; }
     </style>
 </head>
 <body>
 
-    <div id="meny">
-        <h1>Matteportalen</h1>
-        <button class="button" onclick="visa('studion')">Öppna Mattestudion</button>
+<!-- PORTAL MENU -->
+<div id="portal-menu-view">
+    <div class="portal-header">
+        <h1>Välkommen till Matte-Portalen</h1>
+        <p>Välj ett spel eller en övning nedan för att börja träna!</p>
     </div>
-
-    <div id="studion" class="hidden">
-        <button onclick="location.reload()">Tillbaka till start</button>
-        <h2>Mattestudion</h2>
-        <div id="test-yta">Här kommer uppgifterna finnas.</div>
+    <div class="menu-container">
+        <div class="game-card">
+            <div>
+                <h3>Lilla plus &amp; minus</h3>
+                <p>Träna på snabbhet i huvudräkning inom talområdet 0–10. Svara på 30 slumpmässiga uppgifter så snabbt du kan!</p>
+            </div>
+            <button class="start-game-btn color-1" id="btn-game1">Starta Lilla plus/minus</button>
+        </div>
+        <div class="game-card">
+            <div>
+                <h3>Tiotalsövergång</h3>
+                <p>Lär dig strategin för tiotalsövergångar med hjälp av interaktiva tiorutor. Räkna först till 10 och sedan resten.</p>
+            </div>
+            <button class="start-game-btn color-2" id="btn-game2">Starta Tiotalsövergång</button>
+        </div>
+        <div class="game-card">
+            <div>
+                <h3>Mattestudion (Åk 1)</h3>
+                <p>Blandade uppgifter ur bedömningsstödet. Träna tallinjer, problemlösning, likheter, sifferträd och talföljder.</p>
+            </div>
+            <button class="start-game-btn color-3" id="btn-game3">Starta Mattestudion</button>
+        </div>
     </div>
+</div>
 
-    <script>
-        function visa(id) {
-            document.getElementById('meny').classList.add('hidden');
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById('test-yta').innerText = "Knapparna fungerar nu!";
+<!-- SPEL 1 -->
+<div id="portal-game1" class="hidden">
+    <div class="game1-wrapper">
+        <div class="game1-container">
+            <div id="game1-menu-view">
+                <h2>Välj Spel</h2>
+                <button class="game1-menu-btn game1-btn-plus" id="game1-start-plus">Lilla Plus (+)</button>
+                <button class="game1-menu-btn game1-btn-minus" id="game1-start-minus">Lilla Minus (-)</button>
+                <br>
+                <button class="portal-back-btn" id="game1-back-portal">← Till huvudmenyn</button>
+            </div>
+            <div id="game1-active-view" class="hidden">
+                <div class="game1-header">
+                    <span id="game1-title">Spel</span>
+                    <span id="game1-progress">0 / 30</span>
+                    <span class="game1-timer" id="game1-timer">00:00</span>
+                </div>
+                <div class="game1-question-box" id="game1-question">?</div>
+                <div class="game1-options-grid" id="game1-options"></div>
+                <button class="portal-back-btn" id="game1-abort-btn">Avbryt / Tillbaka</button>
+            </div>
+            <div id="game1-end-view" class="hidden">
+                <h2>Bra jobbat!</h2>
+                <p>Din tid blev:</p>
+                <div class="game1-result-time" id="game1-final-time">00:00</div>
+                <button class="game1-menu-btn game1-btn-plus" id="game1-play-again">Spela igen</button>
+                <button class="portal-back-btn" id="game1-end-back">Tillbaka till spelmeny</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SPEL 2 -->
+<div id="portal-game2" class="hidden">
+    <div class="game2-wrapper">
+        <div class="game2-container">
+            <div class="game2-header">
+                <div class="game2-mode-selector">
+                    <button class="game2-mode-btn active" id="game2-btnAdd">Addition (+)</button>
+                    <button class="game2-mode-btn" id="game2-btnSub">Subtraktion (-)</button>
+                </div>
+                <div class="game2-score-board">
+                    <span>Poäng: <span id="game2-scoreText">0</span>/20</span>
+                    <div class="game2-progress-bar"><div class="game2-progress-fill" id="game2-progressFill"></div></div>
+                </div>
+            </div>
+            <h2 id="game2-instructionText">Addera först till 10, addera sedan resten.</h2>
+            <div class="game2-ten-frames" id="game2-tenFrames"></div>
+            <div class="game2-math-problem">
+                <span id="game2-numA"></span>
+                <span class="operator" id="game2-mainOp">+</span>
+                <div class="game2-split-container">
+                    <div class="game2-subtrahend-circle" id="game2-numB"></div>
+                    <div class="game2-branches"></div>
+                    <div class="game2-split-inputs">
+                        <input type="number" class="game2-step-input" id="game2-inputPart1">
+                        <input type="number" class="game2-step-input" id="game2-inputPart2">
+                    </div>
+                </div>
+            </div>
+            <div class="game2-equation-row">
+                = <span id="game2-eqA"></span>
+                <span class="operator" id="game2-eqOp1">+</span> <span id="game2-eqPart1">__</span>
+                <span class="operator" id="game2-eqOp2">+</span> <span id="game2-eqPart2">__</span> =
+                <input type="number" class="game2-main-result" id="game2-inputResult">
+            </div>
+            <div class="game2-feedback" id="game2-feedback"></div>
+            <div class="game2-controls">
+                <button class="game2-btn-check" id="game2-checkBtn">Kontrollera</button>
+                <br>
+                <button class="portal-back-btn" id="game2-back-portal">← Till huvudmenyn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SPEL 3 -->
+<div id="portal-game3" class="hidden">
+    <div class="game3-wrapper">
+        <div class="portal-header" style="width:100%; max-width:800px; border-radius:12px; margin-bottom:10px;">
+            <h1>Mattestudion</h1>
+            <p>Slumpa fram uppgifter och testa dina svar</p>
+        </div>
+        <div class="game3-nav">
+            <button id="game3-btn-tallinjer" class="active">Tallinjer</button>
+            <button id="game3-btn-storleksordna">Storleksordna</button>
+            <button id="game3-btn-likheter">Likhetstecknet</button>
+            <button id="game3-btn-delaupp">Dela upp talet</button>
+            <button id="game3-btn-talfoljd">Talföljder</button>
+            <button id="game3-btn-problem">Problemlösning</button>
+        </div>
+        <div class="game3-main">
+            <section id="game3-page-tallinjer" class="game3-page active">
+                <h2>Hitta talet på tallinjen</h2>
+                <div class="game3-controls">
+                    <button class="game3-btn-generate" id="gen-tallinjer">Slumpa 5 nya uppgifter</button>
+                </div>
+                <div id="game3-container-tallinjer" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" id="correct-tallinjer">Rätta mina svar</button>
+            </section>
+            <section id="game3-page-storleksordna" class="game3-page">
+                <h2>Storleksordna talen (Minsta först)</h2>
+                <div class="game3-controls">
+                    <button class="game3-btn-generate" id="gen-storleksordna">Slumpa 5 nya uppgifter</button>
+                </div>
+                <div id="game3-container-storleksordna" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" id="correct-storleksordna">Rätta mina svar</button>
+            </section>
+            <section id="game3-page-likheter" class="game3-page">
+                <h2>Skriv talet som saknas</h2>
+                <div class="game3-controls">
+                    <button class="game3-btn-generate" id="gen-likheter">Slumpa 5 nya uppgifter</button>
+                </div>
+                <div id="game3-container-likheter" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" id="correct-likheter">Rätta mina svar</button>
+            </section>
+            <section id="game3-page-delaupp" class="game3-page">
+                <h2>Dela upp talet</h2>
+                <div class="game3-controls">
+                    <button class="game3-btn-generate" id="gen-delaupp">Slumpa 5 nya uppgifter</button>
+                </div>
+                <div id="game3-container-delaupp" class="game3-quiz-container" style="flex-direction: row; flex-wrap: wrap; justify-content: space-around; gap: 30px;"></div>
+                <button class="game3-btn-correct" id="correct-delaupp">Rätta mina svar</button>
+            </section>
+            <section id="game3-page-talfoljd" class="game3-page">
+                <h2>Fortsätt talföljden</h2>
+                <div class="game3-controls">
+                    <button class="game3-btn-generate" id="gen-talfoljd">Slumpa 5 nya uppgifter</button>
+                </div>
+                <div id="game3-container-talfoljd" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" id="correct-talfoljd">Rätta mina svar</button>
+            </section>
+            <section id="game3-page-problem" class="game3-page">
+                <h2>Problemlösningsuppgifter</h2>
+                <div class="game3-controls">
+                    <button class="game3-btn-generate" id="gen-problem">Slumpa 2 nya uppgifter</button>
+                </div>
+                <div id="game3-container-problem" class="game3-quiz-container"></div>
+                <button class="game3-btn-correct" id="correct-problem">Rätta mina svar</button>
+            </section>
+            <center>
+                <button class="portal-back-btn" id="game3-back-portal" style="width:100%; padding:12px;">← Till huvudmenyn</button>
+            </center>
+        </div>
+    </div>
+</div>
+
+<script>
+// =====================
+// CONFETTI (inline, no CDN)
+// =====================
+function launchConfetti(duration) {
+    const colors = ['#4caf50','#f44336','#2196f3','#ffeb3b','#ff9800','#e91e63','#9c27b0'];
+    const end = Date.now() + (duration || 3000);
+    function frame() {
+        for (let i = 0; i < 6; i++) {
+            const conf = document.createElement('div');
+            conf.style.cssText = `
+                position:fixed; z-index:9999; pointer-events:none;
+                width:${6+Math.random()*6}px; height:${6+Math.random()*6}px;
+                border-radius:${Math.random()>0.5?'50%':'2px'};
+                background:${colors[Math.floor(Math.random()*colors.length)]};
+                left:${Math.random()*100}vw; top:-10px;
+                animation: confettiFall ${2+Math.random()*3}s linear forwards;
+                transform: rotate(${Math.random()*360}deg);
+            `;
+            document.body.appendChild(conf);
+            setTimeout(() => conf.remove(), 5000);
         }
-    </script>
+        if (Date.now() < end) requestAnimationFrame(frame);
+    }
+    if (!document.getElementById('confetti-style')) {
+        const style = document.createElement('style');
+        style.id = 'confetti-style';
+        style.textContent = '@keyframes confettiFall { to { transform: translateY(105vh) rotate(720deg); } }';
+        document.head.appendChild(style);
+    }
+    frame();
+}
+
+// =====================
+// NAVIGATION
+// =====================
+function showView(id) {
+    ['portal-menu-view','portal-game1','portal-game2','portal-game3'].forEach(v => {
+        document.getElementById(v).classList.add('hidden');
+    });
+    document.getElementById(id).classList.remove('hidden');
+}
+
+function returnToPortal() {
+    game1_stopTimer();
+    document.body.style.backgroundColor = '#eef2f5';
+    showView('portal-menu-view');
+}
+
+document.getElementById('btn-game1').addEventListener('click', function() {
+    showView('portal-game1');
+    game1_showMenu();
+});
+document.getElementById('btn-game2').addEventListener('click', function() {
+    showView('portal-game2');
+    document.body.style.backgroundColor = '#f0f4f8';
+    game2_initGame();
+});
+document.getElementById('btn-game3').addEventListener('click', function() {
+    showView('portal-game3');
+    document.body.style.backgroundColor = '#eef2f5';
+    game3_switchPage('tallinjer');
+});
+document.getElementById('game2-back-portal').addEventListener('click', returnToPortal);
+document.getElementById('game3-back-portal').addEventListener('click', returnToPortal);
+
+// =====================
+// SPEL 1
+// =====================
+let game1_currentMode = '';
+let game1_num1, game1_num2, game1_correctAnswer;
+let game1_count = 0;
+const game1_maxCount = 30;
+let game1_startTime, game1_timerInterval;
+
+const game1_grid = document.getElementById('game1-options');
+for (let i = 0; i <= 10; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'game1-num-btn';
+    btn.innerText = i;
+    btn.addEventListener('click', (function(val){ return function(){ game1_checkAnswer(val); }; })(i));
+    game1_grid.appendChild(btn);
+}
+
+document.getElementById('game1-back-portal').addEventListener('click', returnToPortal);
+document.getElementById('game1-abort-btn').addEventListener('click', game1_showMenu);
+document.getElementById('game1-end-back').addEventListener('click', game1_showMenu);
+document.getElementById('game1-start-plus').addEventListener('click', function(){ game1_startGame('plus'); });
+document.getElementById('game1-start-minus').addEventListener('click', function(){ game1_startGame('minus'); });
+document.getElementById('game1-play-again').addEventListener('click', function(){ game1_startGame(game1_currentMode); });
+
+function game1_showMenu() {
+    game1_stopTimer();
+    document.getElementById('game1-menu-view').classList.remove('hidden');
+    document.getElementById('game1-active-view').classList.add('hidden');
+    document.getElementById('game1-end-view').classList.add('hidden');
+    document.body.style.backgroundColor = '#e0f7fa';
+}
+
+function game1_startGame(mode) {
+    game1_currentMode = mode;
+    game1_count = 0;
+    document.getElementById('game1-menu-view').classList.add('hidden');
+    document.getElementById('game1-end-view').classList.add('hidden');
+    document.getElementById('game1-active-view').classList.remove('hidden');
+    document.getElementById('game1-title').innerText = mode === 'plus' ? 'Lilla Plus' : 'Lilla Minus';
+    document.body.style.backgroundColor = mode === 'plus' ? '#e8f5e9' : '#ffebee';
+    game1_updateProgress();
+    game1_startTime = Date.now();
+    game1_timerInterval = setInterval(game1_updateTimer, 100);
+    game1_generateQuestion();
+}
+
+function game1_generateQuestion() {
+    if (game1_currentMode === 'plus') {
+        game1_num1 = Math.floor(Math.random() * 11);
+        game1_num2 = Math.floor(Math.random() * (10 - game1_num1 + 1));
+        game1_correctAnswer = game1_num1 + game1_num2;
+        document.getElementById('game1-question').innerText = game1_num1 + ' + ' + game1_num2 + ' = ?';
+    } else {
+        game1_num1 = Math.floor(Math.random() * 11);
+        game1_num2 = Math.floor(Math.random() * (game1_num1 + 1));
+        game1_correctAnswer = game1_num1 - game1_num2;
+        document.getElementById('game1-question').innerText = game1_num1 + ' - ' + game1_num2 + ' = ?';
+    }
+}
+
+function game1_checkAnswer(guess) {
+    const box = document.getElementById('game1-question');
+    if (guess === game1_correctAnswer) {
+        game1_count++;
+        game1_updateProgress();
+        box.style.borderColor = '#4caf50'; box.style.color = '#4caf50';
+        setTimeout(function(){ box.style.borderColor = '#b0bec5'; box.style.color = '#37474f'; }, 200);
+        if (game1_count >= game1_maxCount) { game1_endGame(); } else { game1_generateQuestion(); }
+    } else {
+        box.style.borderColor = '#f44336'; box.style.color = '#f44336';
+        setTimeout(function(){ box.style.borderColor = '#b0bec5'; box.style.color = '#37474f'; }, 300);
+    }
+}
+
+function game1_updateProgress() { document.getElementById('game1-progress').innerText = game1_count + ' / ' + game1_maxCount; }
+function game1_updateTimer() {
+    const diff = Date.now() - game1_startTime;
+    const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('game1-timer').innerText = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+function game1_stopTimer() { clearInterval(game1_timerInterval); }
+
+function game1_endGame() {
+    game1_stopTimer();
+    document.getElementById('game1-active-view').classList.add('hidden');
+    document.getElementById('game1-end-view').classList.remove('hidden');
+    const diff = Date.now() - game1_startTime;
+    const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000), cs = Math.floor((diff % 1000) / 10);
+    document.getElementById('game1-final-time').innerText =
+        String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + '.' + String(cs).padStart(2,'0');
+    launchConfetti(3000);
+}
+
+// =====================
+// SPEL 2
+// =====================
+let game2_mode = 'add';
+let game2_score = 0;
+let game2_currentA, game2_currentB, game2_part1, game2_part2, game2_correctResult;
+let game2_lastA = 0, game2_lastB = 0;
+
+document.getElementById('game2-btnAdd').addEventListener('click', function(){ game2_setMode('add'); });
+document.getElementById('game2-btnSub').addEventListener('click', function(){ game2_setMode('sub'); });
+document.getElementById('game2-checkBtn').addEventListener('click', game2_checkAnswer);
+
+document.getElementById('game2-inputPart1').addEventListener('input', game2_updateVisuals);
+document.getElementById('game2-inputPart2').addEventListener('input', game2_updateVisuals);
+document.getElementById('game2-inputPart1').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputPart2').focus(); }});
+document.getElementById('game2-inputPart2').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputResult').focus(); }});
+document.getElementById('game2-inputResult').addEventListener('keydown', function(e){ if(e.key==='Enter' && !this.disabled){ e.preventDefault(); game2_checkAnswer(); }});
+
+function game2_setMode(newMode) {
+    if (game2_mode !== newMode) {
+        game2_score = 0;
+        document.getElementById('game2-scoreText').innerText = 0;
+        document.getElementById('game2-progressFill').style.width = '0%';
+    }
+    game2_mode = newMode;
+    document.getElementById('game2-btnAdd').className = newMode === 'add' ? 'game2-mode-btn active' : 'game2-mode-btn';
+    document.getElementById('game2-btnSub').className = newMode === 'sub' ? 'game2-mode-btn active' : 'game2-mode-btn';
+    document.getElementById('game2-mainOp').innerText = newMode === 'add' ? '+' : '-';
+    document.getElementById('game2-eqOp1').innerText = newMode === 'add' ? '+' : '-';
+    document.getElementById('game2-eqOp2').innerText = newMode === 'add' ? '+' : '-';
+    document.getElementById('game2-instructionText').innerText = newMode === 'add'
+        ? 'Addera först till 10, addera sedan resten.'
+        : 'Subtrahera först till 10, subtrahera sedan resten.';
+    game2_initGame();
+}
+
+function game2_initGame() {
+    let attempts = 0;
+    do {
+        if (game2_mode === 'add') {
+            game2_currentA = Math.floor(Math.random() * 8) + 2;
+            let minB = 11 - game2_currentA;
+            game2_currentB = Math.floor(Math.random() * (9 - minB + 1)) + minB;
+            game2_part1 = 10 - game2_currentA;
+            game2_part2 = game2_currentB - game2_part1;
+            game2_correctResult = game2_currentA + game2_currentB;
+        } else {
+            game2_currentA = Math.floor(Math.random() * 8) + 11;
+            let minB = game2_currentA - 9;
+            game2_currentB = Math.floor(Math.random() * (9 - minB + 1)) + minB;
+            game2_part1 = game2_currentA - 10;
+            game2_part2 = game2_currentB - game2_part1;
+            game2_correctResult = game2_currentA - game2_currentB;
+        }
+        attempts++;
+    } while (game2_currentA === game2_lastA && game2_currentB === game2_lastB && attempts < 10);
+
+    game2_lastA = game2_currentA; game2_lastB = game2_currentB;
+    document.getElementById('game2-numA').innerText = game2_currentA;
+    document.getElementById('game2-numB').innerText = game2_currentB;
+    document.getElementById('game2-eqA').innerText = game2_currentA;
+
+    ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(function(id) {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.className = id === 'game2-inputResult' ? 'game2-main-result' : 'game2-step-input';
+        el.disabled = false;
+        el.style.borderColor = '#ccc';
+    });
+    document.getElementById('game2-eqPart1').innerText = '__';
+    document.getElementById('game2-eqPart2').innerText = '__';
+    document.getElementById('game2-feedback').innerText = '';
+    document.getElementById('game2-checkBtn').style.display = 'inline-block';
+    game2_updateVisuals();
+    document.getElementById('game2-inputPart1').focus();
+}
+
+function game2_updateVisuals() {
+    const val1 = parseInt(document.getElementById('game2-inputPart1').value) || 0;
+    const val2 = parseInt(document.getElementById('game2-inputPart2').value) || 0;
+    document.getElementById('game2-eqPart1').innerText = val1 || '__';
+    document.getElementById('game2-eqPart2').innerText = val2 || '__';
+    const container = document.getElementById('game2-tenFrames');
+    container.innerHTML = '';
+    const frame1 = document.createElement('div'); frame1.className = 'game2-frame';
+    const frame2 = document.createElement('div'); frame2.className = 'game2-frame';
+    const dots = [];
+    for (let i = 0; i < 20; i++) {
+        const dot = document.createElement('div'); dot.className = 'game2-dot'; dots.push(dot);
+        if (i < 10) frame1.appendChild(dot); else frame2.appendChild(dot);
+    }
+    if (game2_mode === 'add') {
+        for (let i = 0; i < game2_currentA; i++) dots[i].classList.add('filled');
+        for (let i = 0; i < Math.min(val1, 10 - game2_currentA); i++) { if (game2_currentA+i<20) dots[game2_currentA+i].classList.add('action'); }
+        for (let i = 0; i < val2; i++) { if (10+i<20) dots[10+i].classList.add('action'); }
+    } else {
+        for (let i = 0; i < game2_currentA; i++) dots[i].classList.add('filled');
+        let removeCount = 0;
+        for (let i = 0; i < val1; i++) { let idx = game2_currentA-1-removeCount; if(idx>=0&&idx>=10){dots[idx].className='game2-dot removed'; removeCount++;} }
+        for (let i = 0; i < val2; i++) { let idx = game2_currentA-1-removeCount; if(idx>=0&&idx<10){dots[idx].className='game2-dot removed'; removeCount++;} }
+    }
+    container.appendChild(frame1); container.appendChild(frame2);
+}
+
+function game2_checkAnswer() {
+    const val1 = parseInt(document.getElementById('game2-inputPart1').value);
+    const val2 = parseInt(document.getElementById('game2-inputPart2').value);
+    const res  = parseInt(document.getElementById('game2-inputResult').value);
+    let isCorrect = true;
+
+    if (val1 !== game2_part1) { document.getElementById('game2-inputPart1').className = 'game2-step-input wrong'; isCorrect = false; }
+    else { document.getElementById('game2-inputPart1').className = 'game2-step-input correct'; }
+    if (val2 !== game2_part2) { document.getElementById('game2-inputPart2').className = 'game2-step-input wrong'; isCorrect = false; }
+    else { document.getElementById('game2-inputPart2').className = 'game2-step-input correct'; }
+    if (res !== game2_correctResult) { document.getElementById('game2-inputResult').style.borderColor = '#f44336'; isCorrect = false; }
+    else { document.getElementById('game2-inputResult').style.borderColor = '#4CAF50'; }
+
+    const fb = document.getElementById('game2-feedback');
+    if (isCorrect) {
+        fb.innerText = 'Rätt svar! Snyggt jobbat!'; fb.style.color = '#4CAF50';
+        document.getElementById('game2-checkBtn').style.display = 'none';
+        ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(function(id){ document.getElementById(id).disabled = true; });
+        game2_score++;
+        document.getElementById('game2-scoreText').innerText = game2_score;
+        document.getElementById('game2-progressFill').style.width = (game2_score / 20 * 100) + '%';
+        if (game2_score >= 20) {
+            fb.innerText = 'GRATTIS! Du klarade 20 poäng!';
+            launchConfetti(5000);
+            game2_score = 0;
+            setTimeout(function(){
+                document.getElementById('game2-scoreText').innerText = 0;
+                document.getElementById('game2-progressFill').style.width = '0%';
+                game2_initGame();
+            }, 6000);
+        } else { setTimeout(game2_initGame, 2000); }
+    } else { fb.innerText = 'Något blev fel, titta på prickarna och försök igen.'; fb.style.color = '#f44336'; }
+}
+
+// =====================
+// SPEL 3
+// =====================
+let answersTallinjer = [], answersStorleksordna = [], answersLikheter = [];
+let answersDelaUpp = [], answersTalfoljd = [], answersProblem = [];
+
+// Nav buttons
+['tallinjer','storleksordna','likheter','delaupp','talfoljd','problem'].forEach(function(id) {
+    document.getElementById('game3-btn-' + id).addEventListener('click', function(){ game3_switchPage(id); });
+});
+// Generate buttons
+document.getElementById('gen-tallinjer').addEventListener('click', game3_generateTallinjer);
+document.getElementById('gen-storleksordna').addEventListener('click', game3_generateStorleksordna);
+document.getElementById('gen-likheter').addEventListener('click', game3_generateLikheter);
+document.getElementById('gen-delaupp').addEventListener('click', game3_generateDelaUpp);
+document.getElementById('gen-talfoljd').addEventListener('click', game3_generateTalfoljd);
+document.getElementById('gen-problem').addEventListener('click', game3_generateProblem);
+// Correct buttons
+document.getElementById('correct-tallinjer').addEventListener('click', function(){ game3_correctQuiz('tallinjer'); });
+document.getElementById('correct-storleksordna').addEventListener('click', function(){ game3_correctQuiz('storleksordna'); });
+document.getElementById('correct-likheter').addEventListener('click', function(){ game3_correctQuiz('likheter'); });
+document.getElementById('correct-delaupp').addEventListener('click', function(){ game3_correctQuiz('delaupp'); });
+document.getElementById('correct-talfoljd').addEventListener('click', function(){ game3_correctQuiz('talfoljd'); });
+document.getElementById('correct-problem').addEventListener('click', function(){ game3_correctQuiz('problem'); });
+
+function game3_switchPage(pageId) {
+    document.querySelectorAll('.game3-page').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('.game3-nav button').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('game3-page-' + pageId).classList.add('active');
+    document.getElementById('game3-btn-' + pageId).classList.add('active');
+    if (pageId === 'tallinjer' && answersTallinjer.length === 0) game3_generateTallinjer();
+    if (pageId === 'storleksordna' && answersStorleksordna.length === 0) game3_generateStorleksordna();
+    if (pageId === 'likheter' && answersLikheter.length === 0) game3_generateLikheter();
+    if (pageId === 'delaupp' && answersDelaUpp.length === 0) game3_generateDelaUpp();
+    if (pageId === 'talfoljd' && answersTalfoljd.length === 0) game3_generateTalfoljd();
+    if (pageId === 'problem' && answersProblem.length === 0) game3_generateProblem();
+}
+
+function game3_getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+function game3_generateTallinjer() {
+    const container = document.getElementById('game3-container-tallinjer');
+    container.innerHTML = ''; answersTallinjer = [];
+    for (let i = 0; i < 5; i++) {
+        const isTwenty = Math.random() > 0.5;
+        const maxVal = isTwenty ? 20 : 10;
+        const targetVal = game3_getRandomInt(1, maxVal - 1);
+        answersTallinjer.push(targetVal);
+        const card = document.createElement('div'); card.className = 'game3-task-card';
+        let lineMarksHTML = '';
+        for (let m = 0; m <= maxVal; m++) {
+            const leftPercent = (m / maxVal) * 100;
+            const isMajor = (m===0||m===5||m===10||m===15||m===20);
+            let label = '';
+            if (m===0||m===10||(isTwenty&&m===20)||(!isTwenty&&m===5)) {
+                label = '<div class="game3-line-label" style="left:' + leftPercent + '%">' + m + '</div>';
+            }
+            lineMarksHTML += '<div class="game3-line-mark ' + (isMajor?'major':'') + '" style="left:' + leftPercent + '%"></div>' + label;
+        }
+        const pointerLeft = (targetVal / maxVal) * 100;
+        card.innerHTML =
+            '<div style="width:100%;"><strong>Uppgift ' + (i+1) + '.</strong> Vilket tal pekar pilen på?</div>' +
+            '<div class="game3-number-line-wrapper">' +
+              '<div class="game3-number-line">' + lineMarksHTML +
+                '<div class="game3-line-pointer" style="left:' + pointerLeft + '%">' +
+                  '<input type="text" class="game3-quiz-input" data-index="' + i + '" placeholder="?">' +
+                  '<span class="game3-feedback-mark" id="feedback-tallinjer-' + i + '"></span>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+        container.appendChild(card);
+    }
+}
+
+function game3_generateStorleksordna() {
+    const container = document.getElementById('game3-container-storleksordna');
+    container.innerHTML = ''; answersStorleksordna = [];
+    for (let i = 0; i < 5; i++) {
+        let numbers = [];
+        while (numbers.length < 5) { let n = game3_getRandomInt(1,35); if(!numbers.includes(n)) numbers.push(n); }
+        const sorted = [...numbers].sort(function(a,b){ return a-b; });
+        answersStorleksordna.push(sorted);
+        const card = document.createElement('div'); card.className = 'game3-task-card';
+        let inputFields = '';
+        for (let j = 0; j < 5; j++) {
+            inputFields += '<div style="display:inline-block;position:relative;">' +
+                '<input type="text" class="game3-quiz-input" data-task="' + i + '" data-sub="' + j + '">' +
+                '<span class="game3-feedback-mark" id="feedback-order-' + i + '-' + j + '"></span></div>';
+            if (j < 4) inputFields += ' &lt; ';
+        }
+        card.innerHTML = '<div><strong>Uppgift ' + (i+1) + '.</strong></div>' +
+            '<div class="game3-cloud-container">' + numbers.map(function(n){ return '<span>'+n+'</span>'; }).join(' | ') + '</div>' +
+            '<div class="game3-order-inputs">' + inputFields + '</div>';
+        container.appendChild(card);
+    }
+}
+
+function game3_generateLikheter() {
+    const container = document.getElementById('game3-container-likheter');
+    container.innerHTML = ''; answersLikheter = [];
+    for (let i = 0; i < 5; i++) {
+        const type = game3_getRandomInt(1,4);
+        const a = game3_getRandomInt(1,10), b = game3_getRandomInt(1,10), sum = a + b;
+        const card = document.createElement('div'); card.className = 'game3-task-card';
+        const inputEl = '<input type="text" class="game3-quiz-input" data-index="' + i + '">' +
+            '<span class="game3-feedback-mark" id="feedback-likheter-' + i + '"></span>';
+        let taskHTML = '<strong>Uppgift ' + (i+1) + '.</strong> &nbsp;&nbsp;';
+        switch(type) {
+            case 1: answersLikheter.push(b); taskHTML += a + ' + ' + inputEl + ' = ' + sum; break;
+            case 2: answersLikheter.push(b); taskHTML += sum + ' = ' + a + ' + ' + inputEl; break;
+            case 3: answersLikheter.push(a); taskHTML += sum + ' = ' + inputEl + ' + ' + b; break;
+            case 4: answersLikheter.push(a); taskHTML += inputEl + ' + ' + b + ' = ' + sum; break;
+        }
+        card.innerHTML = taskHTML; container.appendChild(card);
+    }
+}
+
+function game3_generateDelaUpp() {
+    const container = document.getElementById('game3-container-delaupp');
+    container.innerHTML = ''; answersDelaUpp = [];
+    for (let i = 0; i < 5; i++) {
+        const topNum = game3_getRandomInt(4,12);
+        const leftNum = game3_getRandomInt(1, topNum-1);
+        const rightNum = topNum - leftNum;
+        const missingSide = Math.random() > 0.5 ? 1 : 0;
+        answersDelaUpp.push(missingSide === 0 ? leftNum : rightNum);
+        const inputHTML = '<div class="game3-tree-feedback-container">' +
+            '<input type="text" class="game3-quiz-input" data-index="' + i + '">' +
+            '<span class="game3-feedback-mark" id="feedback-delaupp-' + i + '"></span></div>';
+        const leftBoxHTML  = missingSide === 0 ? inputHTML : '<div class="game3-tree-box">' + leftNum + '</div>';
+        const rightBoxHTML = missingSide === 1 ? inputHTML : '<div class="game3-tree-box">' + rightNum + '</div>';
+        const treeWrapper = document.createElement('div'); treeWrapper.className = 'game3-split-tree';
+        treeWrapper.innerHTML =
+            '<div style="font-size:0.9rem;margin-bottom:5px;font-weight:bold;color:#777;">Upps. '+(i+1)+'</div>' +
+            '<div class="game3-tree-top">' + topNum + '</div>' +
+            '<div class="game3-tree-bottom-row">' + leftBoxHTML + rightBoxHTML + '</div>';
+        container.appendChild(treeWrapper);
+    }
+}
+
+function game3_generateTalfoljd() {
+    const container = document.getElementById('game3-container-talfoljd');
+    container.innerHTML = ''; answersTalfoljd = [];
+    for (let i = 0; i < 5; i++) {
+        let diff, start;
+        const pt = game3_getRandomInt(1,5);
+        if (pt===1){ diff=1; start=game3_getRandomInt(1,10); }
+        else if(pt===2){ diff=-1; start=game3_getRandomInt(10,20); }
+        else if(pt===3){ diff=2; start=game3_getRandomInt(1,5)*2; }
+        else if(pt===4){ diff=2; start=game3_getRandomInt(0,4)*2+1; }
+        else { diff=-2; start=game3_getRandomInt(5,10)*2; }
+        const seq = [];
+        let cur = start;
+        for(let j=0;j<7;j++){ seq.push(cur); cur+=diff; }
+        answersTalfoljd.push([seq[4],seq[5],seq[6]]);
+        const card = document.createElement('div'); card.className = 'game3-task-card';
+        let html = '<div style="width:100%;margin-bottom:10px;"><strong>Uppgift '+(i+1)+'.</strong> Fortsätt talföljden.</div>';
+        html += '<div style="display:flex;gap:15px;align-items:center;font-size:1.5rem;font-weight:bold;width:100%;flex-wrap:wrap;">';
+        for(let j=0;j<4;j++) html += '<div style="width:40px;text-align:center;">' + seq[j] + '</div>';
+        for(let j=0;j<3;j++) {
+            html += '<div style="position:relative;margin-left:10px;">' +
+                '<input type="text" class="game3-quiz-input" data-task="' + i + '" data-sub="' + j + '" style="width:50px;">' +
+                '<span class="game3-feedback-mark" id="feedback-talfoljd-' + i + '-' + j + '" style="position:absolute;top:-20px;right:0;font-size:1rem;"></span></div>';
+        }
+        html += '</div>';
+        card.innerHTML = html; container.appendChild(card);
+    }
+}
+
+const barnNamn = ["Anton","Maja","Leo","Elsa","Hugo","Nora","Liam","Alma","Elias","Wilma"];
+const leksaksPool = [
+    {name:"Bil",emoji:"🚗"},{name:"Bok",emoji:"📖"},{name:"Nalle",emoji:"🧸"},
+    {name:"Pussel",emoji:"🧩"},{name:"Boll",emoji:"⚽"},{name:"Kritor",emoji:"🖍️"},
+    {name:"Spel",emoji:"🎲"},{name:"Målarfärg",emoji:"🎨"},{name:"Keps",emoji:"🧢"},
+    {name:"Glass",emoji:"🍦"}
+];
+
+function game3_generateProblem() {
+    const container = document.getElementById('game3-container-problem');
+    container.innerHTML = ''; answersProblem = [];
+    for (let i = 0; i < 2; i++) {
+        const name = barnNamn[game3_getRandomInt(0, barnNamn.length-1)];
+        const budget = Math.random() > 0.5 ? 100 : 50;
+        const leftoverOptions = [2,3,4,5,10,15];
+        const leftover = leftoverOptions[game3_getRandomInt(0, leftoverOptions.length-1)];
+        const targetSum = budget - leftover;
+        let valid = false, prices = [];
+        while (!valid) {
+            const p1 = game3_getRandomInt(10, targetSum-10);
+            const p2 = targetSum - p1;
+            const p3 = game3_getRandomInt(10, budget-5);
+            const p4 = game3_getRandomInt(10, budget-5);
+            const p5 = game3_getRandomInt(10, budget-5);
+            prices = [p1,p2,p3,p4,p5];
+            if (new Set(prices).size < 5) continue;
+            let matchCount = 0;
+            for(let a=0;a<5;a++) for(let b=a+1;b<5;b++) if(prices[a]+prices[b]===targetSum) matchCount++;
+            if (matchCount === 1) valid = true;
+        }
+        let poolCopy = [...leksaksPool], items = [];
+        for (let j = 0; j < 5; j++) {
+            const rIdx = game3_getRandomInt(0, poolCopy.length-1);
+            items.push(poolCopy.splice(rIdx, 1)[0]);
+        }
+        let shopItems = prices.map(function(price, idx){ return {emoji: items[idx].emoji, price: price}; });
+        for (let k = shopItems.length-1; k > 0; k--) {
+            const j = Math.floor(Math.random()*(k+1));
+            const tmp = shopItems[k]; shopItems[k] = shopItems[j]; shopItems[j] = tmp;
+        }
+        answersProblem.push({target: targetSum});
+        const card = document.createElement('div');
+        card.className = 'game3-task-card';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'flex-start';
+        let html = '<div style="font-size:1.1rem;margin-bottom:10px;"><strong>Uppgift '+(i+1)+'.</strong> ' +
+            name + ' har ' + budget + ' kr. Hen köper två av sakerna nedan. Då har hen ' + leftover +
+            ' kr kvar. Vilka två saker köpte hen? (Klicka på sakerna)</div>' +
+            '<div class="game3-shop-grid" id="shop-grid-' + i + '">';
+        shopItems.forEach(function(item) {
+            html += '<div class="game3-shop-item" data-task="' + i + '" data-price="' + item.price + '">' +
+                '<div class="game3-emoji">' + item.emoji + '</div>' +
+                '<div class="game3-price">' + item.price + ' kr</div></div>';
+        });
+        html += '</div><div style="display:flex;align-items:center;height:30px;">' +
+            '<span class="game3-feedback-mark" id="feedback-problem-' + i + '"></span></div>';
+        card.innerHTML = html;
+        container.appendChild(card);
+    }
+    // Attach click via delegation on the container
+    container.addEventListener('click', function(e) {
+        const item = e.target.closest('.game3-shop-item');
+        if (!item) return;
+        const taskIndex = parseInt(item.getAttribute('data-task'));
+        if (item.classList.contains('selected')) {
+            item.classList.remove('selected');
+        } else {
+            const selectedCount = document.querySelectorAll('#shop-grid-' + taskIndex + ' .selected').length;
+            if (selectedCount < 2) item.classList.add('selected');
+        }
+        item.classList.remove('correct','incorrect');
+        document.getElementById('feedback-problem-' + taskIndex).innerText = '';
+    });
+}
+
+function game3_correctQuiz(pageId) {
+    if (pageId === 'tallinjer') {
+        document.querySelectorAll('#game3-container-tallinjer .game3-quiz-input').forEach(function(input) {
+            const idx = parseInt(input.getAttribute('data-index'));
+            const userAns = parseInt(input.value.trim());
+            const fb = document.getElementById('feedback-tallinjer-' + idx);
+            if (userAns === answersTallinjer[idx]) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
+            else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+answersTallinjer[idx]+')'; fb.className='game3-feedback-mark incorrect'; }
+        });
+    } else if (pageId === 'storleksordna') {
+        for (let i = 0; i < 5; i++) {
+            document.querySelectorAll('#game3-container-storleksordna .game3-quiz-input[data-task="'+i+'"]').forEach(function(input) {
+                const sub = parseInt(input.getAttribute('data-sub'));
+                const userAns = parseInt(input.value.trim());
+                const fb = document.getElementById('feedback-order-'+i+'-'+sub);
+                const correct = answersStorleksordna[i][sub];
+                if (userAns === correct) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
+                else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+correct+')'; fb.className='game3-feedback-mark incorrect'; }
+            });
+        }
+    } else if (pageId === 'likheter') {
+        document.querySelectorAll('#game3-container-likheter .game3-quiz-input').forEach(function(input) {
+            const idx = parseInt(input.getAttribute('data-index'));
+            const userAns = parseInt(input.value.trim());
+            const fb = document.getElementById('feedback-likheter-' + idx);
+            if (userAns === answersLikheter[idx]) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
+            else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+answersLikheter[idx]+')'; fb.className='game3-feedback-mark incorrect'; }
+        });
+    } else if (pageId === 'delaupp') {
+        document.querySelectorAll('#game3-container-delaupp .game3-quiz-input').forEach(function(input) {
+            const idx = parseInt(input.getAttribute('data-index'));
+            const userAns = parseInt(input.value.trim());
+            const fb = document.getElementById('feedback-delaupp-' + idx);
+            if (userAns === answersDelaUpp[idx]) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
+            else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+answersDelaUpp[idx]+')'; fb.className='game3-feedback-mark incorrect'; }
+        });
+    } else if (pageId === 'talfoljd') {
+        for (let i = 0; i < 5; i++) {
+            document.querySelectorAll('#game3-container-talfoljd .game3-quiz-input[data-task="'+i+'"]').forEach(function(input) {
+                const sub = parseInt(input.getAttribute('data-sub'));
+                const userAns = parseInt(input.value.trim());
+                const fb = document.getElementById('feedback-talfoljd-'+i+'-'+sub);
+                const correct = answersTalfoljd[i][sub];
+                if (userAns === correct) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
+                else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+correct+')'; fb.className='game3-feedback-mark incorrect'; }
+            });
+        }
+    } else if (pageId === 'problem') {
+        for (let i = 0; i < 2; i++) {
+            const selectedItems = document.querySelectorAll('#shop-grid-' + i + ' .selected');
+            const fb = document.getElementById('feedback-problem-' + i);
+            if (selectedItems.length !== 2) {
+                fb.innerText = 'Du måste välja exakt två saker!'; fb.className = 'game3-feedback-mark incorrect';
+            } else {
+                let sum = 0;
+                selectedItems.forEach(function(item){ sum += parseInt(item.getAttribute('data-price')); });
+                if (sum === answersProblem[i].target) {
+                    fb.innerText = '✓ Helt rätt! De kostar tillsammans ' + sum + ' kr.';
+                    fb.className = 'game3-feedback-mark correct';
+                    selectedItems.forEach(function(item){ item.classList.add('correct'); });
+                } else {
+                    fb.innerText = '✗ Fel. Dina val kostar ' + sum + ' kr, men de ska kosta ' + answersProblem[i].target + ' kr.';
+                    fb.className = 'game3-feedback-mark incorrect';
+                    selectedItems.forEach(function(item){ item.classList.add('incorrect'); });
+                }
+            }
+        }
+    }
+}
+</script>
 </body>
 </html>
