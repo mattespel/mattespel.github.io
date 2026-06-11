@@ -913,7 +913,77 @@ function g4_gen_multi() {
     }
 }
 
-function g4_gen_problem() {
+function function g4_gen_problem() {
+    let c = document.getElementById('game4-container-problem'); 
+    c.innerHTML = ''; 
+    ans4_problem = [];
+    
+    // Skapa innehållet i "Leksaksaffären"
+    let availableItems = [
+        {n: "Nallen", e: "🧸", p: getRandomInt(40, 80)},
+        {n: "Bilen", e: "🚗", p: getRandomInt(30, 60)},
+        {n: "Bollen", e: "⚽", p: getRandomInt(20, 50)},
+        {n: "Boken", e: "📖", p: getRandomInt(60, 90)},
+        {n: "Pusslet", e: "🧩", p: getRandomInt(50, 80)}
+    ];
+
+    // Välj 3 slumpmässiga saker som köps i Uppgift 1
+    let q1_items = [...availableItems].sort(()=>Math.random()-0.5).slice(0,3);
+    let q1_sum = q1_items[0].p + q1_items[1].p + q1_items[2].p;
+    let betalarMed = (q1_sum < 100) ? 100 : 200; // Bestämmer om hen betalar med 100-lapp eller 200-lapp
+    ans4_problem.push(betalarMed - q1_sum);
+
+    // --- RITA UPP BILDEN AV AFFÄREN ---
+    let shopHtml = `
+        <div style="background:#fff3e0; border:3px dashed #ffb74d; padding:20px; border-radius:15px; margin-bottom:25px; width:100%; box-sizing:border-box; text-align:center;">
+            <h3 style="margin-top:0; color:#ef6c00; font-size:1.5rem;">🧸 Leksaksaffären 🚗</h3>
+            <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">`;
+
+    availableItems.forEach(item => {
+        shopHtml += `
+            <div style="background:white; border:2px solid #ccc; border-radius:10px; padding:15px 10px; width:80px; box-shadow:0 4px 6px rgba(0,0,0,0.05);">
+                <div style="font-size:3rem; margin-bottom:10px;">${item.e}</div>
+                <div style="font-size:0.9rem; color:#666; margin-bottom:5px;">${item.n}</div>
+                <div style="font-weight:bold; font-size:1.1rem; color:#333;">${item.p} kr</div>
+            </div>`;
+    });
+    shopHtml += `</div></div>`;
+
+    // --- UPPGIFT 1 ---
+    let h1 = `
+        <div class="game3-task-card" style="flex-direction:column; align-items:flex-start;">
+            ${shopHtml}
+            <strong style="font-size:1.3rem;">Uppgift 1.</strong><br>
+            Anton går till leksaksaffären. Han köper <strong>${q1_items[0].n}</strong>, <strong>${q1_items[1].n}</strong> och <strong>${q1_items[2].n}</strong>. 
+            Han betalar med en ${betalarMed}-kronorssedel. Hur mycket får han tillbaka?
+            <div style="margin-top:15px; display:flex; align-items:center;">
+                <input class="game3-quiz-input" id="g4-i-prob-0" style="width:80px; font-size:1.3rem;"> 
+                <span style="font-size:1.2rem; margin-left:10px;">kr</span>
+                <span class="game3-feedback-mark" id="g4-fb-prob-0" style="font-size:1.5rem;"></span>
+            </div>
+        </div>`;
+    
+    // --- UPPGIFT 2 (Delningsdivision) ---
+    let kids = ["Sami, Anna, Filip och Leia", "Maja, Hugo och Leo", "Nora och Elias"];
+    let numKids = [4, 3, 2];
+    let kIdx = getRandomInt(0,2);
+    let perKid = getRandomInt(5, 12);
+    let total = numKids[kIdx] * perKid;
+    ans4_problem.push(perKid);
+    
+    let h2 = `
+        <div class="game3-task-card" style="flex-direction:column; align-items:flex-start;">
+            <strong style="font-size:1.3rem;">Uppgift 2.</strong><br>
+            ${kids[kIdx]} ska dela på ${total} kronor så att alla får lika mycket. Hur många kronor får varje barn?
+            <div style="margin-top:15px; display:flex; align-items:center;">
+                <input class="game3-quiz-input" id="g4-i-prob-1" style="width:80px; font-size:1.3rem;"> 
+                <span style="font-size:1.2rem; margin-left:10px;">kr</span>
+                <span class="game3-feedback-mark" id="g4-fb-prob-1" style="font-size:1.5rem;"></span>
+            </div>
+        </div>`;
+    
+    c.innerHTML = h1 + h2;
+} {
     let c = document.getElementById('game4-container-problem'); c.innerHTML=''; ans4_problem=[];
     
     // Q1: Köp 3 saker med 200 kr
