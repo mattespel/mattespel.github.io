@@ -17,6 +17,8 @@
             --tioruta-secondary: #FF9800;
             --dot-base: #2196F3;
             --dot-action: #FF9800;
+            --ak2-primary: #9c27b0;
+            --ak2-bg: #f3e5f5;
         }
 
         body {
@@ -80,6 +82,7 @@
         .start-game-btn.color-1 { background-color: #4caf50; }
         .start-game-btn.color-2 { background-color: #2196F3; }
         .start-game-btn.color-3 { background-color: #f5a623; }
+        .start-game-btn.color-4 { background-color: var(--ak2-primary); }
 
         .portal-back-btn {
             background-color: #607d8b;
@@ -216,12 +219,7 @@
         .game2-btn-check:hover { background-color: #1976D2; }
         .game2-feedback { margin-top: 15px; font-weight: bold; font-size: 18px; height: 24px; }
 
-        .game2-confetti {
-            position: fixed; top: -10px; width: 10px; height: 10px; z-index: 9999; animation: game2-fall linear forwards;
-        }
-        @keyframes game2-fall { to { transform: translateY(105vh) rotate(720deg); } }
-
-        /* --- SPEL 3 --- */
+        /* --- MATTESTUDION (Gemensam layout) --- */
         .game3-wrapper { display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .game3-nav { margin: 20px 0; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
         .game3-nav button {
@@ -229,8 +227,14 @@
             padding: 10px 20px; font-size: 1rem; font-weight: bold;
             border-radius: 25px; cursor: pointer; transition: all 0.2s ease;
         }
+        .game3-nav button.ak2-btn {
+            border-color: var(--ak2-primary); color: var(--ak2-primary);
+        }
         .game3-nav button:hover, .game3-nav button.active {
             background-color: var(--primary); color: white; box-shadow: 0 4px 8px rgba(74,144,226,0.3);
+        }
+        .game3-nav button.ak2-btn:hover, .game3-nav button.ak2-btn.active {
+            background-color: var(--ak2-primary); color: white; box-shadow: 0 4px 8px rgba(156,39,176,0.3);
         }
         .game3-main {
             width: 100%; max-width: 800px; background: white; padding: 30px;
@@ -239,7 +243,10 @@
         }
         .game3-page { display: none; }
         .game3-page.active { display: block; }
-        .game3-main h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.5rem; }
+        .game3-main h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.5rem; }
+        #portal-game3 .game3-main h2 { color: var(--primary); }
+        #portal-game4 .game3-main h2 { color: var(--ak2-primary); }
+
         .game3-controls { margin-bottom: 20px; display: flex; gap: 15px; }
         .game3-btn-generate {
             background-color: var(--secondary); color: white; border: none;
@@ -252,12 +259,16 @@
             padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 8px;
             cursor: pointer; transition: background 0.2s; margin-top: 20px; width: 100%;
         }
-        .game3-btn-correct:hover { background-color: #357abd; }
+        #portal-game4 .game3-btn-correct { background-color: var(--ak2-primary); }
+        .game3-btn-correct:hover { opacity: 0.9; }
+
         .game3-quiz-container { display: flex; flex-direction: column; gap: 20px; }
         .game3-task-card {
             background: var(--light); padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary);
             font-size: 1.2rem; display: flex; align-items: center; flex-wrap: wrap; gap: 15px; position: relative;
         }
+        #portal-game4 .game3-task-card { border-left-color: var(--ak2-primary); }
+
         .game3-quiz-input {
             width: 60px; padding: 5px 10px; font-size: 1.1rem; text-align: center;
             border: 2px dashed #999; border-radius: 4px; background: #fff; transition: all 0.3s ease;
@@ -268,6 +279,7 @@
         .game3-feedback-mark.correct { color: var(--success); }
         .game3-feedback-mark.incorrect { color: var(--error); }
 
+        /* Tallinjer */
         .game3-number-line-wrapper { width: 100%; margin-top: 50px; margin-bottom: 45px; }
         .game3-number-line { position: relative; height: 40px; border-bottom: 3px solid var(--dark); margin: 20px 10px 10px 10px; }
         .game3-line-mark { position: absolute; bottom: 0; width: 2px; height: 15px; background: var(--dark); }
@@ -277,6 +289,7 @@
         .game3-line-pointer input { margin-bottom: 5px; z-index: 10; }
         .game3-line-pointer::after { content: "↓"; font-size: 1.6rem; color: #d0021b; font-weight: bold; line-height: 1; }
 
+        /* Diverse layouter */
         .game3-cloud-container {
             background: #e1f5fe; border: 2px dotted #4fc3f7; padding: 15px; border-radius: 50px;
             display: inline-flex; gap: 15px; font-weight: bold; letter-spacing: 2px; margin-right: 15px;
@@ -290,9 +303,7 @@
             display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold;
             margin-bottom: 20px; position: relative;
         }
-        .game3-tree-top::before, .game3-tree-top::after {
-            content: ""; position: absolute; top: 58px; width: 2px; height: 22px; background: var(--dark);
-        }
+        .game3-tree-top::before, .game3-tree-top::after { content: ""; position: absolute; top: 58px; width: 2px; height: 22px; background: var(--dark); }
         .game3-tree-top::before { left: 30px; transform: rotate(30deg); transform-origin: top left; }
         .game3-tree-top::after { right: 30px; transform: rotate(-30deg); transform-origin: top right; }
         .game3-tree-bottom-row { display: flex; gap: 30px; align-items: flex-start; }
@@ -304,6 +315,7 @@
         .game3-tree-feedback-container { display: flex; flex-direction: column; align-items: center; position: relative; }
         .game3-tree-feedback-container .game3-feedback-mark { position: absolute; bottom: -25px; margin: 0; }
 
+        /* Problemlösning (Åk 1) */
         .game3-shop-grid { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 15px 0; width: 100%; }
         .game3-shop-item {
             border: 3px solid #ccc; border-radius: 12px; padding: 15px 10px; cursor: pointer;
@@ -316,15 +328,29 @@
         .game3-shop-item.incorrect { border-color: var(--error); background-color: #f8d7da; }
         .game3-emoji { font-size: 2.5rem; margin-bottom: 5px; }
         .game3-price { font-weight: bold; font-size: 1.1rem; color: #444; }
+
+        /* Grannar (Åk 2) */
+        .g4-grannar-row { display: flex; gap: 0px; align-items: center; margin: 10px 0; }
+        .g4-grannar-box {
+            width: 60px; height: 50px; border: 2px solid var(--dark); display: flex; 
+            align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold;
+            background: #eee; margin-right: -2px;
+        }
+        .g4-grannar-box input {
+            width: 100%; height: 100%; border: none; text-align: center; font-size: 1.2rem;
+            background: white; margin: 0; padding: 0; box-sizing: border-box; outline: none;
+        }
+        .g4-grannar-box input.correct { background-color: #d4edda; }
+        .g4-grannar-box input.incorrect { background-color: #f8d7da; }
+
     </style>
 </head>
 <body>
 
-<!-- PORTAL MENU -->
 <div id="portal-menu-view">
     <div class="portal-header">
         <h1>Välkommen till Matte-Portalen</h1>
-        <p>Välj en övning nedan för att börja träna!</p>
+        <p>Välj ett spel eller en övning nedan för att börja träna!</p>
     </div>
     <div class="menu-container">
         <div class="game-card">
@@ -344,14 +370,20 @@
         <div class="game-card">
             <div>
                 <h3>Mattestudion (Åk 1)</h3>
-                <p>Blandade uppgifter ur bedömningsstödet. Träna tallinjer, problemlösning, likheter, sifferträd och talföljder.</p>
+                <p>Blandade uppgifter ur bedömningsstödet för Åk 1. Tallinjer, likheter, sifferträd och problemlösning.</p>
             </div>
-            <button class="start-game-btn color-3" id="btn-game3">Starta Mattestudion</button>
+            <button class="start-game-btn color-3" id="btn-game3">Starta Mattestudion Åk 1</button>
+        </div>
+        <div class="game-card">
+            <div>
+                <h3>Mattestudion (Åk 2)</h3>
+                <p>Uppgifter från bedömningsstödet för Åk 2. Talets grannar, högre talföljder, multiplikation och mer.</p>
+            </div>
+            <button class="start-game-btn color-4" id="btn-game4">Starta Mattestudion Åk 2</button>
         </div>
     </div>
 </div>
 
-<!-- SPEL 1 -->
 <div id="portal-game1" class="hidden">
     <div class="game1-wrapper">
         <div class="game1-container">
@@ -383,7 +415,6 @@
     </div>
 </div>
 
-<!-- SPEL 2 -->
 <div id="portal-game2" class="hidden">
     <div class="game2-wrapper">
         <div class="game2-container">
@@ -427,11 +458,10 @@
     </div>
 </div>
 
-<!-- SPEL 3 -->
 <div id="portal-game3" class="hidden">
     <div class="game3-wrapper">
         <div class="portal-header" style="width:100%; max-width:800px; border-radius:12px; margin-bottom:10px;">
-            <h1>Mattestudion</h1>
+            <h1>Mattestudion (Åk 1)</h1>
             <p>Slumpa fram uppgifter och testa dina svar</p>
         </div>
         <div class="game3-nav">
@@ -445,669 +475,481 @@
         <div class="game3-main">
             <section id="game3-page-tallinjer" class="game3-page active">
                 <h2>Hitta talet på tallinjen</h2>
-                <div class="game3-controls">
-                    <button class="game3-btn-generate" id="gen-tallinjer">Slumpa 5 nya uppgifter</button>
-                </div>
-                <div id="game3-container-tallinjer" class="game3-quiz-container"></div>
-                <button class="game3-btn-correct" id="correct-tallinjer">Rätta mina svar</button>
+                <button class="game3-btn-generate" id="gen3-tallinjer">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-tallinjer" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr3-tallinjer">Rätta mina svar</button>
             </section>
             <section id="game3-page-storleksordna" class="game3-page">
                 <h2>Storleksordna talen (Minsta först)</h2>
-                <div class="game3-controls">
-                    <button class="game3-btn-generate" id="gen-storleksordna">Slumpa 5 nya uppgifter</button>
-                </div>
-                <div id="game3-container-storleksordna" class="game3-quiz-container"></div>
-                <button class="game3-btn-correct" id="correct-storleksordna">Rätta mina svar</button>
+                <button class="game3-btn-generate" id="gen3-storleksordna">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-storleksordna" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr3-storleksordna">Rätta mina svar</button>
             </section>
             <section id="game3-page-likheter" class="game3-page">
                 <h2>Skriv talet som saknas</h2>
-                <div class="game3-controls">
-                    <button class="game3-btn-generate" id="gen-likheter">Slumpa 5 nya uppgifter</button>
-                </div>
-                <div id="game3-container-likheter" class="game3-quiz-container"></div>
-                <button class="game3-btn-correct" id="correct-likheter">Rätta mina svar</button>
+                <button class="game3-btn-generate" id="gen3-likheter">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-likheter" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr3-likheter">Rätta mina svar</button>
             </section>
             <section id="game3-page-delaupp" class="game3-page">
                 <h2>Dela upp talet</h2>
-                <div class="game3-controls">
-                    <button class="game3-btn-generate" id="gen-delaupp">Slumpa 5 nya uppgifter</button>
-                </div>
-                <div id="game3-container-delaupp" class="game3-quiz-container" style="flex-direction: row; flex-wrap: wrap; justify-content: space-around; gap: 30px;"></div>
-                <button class="game3-btn-correct" id="correct-delaupp">Rätta mina svar</button>
+                <button class="game3-btn-generate" id="gen3-delaupp">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-delaupp" class="game3-quiz-container" style="flex-direction:row; flex-wrap:wrap; justify-content:space-around; gap:30px; margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr3-delaupp">Rätta mina svar</button>
             </section>
             <section id="game3-page-talfoljd" class="game3-page">
                 <h2>Fortsätt talföljden</h2>
-                <div class="game3-controls">
-                    <button class="game3-btn-generate" id="gen-talfoljd">Slumpa 5 nya uppgifter</button>
-                </div>
-                <div id="game3-container-talfoljd" class="game3-quiz-container"></div>
-                <button class="game3-btn-correct" id="correct-talfoljd">Rätta mina svar</button>
+                <button class="game3-btn-generate" id="gen3-talfoljd">Slumpa 5 nya uppgifter</button>
+                <div id="game3-container-talfoljd" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr3-talfoljd">Rätta mina svar</button>
             </section>
             <section id="game3-page-problem" class="game3-page">
                 <h2>Problemlösningsuppgifter</h2>
-                <div class="game3-controls">
-                    <button class="game3-btn-generate" id="gen-problem">Slumpa 2 nya uppgifter</button>
-                </div>
-                <div id="game3-container-problem" class="game3-quiz-container"></div>
-                <button class="game3-btn-correct" id="correct-problem">Rätta mina svar</button>
+                <button class="game3-btn-generate" id="gen3-problem">Slumpa 2 nya uppgifter</button>
+                <div id="game3-container-problem" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr3-problem">Rätta mina svar</button>
             </section>
-            <center>
-                <button class="portal-back-btn" id="game3-back-portal" style="width:100%; padding:12px;">← Till huvudmenyn</button>
-            </center>
+            <center><button class="portal-back-btn" id="game3-back-portal" style="width:100%; padding:12px;">← Till huvudmenyn</button></center>
+        </div>
+    </div>
+</div>
+
+<div id="portal-game4" class="hidden">
+    <div class="game3-wrapper">
+        <div class="portal-header" style="width:100%; max-width:800px; border-radius:12px; margin-bottom:10px; background-color:var(--ak2-primary);">
+            <h1>Mattestudion (Åk 2)</h1>
+            <p>Slumpa fram uppgifter från höstterminen åk 2</p>
+        </div>
+        <div class="game3-nav">
+            <button class="ak2-btn active" id="game4-btn-grannar">Talets grannar</button>
+            <button class="ak2-btn" id="game4-btn-talfoljd">Talföljder</button>
+            <button class="ak2-btn" id="game4-btn-tallinjer">Tallinjer</button>
+            <button class="ak2-btn" id="game4-btn-likheter">Likheter (+/-)</button>
+            <button class="ak2-btn" id="game4-btn-multi">Multiplikation</button>
+            <button class="ak2-btn" id="game4-btn-problem">Problemlösning</button>
+        </div>
+        <div class="game3-main">
+            <section id="game4-page-grannar" class="game3-page active">
+                <h2>Skriv talets grannar</h2>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-grannar">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-grannar" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr4-grannar">Rätta mina svar</button>
+            </section>
+            <section id="game4-page-talfoljd" class="game3-page">
+                <h2>Fortsätt talföljden</h2>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-talfoljd">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-talfoljd" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr4-talfoljd">Rätta mina svar</button>
+            </section>
+            <section id="game4-page-tallinjer" class="game3-page">
+                <h2>Vilket tal pekar pilen på?</h2>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-tallinjer">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-tallinjer" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr4-tallinjer">Rätta mina svar</button>
+            </section>
+            <section id="game4-page-likheter" class="game3-page">
+                <h2>Skriv talet som saknas</h2>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-likheter">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-likheter" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr4-likheter">Rätta mina svar</button>
+            </section>
+            <section id="game4-page-multi" class="game3-page">
+                <h2>Beräkna multiplikation</h2>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-multi">Slumpa 5 nya uppgifter</button>
+                <div id="game4-container-multi" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr4-multi">Rätta mina svar</button>
+            </section>
+            <section id="game4-page-problem" class="game3-page">
+                <h2>Problemlösning (Åk 2)</h2>
+                <button class="game3-btn-generate" style="background-color:#ab47bc" id="gen4-problem">Slumpa 2 nya uppgifter</button>
+                <div id="game4-container-problem" class="game3-quiz-container" style="margin-top:15px;"></div>
+                <button class="game3-btn-correct" id="corr4-problem">Rätta mina svar</button>
+            </section>
+            <center><button class="portal-back-btn" id="game4-back-portal" style="width:100%; padding:12px;">← Till huvudmenyn</button></center>
         </div>
     </div>
 </div>
 
 <script>
 // =====================
-// CONFETTI (inline, no CDN)
+// GLOBAL LOGIK & CONFETTI
 // =====================
 function launchConfetti(duration) {
-    const colors = ['#4caf50','#f44336','#2196f3','#ffeb3b','#ff9800','#e91e63','#9c27b0'];
+    const colors = ['#4caf50','#f44336','#2196f3','#ffeb3b','#ff9800','#9c27b0'];
     const end = Date.now() + (duration || 3000);
     function frame() {
         for (let i = 0; i < 6; i++) {
             const conf = document.createElement('div');
-            conf.style.cssText = `
-                position:fixed; z-index:9999; pointer-events:none;
-                width:${6+Math.random()*6}px; height:${6+Math.random()*6}px;
-                border-radius:${Math.random()>0.5?'50%':'2px'};
-                background:${colors[Math.floor(Math.random()*colors.length)]};
-                left:${Math.random()*100}vw; top:-10px;
-                animation: confettiFall ${2+Math.random()*3}s linear forwards;
-                transform: rotate(${Math.random()*360}deg);
-            `;
+            conf.style.cssText = `position:fixed; z-index:9999; pointer-events:none; width:${6+Math.random()*6}px; height:${6+Math.random()*6}px; background:${colors[Math.floor(Math.random()*colors.length)]}; left:${Math.random()*100}vw; top:-10px; animation: confettiFall ${2+Math.random()*3}s linear forwards; transform: rotate(${Math.random()*360}deg);`;
             document.body.appendChild(conf);
             setTimeout(() => conf.remove(), 5000);
         }
         if (Date.now() < end) requestAnimationFrame(frame);
     }
     if (!document.getElementById('confetti-style')) {
-        const style = document.createElement('style');
-        style.id = 'confetti-style';
+        const style = document.createElement('style'); style.id = 'confetti-style';
         style.textContent = '@keyframes confettiFall { to { transform: translateY(105vh) rotate(720deg); } }';
         document.head.appendChild(style);
     }
     frame();
 }
 
-// =====================
-// NAVIGATION
-// =====================
 function showView(id) {
-    ['portal-menu-view','portal-game1','portal-game2','portal-game3'].forEach(v => {
-        document.getElementById(v).classList.add('hidden');
-    });
+    ['portal-menu-view','portal-game1','portal-game2','portal-game3','portal-game4'].forEach(v => document.getElementById(v).classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
 }
 
 function returnToPortal() {
-    game1_stopTimer();
+    if(typeof game1_stopTimer === 'function') game1_stopTimer();
     document.body.style.backgroundColor = '#eef2f5';
     showView('portal-menu-view');
 }
 
-document.getElementById('btn-game1').addEventListener('click', function() {
-    showView('portal-game1');
-    game1_showMenu();
-});
-document.getElementById('btn-game2').addEventListener('click', function() {
-    showView('portal-game2');
-    document.body.style.backgroundColor = '#f0f4f8';
-    game2_initGame();
-});
-document.getElementById('btn-game3').addEventListener('click', function() {
-    showView('portal-game3');
-    document.body.style.backgroundColor = '#eef2f5';
-    game3_switchPage('tallinjer');
-});
+document.getElementById('btn-game1').addEventListener('click', () => { showView('portal-game1'); game1_showMenu(); });
+document.getElementById('btn-game2').addEventListener('click', () => { showView('portal-game2'); document.body.style.backgroundColor = '#f0f4f8'; game2_initGame(); });
+document.getElementById('btn-game3').addEventListener('click', () => { showView('portal-game3'); document.body.style.backgroundColor = '#eef2f5'; game3_switchPage('tallinjer'); });
+document.getElementById('btn-game4').addEventListener('click', () => { showView('portal-game4'); document.body.style.backgroundColor = 'var(--ak2-bg)'; game4_switchPage('grannar'); });
 document.getElementById('game2-back-portal').addEventListener('click', returnToPortal);
 document.getElementById('game3-back-portal').addEventListener('click', returnToPortal);
+document.getElementById('game4-back-portal').addEventListener('click', returnToPortal);
+
+function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
 // =====================
-// SPEL 1
+// SPEL 1 & 2 (Behållen befintlig logik)
 // =====================
-let game1_currentMode = '';
-let game1_num1, game1_num2, game1_correctAnswer;
-let game1_count = 0;
+/* Spel 1 */
+let game1_currentMode='', game1_num1, game1_num2, game1_correctAnswer, game1_count=0, game1_startTime, game1_timerInterval;
 const game1_maxCount = 30;
-let game1_startTime, game1_timerInterval;
-
 const game1_grid = document.getElementById('game1-options');
 for (let i = 0; i <= 10; i++) {
-    const btn = document.createElement('button');
-    btn.className = 'game1-num-btn';
-    btn.innerText = i;
-    btn.addEventListener('click', (function(val){ return function(){ game1_checkAnswer(val); }; })(i));
-    game1_grid.appendChild(btn);
+    const btn = document.createElement('button'); btn.className = 'game1-num-btn'; btn.innerText = i;
+    btn.addEventListener('click', () => game1_checkAnswer(i)); game1_grid.appendChild(btn);
 }
-
 document.getElementById('game1-back-portal').addEventListener('click', returnToPortal);
 document.getElementById('game1-abort-btn').addEventListener('click', game1_showMenu);
 document.getElementById('game1-end-back').addEventListener('click', game1_showMenu);
-document.getElementById('game1-start-plus').addEventListener('click', function(){ game1_startGame('plus'); });
-document.getElementById('game1-start-minus').addEventListener('click', function(){ game1_startGame('minus'); });
-document.getElementById('game1-play-again').addEventListener('click', function(){ game1_startGame(game1_currentMode); });
+document.getElementById('game1-start-plus').addEventListener('click', () => game1_startGame('plus'));
+document.getElementById('game1-start-minus').addEventListener('click', () => game1_startGame('minus'));
+document.getElementById('game1-play-again').addEventListener('click', () => game1_startGame(game1_currentMode));
 
-function game1_showMenu() {
-    game1_stopTimer();
-    document.getElementById('game1-menu-view').classList.remove('hidden');
-    document.getElementById('game1-active-view').classList.add('hidden');
-    document.getElementById('game1-end-view').classList.add('hidden');
-    document.body.style.backgroundColor = '#e0f7fa';
-}
-
-function game1_startGame(mode) {
-    game1_currentMode = mode;
-    game1_count = 0;
-    document.getElementById('game1-menu-view').classList.add('hidden');
-    document.getElementById('game1-end-view').classList.add('hidden');
-    document.getElementById('game1-active-view').classList.remove('hidden');
-    document.getElementById('game1-title').innerText = mode === 'plus' ? 'Lilla Plus' : 'Lilla Minus';
-    document.body.style.backgroundColor = mode === 'plus' ? '#e8f5e9' : '#ffebee';
-    game1_updateProgress();
-    game1_startTime = Date.now();
-    game1_timerInterval = setInterval(game1_updateTimer, 100);
-    game1_generateQuestion();
-}
-
+function game1_showMenu() { game1_stopTimer(); document.getElementById('game1-menu-view').classList.remove('hidden'); document.getElementById('game1-active-view').classList.add('hidden'); document.getElementById('game1-end-view').classList.add('hidden'); document.body.style.backgroundColor = '#e0f7fa'; }
+function game1_startGame(mode) { game1_currentMode = mode; game1_count = 0; document.getElementById('game1-menu-view').classList.add('hidden'); document.getElementById('game1-end-view').classList.add('hidden'); document.getElementById('game1-active-view').classList.remove('hidden'); document.getElementById('game1-title').innerText = mode === 'plus' ? 'Lilla Plus' : 'Lilla Minus'; document.body.style.backgroundColor = mode === 'plus' ? '#e8f5e9' : '#ffebee'; game1_updateProgress(); game1_startTime = Date.now(); game1_timerInterval = setInterval(game1_updateTimer, 100); game1_generateQuestion(); }
 function game1_generateQuestion() {
-    if (game1_currentMode === 'plus') {
-        game1_num1 = Math.floor(Math.random() * 11);
-        game1_num2 = Math.floor(Math.random() * (10 - game1_num1 + 1));
-        game1_correctAnswer = game1_num1 + game1_num2;
-        document.getElementById('game1-question').innerText = game1_num1 + ' + ' + game1_num2 + ' = ?';
-    } else {
-        game1_num1 = Math.floor(Math.random() * 11);
-        game1_num2 = Math.floor(Math.random() * (game1_num1 + 1));
-        game1_correctAnswer = game1_num1 - game1_num2;
-        document.getElementById('game1-question').innerText = game1_num1 + ' - ' + game1_num2 + ' = ?';
-    }
+    if(game1_currentMode === 'plus') { game1_num1 = getRandomInt(0,10); game1_num2 = getRandomInt(0, 10-game1_num1); game1_correctAnswer = game1_num1 + game1_num2; document.getElementById('game1-question').innerText = `${game1_num1} + ${game1_num2} = ?`; }
+    else { game1_num1 = getRandomInt(0,10); game1_num2 = getRandomInt(0, game1_num1); game1_correctAnswer = game1_num1 - game1_num2; document.getElementById('game1-question').innerText = `${game1_num1} - ${game1_num2} = ?`; }
 }
-
 function game1_checkAnswer(guess) {
     const box = document.getElementById('game1-question');
-    if (guess === game1_correctAnswer) {
-        game1_count++;
-        game1_updateProgress();
-        box.style.borderColor = '#4caf50'; box.style.color = '#4caf50';
-        setTimeout(function(){ box.style.borderColor = '#b0bec5'; box.style.color = '#37474f'; }, 200);
-        if (game1_count >= game1_maxCount) { game1_endGame(); } else { game1_generateQuestion(); }
-    } else {
-        box.style.borderColor = '#f44336'; box.style.color = '#f44336';
-        setTimeout(function(){ box.style.borderColor = '#b0bec5'; box.style.color = '#37474f'; }, 300);
-    }
+    if (guess === game1_correctAnswer) { game1_count++; game1_updateProgress(); box.style.borderColor = '#4caf50'; box.style.color = '#4caf50'; setTimeout(() => { box.style.borderColor = '#b0bec5'; box.style.color = '#37474f'; }, 200); if (game1_count >= game1_maxCount) { game1_endGame(); } else { game1_generateQuestion(); } }
+    else { box.style.borderColor = '#f44336'; box.style.color = '#f44336'; setTimeout(() => { box.style.borderColor = '#b0bec5'; box.style.color = '#37474f'; }, 300); }
 }
-
-function game1_updateProgress() { document.getElementById('game1-progress').innerText = game1_count + ' / ' + game1_maxCount; }
-function game1_updateTimer() {
-    const diff = Date.now() - game1_startTime;
-    const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('game1-timer').innerText = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-}
+function game1_updateProgress() { document.getElementById('game1-progress').innerText = `${game1_count} / ${game1_maxCount}`; }
+function game1_updateTimer() { const diff = Date.now() - game1_startTime; const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000); document.getElementById('game1-timer').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
 function game1_stopTimer() { clearInterval(game1_timerInterval); }
+function game1_endGame() { game1_stopTimer(); document.getElementById('game1-active-view').classList.add('hidden'); document.getElementById('game1-end-view').classList.remove('hidden'); const diff = Date.now() - game1_startTime; const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000), cs = Math.floor((diff % 1000) / 10); document.getElementById('game1-final-time').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(cs).padStart(2,'0')}`; launchConfetti(3000); }
 
-function game1_endGame() {
-    game1_stopTimer();
-    document.getElementById('game1-active-view').classList.add('hidden');
-    document.getElementById('game1-end-view').classList.remove('hidden');
-    const diff = Date.now() - game1_startTime;
-    const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000), cs = Math.floor((diff % 1000) / 10);
-    document.getElementById('game1-final-time').innerText =
-        String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + '.' + String(cs).padStart(2,'0');
-    launchConfetti(3000);
-}
-
-// =====================
-// SPEL 2
-// =====================
-let game2_mode = 'add';
-let game2_score = 0;
-let game2_currentA, game2_currentB, game2_part1, game2_part2, game2_correctResult;
-let game2_lastA = 0, game2_lastB = 0;
-
-document.getElementById('game2-btnAdd').addEventListener('click', function(){ game2_setMode('add'); });
-document.getElementById('game2-btnSub').addEventListener('click', function(){ game2_setMode('sub'); });
+/* Spel 2 */
+let game2_mode='add', game2_score=0, game2_A, game2_B, game2_p1, game2_p2, game2_res, game2_lastA=0, game2_lastB=0;
+document.getElementById('game2-btnAdd').addEventListener('click', () => game2_setMode('add'));
+document.getElementById('game2-btnSub').addEventListener('click', () => game2_setMode('sub'));
 document.getElementById('game2-checkBtn').addEventListener('click', game2_checkAnswer);
+['game2-inputPart1','game2-inputPart2'].forEach(id => document.getElementById(id).addEventListener('input', game2_updateVisuals));
+document.getElementById('game2-inputPart1').addEventListener('keydown', (e) => { if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputPart2').focus(); }});
+document.getElementById('game2-inputPart2').addEventListener('keydown', (e) => { if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputResult').focus(); }});
+document.getElementById('game2-inputResult').addEventListener('keydown', function(e) { if(e.key==='Enter' && !this.disabled){ e.preventDefault(); game2_checkAnswer(); }});
 
-document.getElementById('game2-inputPart1').addEventListener('input', game2_updateVisuals);
-document.getElementById('game2-inputPart2').addEventListener('input', game2_updateVisuals);
-document.getElementById('game2-inputPart1').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputPart2').focus(); }});
-document.getElementById('game2-inputPart2').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('game2-inputResult').focus(); }});
-document.getElementById('game2-inputResult').addEventListener('keydown', function(e){ if(e.key==='Enter' && !this.disabled){ e.preventDefault(); game2_checkAnswer(); }});
-
-function game2_setMode(newMode) {
-    if (game2_mode !== newMode) {
-        game2_score = 0;
-        document.getElementById('game2-scoreText').innerText = 0;
-        document.getElementById('game2-progressFill').style.width = '0%';
-    }
-    game2_mode = newMode;
-    document.getElementById('game2-btnAdd').className = newMode === 'add' ? 'game2-mode-btn active' : 'game2-mode-btn';
-    document.getElementById('game2-btnSub').className = newMode === 'sub' ? 'game2-mode-btn active' : 'game2-mode-btn';
-    document.getElementById('game2-mainOp').innerText = newMode === 'add' ? '+' : '-';
-    document.getElementById('game2-eqOp1').innerText = newMode === 'add' ? '+' : '-';
-    document.getElementById('game2-eqOp2').innerText = newMode === 'add' ? '+' : '-';
-    document.getElementById('game2-instructionText').innerText = newMode === 'add'
-        ? 'Addera först till 10, addera sedan resten.'
-        : 'Subtrahera först till 10, subtrahera sedan resten.';
-    game2_initGame();
-}
-
-function game2_initGame() {
-    let attempts = 0;
-    do {
-        if (game2_mode === 'add') {
-            game2_currentA = Math.floor(Math.random() * 8) + 2;
-            let minB = 11 - game2_currentA;
-            game2_currentB = Math.floor(Math.random() * (9 - minB + 1)) + minB;
-            game2_part1 = 10 - game2_currentA;
-            game2_part2 = game2_currentB - game2_part1;
-            game2_correctResult = game2_currentA + game2_currentB;
-        } else {
-            game2_currentA = Math.floor(Math.random() * 8) + 11;
-            let minB = game2_currentA - 9;
-            game2_currentB = Math.floor(Math.random() * (9 - minB + 1)) + minB;
-            game2_part1 = game2_currentA - 10;
-            game2_part2 = game2_currentB - game2_part1;
-            game2_correctResult = game2_currentA - game2_currentB;
-        }
-        attempts++;
-    } while (game2_currentA === game2_lastA && game2_currentB === game2_lastB && attempts < 10);
-
-    game2_lastA = game2_currentA; game2_lastB = game2_currentB;
-    document.getElementById('game2-numA').innerText = game2_currentA;
-    document.getElementById('game2-numB').innerText = game2_currentB;
-    document.getElementById('game2-eqA').innerText = game2_currentA;
-
-    ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(function(id) {
-        const el = document.getElementById(id);
-        el.value = '';
-        el.className = id === 'game2-inputResult' ? 'game2-main-result' : 'game2-step-input';
-        el.disabled = false;
-        el.style.borderColor = '#ccc';
-    });
-    document.getElementById('game2-eqPart1').innerText = '__';
-    document.getElementById('game2-eqPart2').innerText = '__';
-    document.getElementById('game2-feedback').innerText = '';
-    document.getElementById('game2-checkBtn').style.display = 'inline-block';
-    game2_updateVisuals();
-    document.getElementById('game2-inputPart1').focus();
-}
-
-function game2_updateVisuals() {
-    const val1 = parseInt(document.getElementById('game2-inputPart1').value) || 0;
-    const val2 = parseInt(document.getElementById('game2-inputPart2').value) || 0;
-    document.getElementById('game2-eqPart1').innerText = val1 || '__';
-    document.getElementById('game2-eqPart2').innerText = val2 || '__';
-    const container = document.getElementById('game2-tenFrames');
-    container.innerHTML = '';
-    const frame1 = document.createElement('div'); frame1.className = 'game2-frame';
-    const frame2 = document.createElement('div'); frame2.className = 'game2-frame';
-    const dots = [];
-    for (let i = 0; i < 20; i++) {
-        const dot = document.createElement('div'); dot.className = 'game2-dot'; dots.push(dot);
-        if (i < 10) frame1.appendChild(dot); else frame2.appendChild(dot);
-    }
-    if (game2_mode === 'add') {
-        for (let i = 0; i < game2_currentA; i++) dots[i].classList.add('filled');
-        for (let i = 0; i < Math.min(val1, 10 - game2_currentA); i++) { if (game2_currentA+i<20) dots[game2_currentA+i].classList.add('action'); }
-        for (let i = 0; i < val2; i++) { if (10+i<20) dots[10+i].classList.add('action'); }
-    } else {
-        for (let i = 0; i < game2_currentA; i++) dots[i].classList.add('filled');
-        let removeCount = 0;
-        for (let i = 0; i < val1; i++) { let idx = game2_currentA-1-removeCount; if(idx>=0&&idx>=10){dots[idx].className='game2-dot removed'; removeCount++;} }
-        for (let i = 0; i < val2; i++) { let idx = game2_currentA-1-removeCount; if(idx>=0&&idx<10){dots[idx].className='game2-dot removed'; removeCount++;} }
-    }
-    container.appendChild(frame1); container.appendChild(frame2);
-}
-
-function game2_checkAnswer() {
-    const val1 = parseInt(document.getElementById('game2-inputPart1').value);
-    const val2 = parseInt(document.getElementById('game2-inputPart2').value);
-    const res  = parseInt(document.getElementById('game2-inputResult').value);
-    let isCorrect = true;
-
-    if (val1 !== game2_part1) { document.getElementById('game2-inputPart1').className = 'game2-step-input wrong'; isCorrect = false; }
-    else { document.getElementById('game2-inputPart1').className = 'game2-step-input correct'; }
-    if (val2 !== game2_part2) { document.getElementById('game2-inputPart2').className = 'game2-step-input wrong'; isCorrect = false; }
-    else { document.getElementById('game2-inputPart2').className = 'game2-step-input correct'; }
-    if (res !== game2_correctResult) { document.getElementById('game2-inputResult').style.borderColor = '#f44336'; isCorrect = false; }
-    else { document.getElementById('game2-inputResult').style.borderColor = '#4CAF50'; }
-
-    const fb = document.getElementById('game2-feedback');
-    if (isCorrect) {
-        fb.innerText = 'Rätt svar! Snyggt jobbat!'; fb.style.color = '#4CAF50';
-        document.getElementById('game2-checkBtn').style.display = 'none';
-        ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(function(id){ document.getElementById(id).disabled = true; });
-        game2_score++;
-        document.getElementById('game2-scoreText').innerText = game2_score;
-        document.getElementById('game2-progressFill').style.width = (game2_score / 20 * 100) + '%';
-        if (game2_score >= 20) {
-            fb.innerText = 'GRATTIS! Du klarade 20 poäng!';
-            launchConfetti(5000);
-            game2_score = 0;
-            setTimeout(function(){
-                document.getElementById('game2-scoreText').innerText = 0;
-                document.getElementById('game2-progressFill').style.width = '0%';
-                game2_initGame();
-            }, 6000);
-        } else { setTimeout(game2_initGame, 2000); }
-    } else { fb.innerText = 'Något blev fel, titta på prickarna och försök igen.'; fb.style.color = '#f44336'; }
-}
+function game2_setMode(newMode) { if (game2_mode !== newMode) { game2_score = 0; document.getElementById('game2-scoreText').innerText = 0; document.getElementById('game2-progressFill').style.width = '0%'; } game2_mode = newMode; document.getElementById('game2-btnAdd').className = newMode === 'add' ? 'game2-mode-btn active' : 'game2-mode-btn'; document.getElementById('game2-btnSub').className = newMode === 'sub' ? 'game2-mode-btn active' : 'game2-mode-btn'; document.getElementById('game2-mainOp').innerText = newMode === 'add' ? '+' : '-'; document.getElementById('game2-eqOp1').innerText = newMode === 'add' ? '+' : '-'; document.getElementById('game2-eqOp2').innerText = newMode === 'add' ? '+' : '-'; document.getElementById('game2-instructionText').innerText = newMode === 'add' ? 'Addera först till 10, addera sedan resten.' : 'Subtrahera först till 10, subtrahera sedan resten.'; game2_initGame(); }
+function game2_initGame() { let att = 0; do { if (game2_mode === 'add') { game2_A = getRandomInt(2,9); game2_B = getRandomInt(11-game2_A, 9); game2_p1 = 10-game2_A; game2_p2 = game2_B-game2_p1; game2_res = game2_A+game2_B; } else { game2_A = getRandomInt(11,18); game2_B = getRandomInt(game2_A-9, 9); game2_p1 = game2_A-10; game2_p2 = game2_B-game2_p1; game2_res = game2_A-game2_B; } att++; } while (game2_A === game2_lastA && game2_B === game2_lastB && att < 10); game2_lastA = game2_A; game2_lastB = game2_B; document.getElementById('game2-numA').innerText = game2_A; document.getElementById('game2-numB').innerText = game2_B; document.getElementById('game2-eqA').innerText = game2_A; ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(id => { const el = document.getElementById(id); el.value = ''; el.className = id === 'game2-inputResult' ? 'game2-main-result' : 'game2-step-input'; el.disabled = false; el.style.borderColor = '#ccc'; }); document.getElementById('game2-eqPart1').innerText = '__'; document.getElementById('game2-eqPart2').innerText = '__'; document.getElementById('game2-feedback').innerText = ''; document.getElementById('game2-checkBtn').style.display = 'inline-block'; game2_updateVisuals(); document.getElementById('game2-inputPart1').focus(); }
+function game2_updateVisuals() { const v1 = parseInt(document.getElementById('game2-inputPart1').value) || 0; const v2 = parseInt(document.getElementById('game2-inputPart2').value) || 0; document.getElementById('game2-eqPart1').innerText = v1 || '__'; document.getElementById('game2-eqPart2').innerText = v2 || '__'; const c = document.getElementById('game2-tenFrames'); c.innerHTML = ''; const f1 = document.createElement('div'); f1.className = 'game2-frame'; const f2 = document.createElement('div'); f2.className = 'game2-frame'; const dts = []; for (let i = 0; i < 20; i++) { const dot = document.createElement('div'); dot.className = 'game2-dot'; dts.push(dot); if (i < 10) f1.appendChild(dot); else f2.appendChild(dot); } if (game2_mode === 'add') { for (let i = 0; i < game2_A; i++) dts[i].classList.add('filled'); for (let i = 0; i < Math.min(v1, 10 - game2_A); i++) { if (game2_A+i<20) dts[game2_A+i].classList.add('action'); } for (let i = 0; i < v2; i++) { if (10+i<20) dts[10+i].classList.add('action'); } } else { for (let i = 0; i < game2_A; i++) dts[i].classList.add('filled'); let rm = 0; for (let i = 0; i < v1; i++) { let idx = game2_A-1-rm; if(idx>=0&&idx>=10){dts[idx].className='game2-dot removed'; rm++;} } for (let i = 0; i < v2; i++) { let idx = game2_A-1-rm; if(idx>=0&&idx<10){dts[idx].className='game2-dot removed'; rm++;} } } c.appendChild(f1); c.appendChild(f2); }
+function game2_checkAnswer() { const v1 = parseInt(document.getElementById('game2-inputPart1').value); const v2 = parseInt(document.getElementById('game2-inputPart2').value); const res = parseInt(document.getElementById('game2-inputResult').value); let ok = true; if (v1 !== game2_p1) { document.getElementById('game2-inputPart1').className = 'game2-step-input wrong'; ok = false; } else { document.getElementById('game2-inputPart1').className = 'game2-step-input correct'; } if (v2 !== game2_p2) { document.getElementById('game2-inputPart2').className = 'game2-step-input wrong'; ok = false; } else { document.getElementById('game2-inputPart2').className = 'game2-step-input correct'; } if (res !== game2_res) { document.getElementById('game2-inputResult').style.borderColor = '#f44336'; ok = false; } else { document.getElementById('game2-inputResult').style.borderColor = '#4CAF50'; } const fb = document.getElementById('game2-feedback'); if (ok) { fb.innerText = 'Rätt svar! Snyggt jobbat!'; fb.style.color = '#4CAF50'; document.getElementById('game2-checkBtn').style.display = 'none'; ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(id => document.getElementById(id).disabled = true); game2_score++; document.getElementById('game2-scoreText').innerText = game2_score; document.getElementById('game2-progressFill').style.width = (game2_score / 20 * 100) + '%'; if (game2_score >= 20) { fb.innerText = 'GRATTIS! Du klarade 20 poäng!'; launchConfetti(5000); game2_score = 0; setTimeout(() => { document.getElementById('game2-scoreText').innerText = 0; document.getElementById('game2-progressFill').style.width = '0%'; game2_initGame(); }, 6000); } else { setTimeout(game2_initGame, 2000); } } else { fb.innerText = 'Något blev fel, titta på prickarna och försök igen.'; fb.style.color = '#f44336'; } }
 
 // =====================
-// SPEL 3
+// SPEL 3 (ÅK 1) LOGIK
 // =====================
-let answersTallinjer = [], answersStorleksordna = [], answersLikheter = [];
-let answersDelaUpp = [], answersTalfoljd = [], answersProblem = [];
+let ans3_tallinjer=[], ans3_storleksordna=[], ans3_likheter=[], ans3_delaupp=[], ans3_talfoljd=[], ans3_problem=[];
+const leksaker1 = [{e:"🚗"},{e:"📖"},{e:"🧸"},{e:"🧩"},{e:"⚽"},{e:"🖍️"},{e:"🎲"},{e:"🧢"}];
 
-// Nav buttons
-['tallinjer','storleksordna','likheter','delaupp','talfoljd','problem'].forEach(function(id) {
-    document.getElementById('game3-btn-' + id).addEventListener('click', function(){ game3_switchPage(id); });
+['tallinjer','storleksordna','likheter','delaupp','talfoljd','problem'].forEach(id => {
+    document.getElementById('game3-btn-'+id).addEventListener('click', () => game3_switchPage(id));
+    document.getElementById('gen3-'+id).addEventListener('click', window['g3_gen_'+id]);
+    document.getElementById('corr3-'+id).addEventListener('click', () => game3_correctQuiz(id));
 });
-// Generate buttons
-document.getElementById('gen-tallinjer').addEventListener('click', game3_generateTallinjer);
-document.getElementById('gen-storleksordna').addEventListener('click', game3_generateStorleksordna);
-document.getElementById('gen-likheter').addEventListener('click', game3_generateLikheter);
-document.getElementById('gen-delaupp').addEventListener('click', game3_generateDelaUpp);
-document.getElementById('gen-talfoljd').addEventListener('click', game3_generateTalfoljd);
-document.getElementById('gen-problem').addEventListener('click', game3_generateProblem);
-// Correct buttons
-document.getElementById('correct-tallinjer').addEventListener('click', function(){ game3_correctQuiz('tallinjer'); });
-document.getElementById('correct-storleksordna').addEventListener('click', function(){ game3_correctQuiz('storleksordna'); });
-document.getElementById('correct-likheter').addEventListener('click', function(){ game3_correctQuiz('likheter'); });
-document.getElementById('correct-delaupp').addEventListener('click', function(){ game3_correctQuiz('delaupp'); });
-document.getElementById('correct-talfoljd').addEventListener('click', function(){ game3_correctQuiz('talfoljd'); });
-document.getElementById('correct-problem').addEventListener('click', function(){ game3_correctQuiz('problem'); });
 
-function game3_switchPage(pageId) {
-    document.querySelectorAll('.game3-page').forEach(function(p){ p.classList.remove('active'); });
-    document.querySelectorAll('.game3-nav button').forEach(function(b){ b.classList.remove('active'); });
-    document.getElementById('game3-page-' + pageId).classList.add('active');
-    document.getElementById('game3-btn-' + pageId).classList.add('active');
-    if (pageId === 'tallinjer' && answersTallinjer.length === 0) game3_generateTallinjer();
-    if (pageId === 'storleksordna' && answersStorleksordna.length === 0) game3_generateStorleksordna();
-    if (pageId === 'likheter' && answersLikheter.length === 0) game3_generateLikheter();
-    if (pageId === 'delaupp' && answersDelaUpp.length === 0) game3_generateDelaUpp();
-    if (pageId === 'talfoljd' && answersTalfoljd.length === 0) game3_generateTalfoljd();
-    if (pageId === 'problem' && answersProblem.length === 0) game3_generateProblem();
+function game3_switchPage(id) {
+    document.querySelectorAll('#portal-game3 .game3-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#portal-game3 .game3-nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('game3-page-'+id).classList.add('active');
+    document.getElementById('game3-btn-'+id).classList.add('active');
+    if(id==='tallinjer' && ans3_tallinjer.length===0) g3_gen_tallinjer();
+    if(id==='storleksordna' && ans3_storleksordna.length===0) g3_gen_storleksordna();
+    if(id==='likheter' && ans3_likheter.length===0) g3_gen_likheter();
+    if(id==='delaupp' && ans3_delaupp.length===0) g3_gen_delaupp();
+    if(id==='talfoljd' && ans3_talfoljd.length===0) g3_gen_talfoljd();
+    if(id==='problem' && ans3_problem.length===0) g3_gen_problem();
 }
 
-function game3_getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
-function game3_generateTallinjer() {
-    const container = document.getElementById('game3-container-tallinjer');
-    container.innerHTML = ''; answersTallinjer = [];
-    for (let i = 0; i < 5; i++) {
-        const isTwenty = Math.random() > 0.5;
-        const maxVal = isTwenty ? 20 : 10;
-        const targetVal = game3_getRandomInt(1, maxVal - 1);
-        answersTallinjer.push(targetVal);
-        const card = document.createElement('div'); card.className = 'game3-task-card';
-        let lineMarksHTML = '';
-        for (let m = 0; m <= maxVal; m++) {
-            const leftPercent = (m / maxVal) * 100;
-            const isMajor = (m===0||m===5||m===10||m===15||m===20);
-            let label = '';
-            if (m===0||m===10||(isTwenty&&m===20)||(!isTwenty&&m===5)) {
-                label = '<div class="game3-line-label" style="left:' + leftPercent + '%">' + m + '</div>';
-            }
-            lineMarksHTML += '<div class="game3-line-mark ' + (isMajor?'major':'') + '" style="left:' + leftPercent + '%"></div>' + label;
+function g3_gen_tallinjer() {
+    let c = document.getElementById('game3-container-tallinjer'); c.innerHTML=''; ans3_tallinjer=[];
+    for(let i=0; i<5; i++) {
+        let max = Math.random()>0.5?20:10, target = getRandomInt(1, max-1); ans3_tallinjer.push(target);
+        let html = `<div class="game3-task-card" style="flex-direction:column; align-items:flex-start;"><strong>Uppgift ${i+1}.</strong> Vilket tal pekar pilen på?<div class="game3-number-line-wrapper"><div class="game3-number-line">`;
+        for(let m=0; m<=max; m++) {
+            let pct = (m/max)*100, maj = (m===0||m===5||m===10||m===15||m===20);
+            html += `<div class="game3-line-mark ${maj?'major':''}" style="left:${pct}%"></div>`;
+            if(m===0||m===10||(max===20&&m===20)||(!max===10&&m===5)) html+=`<div class="game3-line-label" style="left:${pct}%">${m}</div>`;
         }
-        const pointerLeft = (targetVal / maxVal) * 100;
-        card.innerHTML =
-            '<div style="width:100%;"><strong>Uppgift ' + (i+1) + '.</strong> Vilket tal pekar pilen på?</div>' +
-            '<div class="game3-number-line-wrapper">' +
-              '<div class="game3-number-line">' + lineMarksHTML +
-                '<div class="game3-line-pointer" style="left:' + pointerLeft + '%">' +
-                  '<input type="text" class="game3-quiz-input" data-index="' + i + '" placeholder="?">' +
-                  '<span class="game3-feedback-mark" id="feedback-tallinjer-' + i + '"></span>' +
-                '</div>' +
-              '</div>' +
-            '</div>';
-        container.appendChild(card);
+        html += `<div class="game3-line-pointer" style="left:${(target/max)*100}%"><input type="text" class="game3-quiz-input" id="g3-i-tallinjer-${i}"><span class="game3-feedback-mark" id="g3-fb-tallinjer-${i}"></span></div></div></div></div>`;
+        c.innerHTML += html;
     }
 }
-
-function game3_generateStorleksordna() {
-    const container = document.getElementById('game3-container-storleksordna');
-    container.innerHTML = ''; answersStorleksordna = [];
-    for (let i = 0; i < 5; i++) {
-        let numbers = [];
-        while (numbers.length < 5) { let n = game3_getRandomInt(1,35); if(!numbers.includes(n)) numbers.push(n); }
-        const sorted = [...numbers].sort(function(a,b){ return a-b; });
-        answersStorleksordna.push(sorted);
-        const card = document.createElement('div'); card.className = 'game3-task-card';
-        let inputFields = '';
-        for (let j = 0; j < 5; j++) {
-            inputFields += '<div style="display:inline-block;position:relative;">' +
-                '<input type="text" class="game3-quiz-input" data-task="' + i + '" data-sub="' + j + '">' +
-                '<span class="game3-feedback-mark" id="feedback-order-' + i + '-' + j + '"></span></div>';
-            if (j < 4) inputFields += ' &lt; ';
-        }
-        card.innerHTML = '<div><strong>Uppgift ' + (i+1) + '.</strong></div>' +
-            '<div class="game3-cloud-container">' + numbers.map(function(n){ return '<span>'+n+'</span>'; }).join(' | ') + '</div>' +
-            '<div class="game3-order-inputs">' + inputFields + '</div>';
-        container.appendChild(card);
+function g3_gen_storleksordna() {
+    let c = document.getElementById('game3-container-storleksordna'); c.innerHTML=''; ans3_storleksordna=[];
+    for(let i=0; i<5; i++) {
+        let n=[]; while(n.length<5){let x=getRandomInt(1,35); if(!n.includes(x)) n.push(x);}
+        ans3_storleksordna.push([...n].sort((a,b)=>a-b));
+        let html = `<div class="game3-task-card"><div><strong>Uppgift ${i+1}.</strong></div><div class="game3-cloud-container">${n.map(x=>`<span>${x}</span>`).join(' | ')}</div><div class="game3-order-inputs">`;
+        for(let j=0; j<5; j++) html += `<div style="position:relative;display:inline-block;"><input class="game3-quiz-input" id="g3-i-ord-${i}-${j}"><span class="game3-feedback-mark" id="g3-fb-ord-${i}-${j}"></span></div> ${j<4?'&lt; ':''}`;
+        c.innerHTML += html + `</div></div>`;
     }
 }
-
-function game3_generateLikheter() {
-    const container = document.getElementById('game3-container-likheter');
-    container.innerHTML = ''; answersLikheter = [];
-    for (let i = 0; i < 5; i++) {
-        const type = game3_getRandomInt(1,4);
-        const a = game3_getRandomInt(1,10), b = game3_getRandomInt(1,10), sum = a + b;
-        const card = document.createElement('div'); card.className = 'game3-task-card';
-        const inputEl = '<input type="text" class="game3-quiz-input" data-index="' + i + '">' +
-            '<span class="game3-feedback-mark" id="feedback-likheter-' + i + '"></span>';
-        let taskHTML = '<strong>Uppgift ' + (i+1) + '.</strong> &nbsp;&nbsp;';
-        switch(type) {
-            case 1: answersLikheter.push(b); taskHTML += a + ' + ' + inputEl + ' = ' + sum; break;
-            case 2: answersLikheter.push(b); taskHTML += sum + ' = ' + a + ' + ' + inputEl; break;
-            case 3: answersLikheter.push(a); taskHTML += sum + ' = ' + inputEl + ' + ' + b; break;
-            case 4: answersLikheter.push(a); taskHTML += inputEl + ' + ' + b + ' = ' + sum; break;
-        }
-        card.innerHTML = taskHTML; container.appendChild(card);
+function g3_gen_likheter() {
+    let c = document.getElementById('game3-container-likheter'); c.innerHTML=''; ans3_likheter=[];
+    for(let i=0; i<5; i++) {
+        let t=getRandomInt(1,4), a=getRandomInt(1,10), b=getRandomInt(1,10), s=a+b;
+        let inp = `<input class="game3-quiz-input" id="g3-i-lik-${i}"><span class="game3-feedback-mark" id="g3-fb-lik-${i}"></span>`;
+        let html = `<div class="game3-task-card"><strong>Uppgift ${i+1}.</strong> &nbsp;&nbsp;`;
+        if(t===1){ ans3_likheter.push(b); html+=`${a} + ${inp} = ${s}`; }
+        else if(t===2){ ans3_likheter.push(b); html+=`${s} = ${a} + ${inp}`; }
+        else if(t===3){ ans3_likheter.push(a); html+=`${s} = ${inp} + ${b}`; }
+        else { ans3_likheter.push(a); html+=`${inp} + ${b} = ${s}`; }
+        c.innerHTML += html + `</div>`;
     }
 }
-
-function game3_generateDelaUpp() {
-    const container = document.getElementById('game3-container-delaupp');
-    container.innerHTML = ''; answersDelaUpp = [];
-    for (let i = 0; i < 5; i++) {
-        const topNum = game3_getRandomInt(4,12);
-        const leftNum = game3_getRandomInt(1, topNum-1);
-        const rightNum = topNum - leftNum;
-        const missingSide = Math.random() > 0.5 ? 1 : 0;
-        answersDelaUpp.push(missingSide === 0 ? leftNum : rightNum);
-        const inputHTML = '<div class="game3-tree-feedback-container">' +
-            '<input type="text" class="game3-quiz-input" data-index="' + i + '">' +
-            '<span class="game3-feedback-mark" id="feedback-delaupp-' + i + '"></span></div>';
-        const leftBoxHTML  = missingSide === 0 ? inputHTML : '<div class="game3-tree-box">' + leftNum + '</div>';
-        const rightBoxHTML = missingSide === 1 ? inputHTML : '<div class="game3-tree-box">' + rightNum + '</div>';
-        const treeWrapper = document.createElement('div'); treeWrapper.className = 'game3-split-tree';
-        treeWrapper.innerHTML =
-            '<div style="font-size:0.9rem;margin-bottom:5px;font-weight:bold;color:#777;">Upps. '+(i+1)+'</div>' +
-            '<div class="game3-tree-top">' + topNum + '</div>' +
-            '<div class="game3-tree-bottom-row">' + leftBoxHTML + rightBoxHTML + '</div>';
-        container.appendChild(treeWrapper);
+function g3_gen_delaupp() {
+    let c = document.getElementById('game3-container-delaupp'); c.innerHTML=''; ans3_delaupp=[];
+    for(let i=0; i<5; i++) {
+        let top=getRandomInt(4,12), L=getRandomInt(1,top-1), R=top-L, miss=Math.random()>0.5?0:1;
+        ans3_delaupp.push(miss===0?L:R);
+        let inp = `<div class="game3-tree-feedback-container"><input class="game3-quiz-input" id="g3-i-del-${i}"><span class="game3-feedback-mark" id="g3-fb-del-${i}"></span></div>`;
+        c.innerHTML += `<div class="game3-split-tree"><div style="font-weight:bold;color:#777;">Upps. ${i+1}</div><div class="game3-tree-top">${top}</div><div class="game3-tree-bottom-row">${miss===0?inp:`<div class="game3-tree-box">${L}</div>`}${miss===1?inp:`<div class="game3-tree-box">${R}</div>`}</div></div>`;
     }
 }
-
-function game3_generateTalfoljd() {
-    const container = document.getElementById('game3-container-talfoljd');
-    container.innerHTML = ''; answersTalfoljd = [];
-    for (let i = 0; i < 5; i++) {
-        let diff, start;
-        const pt = game3_getRandomInt(1,5);
-        if (pt===1){ diff=1; start=game3_getRandomInt(1,10); }
-        else if(pt===2){ diff=-1; start=game3_getRandomInt(10,20); }
-        else if(pt===3){ diff=2; start=game3_getRandomInt(1,5)*2; }
-        else if(pt===4){ diff=2; start=game3_getRandomInt(0,4)*2+1; }
-        else { diff=-2; start=game3_getRandomInt(5,10)*2; }
-        const seq = [];
-        let cur = start;
-        for(let j=0;j<7;j++){ seq.push(cur); cur+=diff; }
-        answersTalfoljd.push([seq[4],seq[5],seq[6]]);
-        const card = document.createElement('div'); card.className = 'game3-task-card';
-        let html = '<div style="width:100%;margin-bottom:10px;"><strong>Uppgift '+(i+1)+'.</strong> Fortsätt talföljden.</div>';
-        html += '<div style="display:flex;gap:15px;align-items:center;font-size:1.5rem;font-weight:bold;width:100%;flex-wrap:wrap;">';
-        for(let j=0;j<4;j++) html += '<div style="width:40px;text-align:center;">' + seq[j] + '</div>';
-        for(let j=0;j<3;j++) {
-            html += '<div style="position:relative;margin-left:10px;">' +
-                '<input type="text" class="game3-quiz-input" data-task="' + i + '" data-sub="' + j + '" style="width:50px;">' +
-                '<span class="game3-feedback-mark" id="feedback-talfoljd-' + i + '-' + j + '" style="position:absolute;top:-20px;right:0;font-size:1rem;"></span></div>';
-        }
-        html += '</div>';
-        card.innerHTML = html; container.appendChild(card);
+function g3_gen_talfoljd() {
+    let c = document.getElementById('game3-container-talfoljd'); c.innerHTML=''; ans3_talfoljd=[];
+    for(let i=0; i<5; i++) {
+        let t=getRandomInt(1,4), d=(t===1)?1:((t===2)?-1:((t===3)?2:-2)), st=(d>0)?getRandomInt(1,5):getRandomInt(12,20), seq=[];
+        for(let j=0; j<7; j++){ seq.push(st); st+=d; }
+        ans3_talfoljd.push([seq[4],seq[5],seq[6]]);
+        let html = `<div class="game3-task-card" style="flex-direction:column; align-items:flex-start;"><strong>Uppgift ${i+1}.</strong> Fortsätt talföljden.<div style="display:flex;gap:15px;font-size:1.5rem;font-weight:bold;margin-top:10px;">`;
+        for(let j=0; j<4; j++) html+=`<div>${seq[j]}</div>`;
+        for(let j=0; j<3; j++) html+=`<div style="position:relative;"><input class="game3-quiz-input" id="g3-i-tal-${i}-${j}"><span class="game3-feedback-mark" style="position:absolute;top:-20px;right:0;" id="g3-fb-tal-${i}-${j}"></span></div>`;
+        c.innerHTML += html + `</div></div>`;
     }
 }
-
-const barnNamn = ["Anton","Maja","Leo","Elsa","Hugo","Nora","Liam","Alma","Elias","Wilma"];
-const leksaksPool = [
-    {name:"Bil",emoji:"🚗"},{name:"Bok",emoji:"📖"},{name:"Nalle",emoji:"🧸"},
-    {name:"Pussel",emoji:"🧩"},{name:"Boll",emoji:"⚽"},{name:"Kritor",emoji:"🖍️"},
-    {name:"Spel",emoji:"🎲"},{name:"Målarfärg",emoji:"🎨"},{name:"Keps",emoji:"🧢"},
-    {name:"Glass",emoji:"🍦"}
-];
-
-function game3_generateProblem() {
-    const container = document.getElementById('game3-container-problem');
-    container.innerHTML = ''; answersProblem = [];
-    for (let i = 0; i < 2; i++) {
-        const name = barnNamn[game3_getRandomInt(0, barnNamn.length-1)];
-        const budget = Math.random() > 0.5 ? 100 : 50;
-        const leftoverOptions = [2,3,4,5,10,15];
-        const leftover = leftoverOptions[game3_getRandomInt(0, leftoverOptions.length-1)];
-        const targetSum = budget - leftover;
-        let valid = false, prices = [];
-        while (!valid) {
-            const p1 = game3_getRandomInt(10, targetSum-10);
-            const p2 = targetSum - p1;
-            const p3 = game3_getRandomInt(10, budget-5);
-            const p4 = game3_getRandomInt(10, budget-5);
-            const p5 = game3_getRandomInt(10, budget-5);
-            prices = [p1,p2,p3,p4,p5];
-            if (new Set(prices).size < 5) continue;
-            let matchCount = 0;
-            for(let a=0;a<5;a++) for(let b=a+1;b<5;b++) if(prices[a]+prices[b]===targetSum) matchCount++;
-            if (matchCount === 1) valid = true;
-        }
-        let poolCopy = [...leksaksPool], items = [];
-        for (let j = 0; j < 5; j++) {
-            const rIdx = game3_getRandomInt(0, poolCopy.length-1);
-            items.push(poolCopy.splice(rIdx, 1)[0]);
-        }
-        let shopItems = prices.map(function(price, idx){ return {emoji: items[idx].emoji, price: price}; });
-        for (let k = shopItems.length-1; k > 0; k--) {
-            const j = Math.floor(Math.random()*(k+1));
-            const tmp = shopItems[k]; shopItems[k] = shopItems[j]; shopItems[j] = tmp;
-        }
-        answersProblem.push({target: targetSum});
-        const card = document.createElement('div');
-        card.className = 'game3-task-card';
-        card.style.flexDirection = 'column';
-        card.style.alignItems = 'flex-start';
-        let html = '<div style="font-size:1.1rem;margin-bottom:10px;"><strong>Uppgift '+(i+1)+'.</strong> ' +
-            name + ' har ' + budget + ' kr. Hen köper två av sakerna nedan. Då har hen ' + leftover +
-            ' kr kvar. Vilka två saker köpte hen? (Klicka på sakerna)</div>' +
-            '<div class="game3-shop-grid" id="shop-grid-' + i + '">';
-        shopItems.forEach(function(item) {
-            html += '<div class="game3-shop-item" data-task="' + i + '" data-price="' + item.price + '">' +
-                '<div class="game3-emoji">' + item.emoji + '</div>' +
-                '<div class="game3-price">' + item.price + ' kr</div></div>';
+function g3_gen_problem() {
+    let c = document.getElementById('game3-container-problem'); c.innerHTML=''; ans3_problem=[];
+    for(let i=0; i<2; i++) {
+        let budg=Math.random()>0.5?100:50, left=[2,3,4,5,10][getRandomInt(0,4)], tgt=budg-left; ans3_problem.push(tgt);
+        let prc=[tgt-2, 2, tgt+1, tgt+2, tgt+5].sort(()=>Math.random()-0.5);
+        let html = `<div class="game3-task-card" style="flex-direction:column;align-items:flex-start;"><strong>Uppgift ${i+1}.</strong> Maja har ${budg} kr. Köper två saker, har ${left} kr kvar. Vilka? (Klicka 2)<div class="game3-shop-grid" id="g3-shop-${i}">`;
+        for(let j=0; j<5; j++) html += `<div class="game3-shop-item" onclick="g3_tog(${i},this)" data-p="${prc[j]}"><div class="game3-emoji">${leksaker1[getRandomInt(0,leksaker1.length-1)].e}</div><div class="game3-price">${prc[j]} kr</div></div>`;
+        c.innerHTML += html + `</div><div class="game3-feedback-mark" id="g3-fb-prob-${i}"></div></div>`;
+    }
+}
+function g3_tog(idx, el) {
+    if(el.classList.contains('selected')) el.classList.remove('selected');
+    else if(document.querySelectorAll(`#g3-shop-${idx} .selected`).length < 2) el.classList.add('selected');
+    el.classList.remove('correct','incorrect'); document.getElementById(`g3-fb-prob-${idx}`).innerText='';
+}
+function game3_correctQuiz(id) {
+    if(id==='tallinjer'){ ans3_tallinjer.forEach((a,i)=>chk(`g3-i-tallinjer-${i}`,`g3-fb-tallinjer-${i}`,a)); }
+    if(id==='storleksordna'){ ans3_storleksordna.forEach((arr,i)=>arr.forEach((a,j)=>chk(`g3-i-ord-${i}-${j}`,`g3-fb-ord-${i}-${j}`,a))); }
+    if(id==='likheter'){ ans3_likheter.forEach((a,i)=>chk(`g3-i-lik-${i}`,`g3-fb-lik-${i}`,a)); }
+    if(id==='delaupp'){ ans3_delaupp.forEach((a,i)=>chk(`g3-i-del-${i}`,`g3-fb-del-${i}`,a)); }
+    if(id==='talfoljd'){ ans3_talfoljd.forEach((arr,i)=>arr.forEach((a,j)=>chk(`g3-i-tal-${i}-${j}`,`g3-fb-tal-${i}-${j}`,a))); }
+    if(id==='problem'){
+        ans3_problem.forEach((tgt,i)=>{
+            let sels=document.querySelectorAll(`#g3-shop-${i} .selected`), fb=document.getElementById(`g3-fb-prob-${i}`);
+            if(sels.length!==2){ fb.innerText="Välj 2 saker!"; fb.className="game3-feedback-mark incorrect"; return; }
+            let sum=parseInt(sels[0].dataset.p)+parseInt(sels[1].dataset.p);
+            if(sum===tgt){ fb.innerText="✓ Rätt!"; fb.className="game3-feedback-mark correct"; sels.forEach(s=>s.classList.add('correct')); }
+            else{ fb.innerText=`✗ Fel (${sum} kr).`; fb.className="game3-feedback-mark incorrect"; sels.forEach(s=>s.classList.add('incorrect')); }
         });
-        html += '</div><div style="display:flex;align-items:center;height:30px;">' +
-            '<span class="game3-feedback-mark" id="feedback-problem-' + i + '"></span></div>';
-        card.innerHTML = html;
-        container.appendChild(card);
     }
-    // Attach click via delegation on the container
-    container.addEventListener('click', function(e) {
-        const item = e.target.closest('.game3-shop-item');
-        if (!item) return;
-        const taskIndex = parseInt(item.getAttribute('data-task'));
-        if (item.classList.contains('selected')) {
-            item.classList.remove('selected');
+}
+function chk(iId, fId, ans) {
+    let inp=document.getElementById(iId), fb=document.getElementById(fId), val=parseInt(inp.value);
+    if(val===ans){ inp.className="game3-quiz-input correct"; fb.innerText="✓"; fb.className="game3-feedback-mark correct"; }
+    else { inp.className="game3-quiz-input incorrect"; fb.innerText=`✗ (${ans})`; fb.className="game3-feedback-mark incorrect"; }
+}
+
+// =====================
+// SPEL 4 (ÅK 2) LOGIK
+// =====================
+let ans4_grannar=[], ans4_talfoljd=[], ans4_tallinjer=[], ans4_likheter=[], ans4_multi=[], ans4_problem=[];
+
+['grannar','talfoljd','tallinjer','likheter','multi','problem'].forEach(id => {
+    document.getElementById('game4-btn-'+id).addEventListener('click', () => game4_switchPage(id));
+    document.getElementById('gen4-'+id).addEventListener('click', window['g4_gen_'+id]);
+    document.getElementById('corr4-'+id).addEventListener('click', () => game4_correctQuiz(id));
+});
+
+function game4_switchPage(id) {
+    document.querySelectorAll('#portal-game4 .game3-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#portal-game4 .game3-nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('game4-page-'+id).classList.add('active');
+    document.getElementById('game4-btn-'+id).classList.add('active');
+    if(id==='grannar' && ans4_grannar.length===0) g4_gen_grannar();
+    if(id==='talfoljd' && ans4_talfoljd.length===0) g4_gen_talfoljd();
+    if(id==='tallinjer' && ans4_tallinjer.length===0) g4_gen_tallinjer();
+    if(id==='likheter' && ans4_likheter.length===0) g4_gen_likheter();
+    if(id==='multi' && ans4_multi.length===0) g4_gen_multi();
+    if(id==='problem' && ans4_problem.length===0) g4_gen_problem();
+}
+
+function g4_gen_grannar() {
+    let c = document.getElementById('game4-container-grannar'); c.innerHTML=''; ans4_grannar=[];
+    for(let i=0; i<5; i++) {
+        let start = getRandomInt(40, 196);
+        let seq = [start, start+1, start+2, start+3];
+        let showIdx = getRandomInt(0, 3);
+        let taskAns = [];
+        let html = `<div class="game3-task-card"><strong>${String.fromCharCode(97+i)})</strong> <div class="g4-grannar-row" style="margin-left:15px;">`;
+        for(let j=0; j<4; j++) {
+            if(j === showIdx) { html += `<div class="g4-grannar-box">${seq[j]}</div>`; }
+            else { 
+                html += `<div class="g4-grannar-box" style="position:relative;"><input id="g4-i-grannar-${i}-${j}"><span id="g4-fb-grannar-${i}-${j}" class="game3-feedback-mark" style="position:absolute; right:-20px; font-size:1rem;"></span></div>`;
+                taskAns.push({idx: j, val: seq[j]});
+            }
+        }
+        ans4_grannar.push(taskAns);
+        c.innerHTML += html + `</div></div>`;
+    }
+}
+
+function g4_gen_talfoljd() {
+    let c = document.getElementById('game4-container-talfoljd'); c.innerHTML=''; ans4_talfoljd=[];
+    for(let i=0; i<5; i++) {
+        let diffs = [2, -2, 5, -5, 10, -10];
+        let d = diffs[getRandomInt(0, 5)];
+        let st = d > 0 ? getRandomInt(1, 10)*5 : getRandomInt(10, 20)*5; 
+        if(Math.abs(d)===2) st = d > 0 ? getRandomInt(10, 50) : getRandomInt(60, 90);
+        let seq = [];
+        for(let j=0; j<7; j++){ seq.push(st); st+=d; }
+        ans4_talfoljd.push([seq[4],seq[5],seq[6]]);
+        let html = `<div class="game3-task-card" style="flex-direction:column; align-items:flex-start;"><strong>${String.fromCharCode(97+i)})</strong> <div style="display:flex;gap:15px;font-size:1.5rem;margin-top:10px;">`;
+        for(let j=0; j<4; j++) html+=`<div style="width:40px; text-align:right;">${seq[j]}</div>`;
+        for(let j=0; j<3; j++) html+=`<div style="position:relative;"><input class="game3-quiz-input" id="g4-i-tal-${i}-${j}"><span class="game3-feedback-mark" style="position:absolute;top:-20px;right:-10px;" id="g4-fb-tal-${i}-${j}"></span></div>`;
+        c.innerHTML += html + `</div></div>`;
+    }
+}
+
+function g4_gen_tallinjer() {
+    let c = document.getElementById('game4-container-tallinjer'); c.innerHTML=''; ans4_tallinjer=[];
+    for(let i=0; i<5; i++) {
+        let isHigh = Math.random()>0.5;
+        let min = isHigh ? 50 : 0, max = isHigh ? 100 : 100;
+        let steps = isHigh ? 10 : 20; // antal småstreck
+        let stepVal = (max-min)/steps;
+        let targetIdx = getRandomInt(1, steps-1);
+        let target = min + targetIdx * stepVal;
+        ans4_tallinjer.push(target);
+        
+        let html = `<div class="game3-task-card" style="flex-direction:column; align-items:flex-start;"><strong>${String.fromCharCode(97+i)})</strong> <div class="game3-number-line-wrapper"><div class="game3-number-line">`;
+        for(let m=0; m<=steps; m++) {
+            let pct = (m/steps)*100;
+            let val = min + m*stepVal;
+            let maj = (isHigh && val%10===0) || (!isHigh && val%25===0);
+            html += `<div class="game3-line-mark ${maj?'major':''}" style="left:${pct}%"></div>`;
+            if(maj) html+=`<div class="game3-line-label" style="left:${pct}%">${val}</div>`;
+        }
+        html += `<div class="game3-line-pointer" style="left:${(targetIdx/steps)*100}%"><input type="text" class="game3-quiz-input" id="g4-i-tallinjer-${i}"><span class="game3-feedback-mark" id="g4-fb-tallinjer-${i}"></span></div></div></div></div>`;
+        c.innerHTML += html;
+    }
+}
+
+function g4_gen_likheter() {
+    let c = document.getElementById('game4-container-likheter'); c.innerHTML=''; ans4_likheter=[];
+    for(let i=0; i<5; i++) {
+        let isAdd = Math.random()>0.5;
+        let html = `<div class="game3-task-card"><strong>${String.fromCharCode(97+i)})</strong> &nbsp;&nbsp;`;
+        let inp = `<input class="game3-quiz-input" id="g4-i-lik-${i}"><span class="game3-feedback-mark" id="g4-fb-lik-${i}"></span>`;
+        if(isAdd) {
+            let s = getRandomInt(15, 35), a = getRandomInt(5, s-5), b = s-a;
+            let t = getRandomInt(1,4);
+            if(t===1){ ans4_likheter.push(b); html+=`${a} + ${inp} = ${s}`; }
+            else if(t===2){ ans4_likheter.push(b); html+=`${s} = ${a} + ${inp}`; }
+            else if(t===3){ ans4_likheter.push(a); html+=`${s} = ${inp} + ${b}`; }
+            else { ans4_likheter.push(a); html+=`${inp} + ${b} = ${s}`; }
         } else {
-            const selectedCount = document.querySelectorAll('#shop-grid-' + taskIndex + ' .selected').length;
-            if (selectedCount < 2) item.classList.add('selected');
+            let a = getRandomInt(15, 35), b = getRandomInt(2, 10), res = a-b;
+            let t = getRandomInt(1,4);
+            if(t===1){ ans4_likheter.push(b); html+=`${a} - ${inp} = ${res}`; }
+            else if(t===2){ ans4_likheter.push(a); html+=`${res} = ${inp} - ${b}`; }
+            else if(t===3){ ans4_likheter.push(res); html+=`${a} - ${b} = ${inp}`; }
+            else { ans4_likheter.push(a); html+=`${inp} - ${b} = ${res}`; }
         }
-        item.classList.remove('correct','incorrect');
-        document.getElementById('feedback-problem-' + taskIndex).innerText = '';
-    });
+        c.innerHTML += html + `</div>`;
+    }
 }
 
-function game3_correctQuiz(pageId) {
-    if (pageId === 'tallinjer') {
-        document.querySelectorAll('#game3-container-tallinjer .game3-quiz-input').forEach(function(input) {
-            const idx = parseInt(input.getAttribute('data-index'));
-            const userAns = parseInt(input.value.trim());
-            const fb = document.getElementById('feedback-tallinjer-' + idx);
-            if (userAns === answersTallinjer[idx]) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
-            else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+answersTallinjer[idx]+')'; fb.className='game3-feedback-mark incorrect'; }
-        });
-    } else if (pageId === 'storleksordna') {
-        for (let i = 0; i < 5; i++) {
-            document.querySelectorAll('#game3-container-storleksordna .game3-quiz-input[data-task="'+i+'"]').forEach(function(input) {
-                const sub = parseInt(input.getAttribute('data-sub'));
-                const userAns = parseInt(input.value.trim());
-                const fb = document.getElementById('feedback-order-'+i+'-'+sub);
-                const correct = answersStorleksordna[i][sub];
-                if (userAns === correct) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
-                else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+correct+')'; fb.className='game3-feedback-mark incorrect'; }
-            });
+function g4_gen_multi() {
+    let c = document.getElementById('game4-container-multi'); c.innerHTML=''; ans4_multi=[];
+    for(let i=0; i<5; i++) {
+        let isAddForm = (i===4); // Sista uppgiften är addition till multiplikation
+        let html = `<div class="game3-task-card"><strong>${String.fromCharCode(97+i)})</strong> &nbsp;&nbsp;`;
+        let inp = `<input class="game3-quiz-input" id="g4-i-mul-${i}"><span class="game3-feedback-mark" id="g4-fb-mul-${i}"></span>`;
+        if(isAddForm) {
+            let val = [2,3,4,5,10][getRandomInt(0,4)];
+            ans4_multi.push(val);
+            html += `${val} + ${val} + ${val} = 3 &middot; ${inp}`;
+        } else {
+            let a = [2,3,4,5,10][getRandomInt(0,4)], b = getRandomInt(1,10);
+            ans4_multi.push(a*b);
+            html += `${a} &middot; ${b} = ${inp}`;
         }
-    } else if (pageId === 'likheter') {
-        document.querySelectorAll('#game3-container-likheter .game3-quiz-input').forEach(function(input) {
-            const idx = parseInt(input.getAttribute('data-index'));
-            const userAns = parseInt(input.value.trim());
-            const fb = document.getElementById('feedback-likheter-' + idx);
-            if (userAns === answersLikheter[idx]) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
-            else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+answersLikheter[idx]+')'; fb.className='game3-feedback-mark incorrect'; }
-        });
-    } else if (pageId === 'delaupp') {
-        document.querySelectorAll('#game3-container-delaupp .game3-quiz-input').forEach(function(input) {
-            const idx = parseInt(input.getAttribute('data-index'));
-            const userAns = parseInt(input.value.trim());
-            const fb = document.getElementById('feedback-delaupp-' + idx);
-            if (userAns === answersDelaUpp[idx]) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
-            else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+answersDelaUpp[idx]+')'; fb.className='game3-feedback-mark incorrect'; }
-        });
-    } else if (pageId === 'talfoljd') {
-        for (let i = 0; i < 5; i++) {
-            document.querySelectorAll('#game3-container-talfoljd .game3-quiz-input[data-task="'+i+'"]').forEach(function(input) {
-                const sub = parseInt(input.getAttribute('data-sub'));
-                const userAns = parseInt(input.value.trim());
-                const fb = document.getElementById('feedback-talfoljd-'+i+'-'+sub);
-                const correct = answersTalfoljd[i][sub];
-                if (userAns === correct) { input.className='game3-quiz-input correct'; fb.innerText='✓'; fb.className='game3-feedback-mark correct'; }
-                else { input.className='game3-quiz-input incorrect'; fb.innerText='✗ ('+correct+')'; fb.className='game3-feedback-mark incorrect'; }
-            });
-        }
-    } else if (pageId === 'problem') {
-        for (let i = 0; i < 2; i++) {
-            const selectedItems = document.querySelectorAll('#shop-grid-' + i + ' .selected');
-            const fb = document.getElementById('feedback-problem-' + i);
-            if (selectedItems.length !== 2) {
-                fb.innerText = 'Du måste välja exakt två saker!'; fb.className = 'game3-feedback-mark incorrect';
-            } else {
-                let sum = 0;
-                selectedItems.forEach(function(item){ sum += parseInt(item.getAttribute('data-price')); });
-                if (sum === answersProblem[i].target) {
-                    fb.innerText = '✓ Helt rätt! De kostar tillsammans ' + sum + ' kr.';
-                    fb.className = 'game3-feedback-mark correct';
-                    selectedItems.forEach(function(item){ item.classList.add('correct'); });
-                } else {
-                    fb.innerText = '✗ Fel. Dina val kostar ' + sum + ' kr, men de ska kosta ' + answersProblem[i].target + ' kr.';
-                    fb.className = 'game3-feedback-mark incorrect';
-                    selectedItems.forEach(function(item){ item.classList.add('incorrect'); });
-                }
-            }
-        }
+        c.innerHTML += html + `</div>`;
     }
+}
+
+function g4_gen_problem() {
+    let c = document.getElementById('game4-container-problem'); c.innerHTML=''; ans4_problem=[];
+    
+    // Q1: Köp 3 saker med 200 kr
+    let items = [{n:"bilen", p:getRandomInt(30,60)}, {n:"bollen", p:getRandomInt(20,40)}, {n:"nallen", p:getRandomInt(50,80)}];
+    let sum = items[0].p + items[1].p + items[2].p; // Alltid under 200
+    ans4_problem.push(200 - sum);
+    let h1 = `<div class="game3-task-card" style="flex-direction:column;align-items:flex-start;"><strong>Uppgift 1.</strong><br>Anton köper ${items[0].n} (${items[0].p} kr), ${items[1].n} (${items[1].p} kr) och ${items[2].n} (${items[2].p} kr). Han lämnar fram 200 kr. Hur mycket får han tillbaka?<br><div style="margin-top:10px;"><input class="game3-quiz-input" id="g4-i-prob-0" style="width:80px;"> kr <span class="game3-feedback-mark" id="g4-fb-prob-0"></span></div></div>`;
+    
+    // Q2: Dela lika
+    let kids = ["Sami, Anna, Filip och Leia", "Maja, Hugo och Leo", "Nora och Elias"];
+    let numKids = [4, 3, 2];
+    let kIdx = getRandomInt(0,2);
+    let perKid = getRandomInt(5, 12);
+    let total = numKids[kIdx] * perKid;
+    ans4_problem.push(perKid);
+    let h2 = `<div class="game3-task-card" style="flex-direction:column;align-items:flex-start;"><strong>Uppgift 2.</strong><br>${kids[kIdx]} ska dela på ${total} kronor. Hur många kronor får varje barn?<br><div style="margin-top:10px;"><input class="game3-quiz-input" id="g4-i-prob-1" style="width:80px;"> kr <span class="game3-feedback-mark" id="g4-fb-prob-1"></span></div></div>`;
+    
+    c.innerHTML = h1 + h2;
+}
+
+function game4_correctQuiz(id) {
+    if(id==='grannar'){ 
+        ans4_grannar.forEach((ansArr, i) => {
+            ansArr.forEach(obj => {
+                let inp = document.getElementById(`g4-i-grannar-${i}-${obj.idx}`);
+                let fb = document.getElementById(`g4-fb-grannar-${i}-${obj.idx}`);
+                if(parseInt(inp.value) === obj.val) { inp.className="correct"; fb.innerText="✓"; fb.className="game3-feedback-mark correct"; }
+                else { inp.className="incorrect"; fb.innerText="✗"; fb.className="game3-feedback-mark incorrect"; }
+            });
+        });
+    }
+    if(id==='talfoljd'){ ans4_talfoljd.forEach((arr,i)=>arr.forEach((a,j)=>chk(`g4-i-tal-${i}-${j}`,`g4-fb-tal-${i}-${j}`,a))); }
+    if(id==='tallinjer'){ ans4_tallinjer.forEach((a,i)=>chk(`g4-i-tallinjer-${i}`,`g4-fb-tallinjer-${i}`,a)); }
+    if(id==='likheter'){ ans4_likheter.forEach((a,i)=>chk(`g4-i-lik-${i}`,`g4-fb-lik-${i}`,a)); }
+    if(id==='multi'){ ans4_multi.forEach((a,i)=>chk(`g4-i-mul-${i}`,`g4-fb-mul-${i}`,a)); }
+    if(id==='problem'){ ans4_problem.forEach((a,i)=>chk(`g4-i-prob-${i}`,`g4-fb-prob-${i}`,a)); }
 }
 </script>
 </body>
