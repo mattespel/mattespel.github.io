@@ -140,6 +140,13 @@ const digits=n=>({th:Math.floor(n/1000),h:Math.floor(n/100)%10,t:Math.floor(n/10
 function place(n,c){const d=digits(n);K.forEach(k=>{for(let i=0;i<d[k];i++)S.cols[k].push({c})})}
 function clear(){K.forEach(k=>S.cols[k]=[])}
 
+// ---------- vilken kolumn ska växlas ner? ----------
+function minusNeed(){
+  if(S.mode!=="minus"||!S.rem)return null;
+  const need=["e","t","h"].find(k=>S.rem[k]>S.cols[k].length);if(!need)return null;
+  let i=K.indexOf(need)-1;while(i>=0&&S.cols[K[i]].length===0)i--;
+  return i<0?{need,src:null}:{need,src:K[i]};
+}
 // ---------- rendering ----------
 function render(){
   const showTh=S.cols.th.length>0||total()>=1000;
@@ -149,7 +156,8 @@ function render(){
     const n=S.cols[k].length,i=K.indexOf(k),over=n>9&&k!=="th";
     const blocks=S.cols[k].map((b,j)=>`<div class="blk ${SHAPE[k]} ${b.c}${S.fresh&&S.fresh.k===k&&j>=S.fresh.from?" pop":""}" data-k="${k}" data-i="${j}" role="button" aria-label="${NAME[k]}"></div>`).join("");
     const up=k!=="th"?`<button class="sm xch${over?" hot":""}" data-act="up" data-k="${k}" ${n>=10?"":"disabled"} aria-label="Växla 10 ${NAME[k]} till 1 ${NAME[K[i-1]]}">← Växla 10</button>`:"";
-    const down=k!=="e"?`<button class="sm xch" data-act="down" data-k="${k}" ${n>=1&&S.cols[K[i+1]].length<=19?"":"disabled"} aria-label="Växla 1 ${NAME[k]} till 10 ${NAME[K[i+1]]}">Växla 1 →</button>`:"";
+    const mn=minusNeed(),hotDown=mn&&mn.src===k;
+    const down=k!=="e"?`<button class="sm xch${hotDown?" hot":""}" data-act="down" data-k="${k}" ${n>=1&&S.cols[K[i+1]].length<=19?"":"disabled"} aria-label="Växla 1 ${NAME[k]} till 10 ${NAME[K[i+1]]}">Växla 1 →</button>`:"";
     const canAdd=S.mode==="fri"&&k!=="th"&&n<MAXCOL&&total()+VAL[k]<=1000;
     const canSub=S.mode==="fri"?n>0:(S.mode==="minus"&&n>0&&S.rem[k]>0);
     const pm=S.mode==="plus"?"":`<div class="row">${S.mode==="fri"&&k!=="th"?`<button class="sm pm" data-act="add" data-k="${k}" ${canAdd?"":"disabled"} aria-label="Lägg till 1 ${NAME[k]}">+</button>`:""}<button class="sm pm" data-act="sub" data-k="${k}" ${canSub?"":"disabled"} aria-label="Ta bort 1 ${NAME[k]}">−</button></div>`;
@@ -177,9 +185,12 @@ function guide(){
   }
   if(S.mode==="minus"){
     if(S.a==null){say("Välj en uppgift eller skriv två egna tal.");return}
-    const need=["e","t","h"].find(k=>S.rem[k]>S.cols[k].length);
-    const left=K.filter(k=>S.rem[k]>0);
-    if(need){const up=K[K.indexOf(need)-1];say(`Du ska ta bort ${S.rem[need]} ${NAME[need]} men har bara ${S.cols[need].length}. Växla 1 ${NAME[up]} till 10 ${NAME[need]}.`,"warn")}
+    const mn=minusNeed(),left=K.filter(k=>S.rem[k]>0);
+    if(mn){const{need,src}=mn,nb=K[K.indexOf(need)-1];
+      if(!src)say(`Du ska ta bort ${S.rem[need]} ${NAME[need]} men det finns inte tillräckligt kvar. Kontrollera talen.`,"warn");
+      else if(src===nb)say(`Du ska ta bort ${S.rem[need]} ${NAME[need]} men har bara ${S.cols[need].length}. Växla 1 ${NAME[src]} till 10 ${NAME[need]}.`,"warn");
+      else{const empty=K.slice(K.indexOf(src)+1,K.indexOf(need)).reverse().map(k=>NAME[k]);
+        say(`Du ska ta bort ${S.rem[need]} ${NAME[need]} men har bara ${S.cols[need].length}. Du har inga ${empty.join(" eller ")} heller. Växla först 1 ${NAME[src]} till 10 ${NAME[K[K.indexOf(src)+1]]}.`,"warn")}}
     else if(left.length)say(`Ta bort ${left.map(k=>`${S.rem[k]} ${NAME[k]}`).join(", ")}. Tryck på blocken eller på minus.`);
     else say("Allt är borttaget. Vilket tal är kvar?");
   }

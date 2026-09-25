@@ -60,10 +60,16 @@ button{font:inherit;color:inherit}
 .oldtab{border-collapse:separate;border-spacing:6px;margin-left:-6px}
 .oldtab th{text-align:left;font-weight:700;padding:0 8px 0 0;white-space:nowrap}
 .oldtab thead th{text-align:center;color:var(--muted);font-size:.9rem}
-.oldtab td{text-align:center}
+.oldtab td{text-align:center;vertical-align:top}
+.oldtab tbody th{vertical-align:top;padding-top:14px}
 .pdf{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:12px;background:#fff;border:2px solid var(--blue);color:var(--blue-d);font-weight:700;font-size:1.2rem;text-decoration:none}
 .pdf:hover{background:var(--blue);color:#fff}
 .none{color:#b8bfcb}
+.badge{display:inline-block;font-size:.72rem;font-weight:700;color:var(--muted);background:#eef1f5;border-radius:999px;padding:0 7px;margin-left:4px;vertical-align:middle;white-space:nowrap}
+.badge.full{color:var(--ok);background:var(--ok-l)}
+.oldtab td .badge{display:block;margin:3px auto 0;width:max-content}
+.msgbox{padding:10px 14px;border-left:5px solid var(--err);background:var(--err-l);border-radius:0 10px 10px 0}
+.imgmiss{padding:24px 16px;border:2px dashed var(--err);border-radius:12px;background:var(--err-l);text-align:center}
 
 /* ---------- Provbladet ---------- */
 .back{display:inline-block;margin-bottom:14px;font-weight:700;text-decoration:none}
@@ -102,6 +108,43 @@ input.ans:focus{outline:none;background:#fff8dc;border-bottom-color:var(--pencil
 .facit{margin-top:.8rem;padding:8px 12px;border-left:4px solid var(--pencil);background:#fffbea;font-size:.95rem}
 .facit pre{margin:.3rem 0 0;font-size:1.05rem;line-height:1.25}
 .col{font-family:ui-monospace,Menlo,Consolas,monospace}
+.calcgrid{border-collapse:collapse;font-family:ui-monospace,Menlo,Consolas,monospace;margin:.3rem 0}
+.calcgrid td.dg{width:1.5em;height:auto;display:table-cell;text-align:center;font-size:1.35rem;padding:1px 2px;position:relative}
+.calcgrid td.opcell{width:1.2em;text-align:left;font-size:1.35rem;vertical-align:bottom}
+.calcgrid tr.mkrow td.dg{font-size:.75rem;color:var(--err);height:1.1em;vertical-align:bottom;padding-bottom:0}
+.calcgrid tr.mkrow td.mk{font-weight:700}
+.calcgrid tr.opline td{border-bottom:2px solid var(--ink);padding-bottom:2px}
+.calcgrid tr.resrow td.dg{font-weight:700;padding-top:2px}
+.calcgrid td.dg.struck{color:var(--err)}
+.colpad{display:table;margin:.5rem 0 .2rem;padding:6px 12px 8px;border:2px solid transparent;border-radius:12px;background:#f7f9fc}
+.colpad.ok{border-color:var(--ok);background:var(--ok-l)}
+.colpad.bad{border-color:var(--err);background:var(--err-l)}
+.calcgrid.live td.dg{width:2em;height:auto;padding:2px 3px}
+.calcgrid.live tr.mkrow td.dg{height:auto;padding-bottom:1px}
+.calcgrid.live input{font-family:inherit;text-align:center;background:#fff;color:var(--blue-d);border-radius:5px;padding:0}
+.calcgrid.live .cin{width:1.6em;height:1.75em;font-size:1.35rem;font-weight:700;border:2px solid #aab4c3}
+.calcgrid.live .cin:focus,.calcgrid.live .mkin:focus{outline:none;border-color:var(--pencil);background:#fff8dc}
+.calcgrid.live .mkin{width:1.6em;height:1.4em;font-size:.85rem;color:var(--err);border:1.5px dashed #d9a3aa}
+.calcgrid.live .cin.dok{border-color:var(--ok);background:var(--ok-l)}
+.calcgrid.live .cin.dbad{border-color:var(--err);background:var(--err-l)}
+.dgb{font:inherit;font-size:1.35rem;background:none;border:0;padding:0 .15em;cursor:pointer;position:relative;color:var(--ink);border-radius:4px}
+.dgb:hover{background:#fff4c7}
+.dgb.struck{color:var(--err)}
+.dgb.struck::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid var(--err);transform:rotate(-12deg)}
+.sm{font:inherit;font-size:.95rem;border:2px solid var(--ink);background:#fff;border-radius:10px;padding:4px 12px;font-weight:700;cursor:pointer}
+.sm:hover{background:#fff8dc}
+.padwrap{margin-top:.6rem}
+.padwrap summary{cursor:pointer;display:inline-block;font-weight:700;font-size:.95rem;color:var(--blue-d);border:2px dashed #9fbadc;border-radius:10px;padding:3px 12px;list-style:none}
+.padwrap summary::-webkit-details-marker{display:none}
+.padwrap[open] summary{border-style:solid}
+.padform{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:.5rem 0 .2rem}
+.padform input,.padform select{font:inherit;font-size:1.05rem;border:2px solid var(--ink);border-radius:8px;padding:3px 6px;background:#fff}
+.padform input{width:4.6em;text-align:center}
+.padmsg{font-size:.9rem;font-weight:700}
+.padmsg.good{color:var(--ok)}
+.padmsg.bad{color:var(--err)}
+.calcgrid td.dg.struck::after{content:"";position:absolute;left:10%;right:10%;top:48%;border-top:2px solid var(--err);transform:rotate(-8deg)}
+
 
 .cloud{display:inline-flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;max-width:260px;padding:18px 28px;margin:.5rem 0;background:#dcecf8;border:1.5px solid #2c3e5c;border-radius:48% 52% 45% 55%/60% 55% 45% 40%;font-size:1.05rem}
 .cards{display:flex;gap:18px;margin:.6rem 0 .8rem;padding-left:.3rem}
@@ -215,7 +258,7 @@ const until=(fn,ok)=>{let v,n=0;do{v=fn();n++}while(!ok(v)&&n<5000);return v};
 const L="abcdefgh";
 const norm=s=>String(s==null?"":s).trim().toLowerCase().replace(/\s+/g," ");
 const toNum=v=>{const d=String(v==null?"":v).replace(/[^0-9]/g,"");return d===""?NaN:parseInt(d,10)};
-const toTime=v=>{const m=String(v==null?"":v).trim().match(/^(\d{1,2})\s*[.:,]?\s*(\d{2})$/);if(!m)return NaN;const h=+m[1],mi=+m[2];if(mi>59)return NaN;return (h*60+mi)%720};
+const toTime=v=>{const t=String(v==null?"":v).trim();if(/^\d{1,2}$/.test(t)&&+t<=24)return (+t*60)%720;const m=t.match(/^(\d{1,2})\s*[.:,]?\s*(\d{2})$/);if(!m)return NaN;const h=+m[1],mi=+m[2];if(mi>59)return NaN;return (h*60+mi)%720};
 const fmtT=(h,m)=>`${String(h).padStart(2,"0")}.${String(m).padStart(2,"0")}`;
 const frac=(a,b)=>`<span class="frac"><span>${a}</span><span>${b}</span></span>`;
 const svar=x=>`<div class="svar">Svar: ${x}</div>`;
@@ -230,12 +273,14 @@ const T=(a,w)=>({k:"txt",a:[].concat(a).map(norm),w:w||8});
 const TM=(mins)=>({k:"time",a:((mins%1440)+1440)%720,w:5});
 const MC=(opts,a,layout)=>({k:"mc",opts,a,layout});
 const FREE=(w,num=true)=>({k:"free",w:w||3,num});
+const COL=(x,y,op)=>({k:"col",a:op==="+"?x+y:x-y,x,y,op});
 
 function checkField(fd,v){
   if(fd.k==="num")return toNum(v)===fd.a;
   if(fd.k==="txt")return fd.a.includes(norm(v));
   if(fd.k==="time")return toTime(v)===fd.a;
   if(fd.k==="mc"||fd.k==="sel")return v===fd.a;
+  if(fd.k==="col")return /^\d+$/.test(String(v||""))&&parseInt(v,10)===fd.a;
   if(fd.k==="multi")return Array.isArray(v)&&v.length===fd.a.length&&fd.a.every(i=>v.includes(i));
   if(fd.k==="self")return true;
   return false;
@@ -558,13 +603,36 @@ function eMore(f){
 const E_GENS=[eGroups,eSplit,eDouble,eFraction,eMoneyBack,eRatio,eBags,eMuffins,eShop,eMilk,eMore];
 
 // ======================= DELPROV F =======================
-function colForm(a,b,op,r){const w=Math.max(String(a).length,String(b).length,String(r).length)+2;return[String(a).padStart(w),op+String(b).padStart(w-1),"─".repeat(w),String(r).padStart(w)].join("\n")}
+function colForm(a,b,op,r){return colFormHTML(a,b,op==="-"?"−":op,r)}
+function digitsArr(n,w){return String(n).padStart(w," ").split("").map(c=>c===" "?null:+c)}
+function colFormHTML(a,b,op,r){
+  if(op==="+"){
+    const w=String(r).length,ad=digitsArr(a,w),bd=digitsArr(b,w),res=new Array(w).fill(0),carryInto=new Array(w).fill(0);
+    let carry=0;
+    for(let i=w-1;i>=0;i--){const s=(ad[i]||0)+(bd[i]||0)+carry;res[i]=s%10;carry=Math.floor(s/10);if(carry>0&&i>0)carryInto[i-1]=carry;}
+    const cell=(d,cls)=>`<td class="dg${cls?" "+cls:""}">${d==null||d===""?"":d}</td>`;
+    return `<table class="calcgrid"><tr class="mkrow"><td class="opcell"></td>${carryInto.map(c=>cell(c||"","mk")).join("")}</tr>`
+      +`<tr><td class="opcell"></td>${ad.map(d=>cell(d)).join("")}</tr>`
+      +`<tr class="opline"><td class="opcell">+</td>${bd.map(d=>cell(d)).join("")}</tr>`
+      +`<tr class="resrow"><td class="opcell">=</td>${res.map(d=>cell(d)).join("")}</tr></table>`;
+  }
+  const w=String(a).length,ad=digitsArr(a,w),bd=digitsArr(b,w),res=new Array(w).fill(0),needBorrow=new Array(w+1).fill(false);
+  let borrow=0;
+  for(let i=w-1;i>=0;i--){let top=(ad[i]||0)-borrow,bot=(bd[i]||0);if(top<bot){top+=10;needBorrow[i]=true;}res[i]=top-bot;borrow=needBorrow[i]?1:0;}
+  const eff=new Array(w).fill(0);
+  for(let i=0;i<w;i++)eff[i]=(ad[i]||0)+(needBorrow[i]?10:0)-(needBorrow[i+1]?1:0);
+  const cell=(d,cls)=>`<td class="dg${cls?" "+cls:""}">${d==null||d===""?"":d}</td>`;
+  return `<table class="calcgrid"><tr class="mkrow"><td class="opcell"></td>${eff.map((e,i)=>cell(e!==(ad[i]||0)?e:"","mk")).join("")}</tr>`
+    +`<tr><td class="opcell"></td>${ad.map((d,i)=>cell(d,eff[i]!==(d||0)&&d!=null?"struck":"")).join("")}</tr>`
+    +`<tr class="opline"><td class="opcell">−</td>${bd.map(d=>cell(d)).join("")}</tr>`
+    +`<tr class="resrow"><td class="opcell">=</td>${res.map(d=>cell(d)).join("")}</tr></table>`;
+}
 const fCalc=(a,b,op,text)=>f=>{const r=op==="+"?a+b:a-b;const o=op==="+"?"+":"−";
-  return{html:text?`${text}${svar(f(N(r,5)))}`:`<span class="calc">${a} ${o} ${b} =</span>${svar(f(N(r,5)))}`,facit:`<pre class="col">${colForm(a,b,o,r)}</pre>`}};
+  return text?{html:`${text}${svar(f(N(r,5)))}`,facit:colFormHTML(a,b,o,r),pad:true}:{html:`<span class="calc">${a} ${o} ${b} =</span>${f(COL(a,b,op))}`,facit:colFormHTML(a,b,o,r)}};
 function fSet(){
   const[p,q]=people(2);
-  const a1=R(55,98),b1=until(()=>R(35,98),b=>(a1%10+b%10)>=10);
-  const a2=R(101,189),b2=until(()=>R(25,99),b=>(a2%10+b%10)>=10);
+  const a1=until(()=>R(55,98),a=>a%10>1),b1=until(()=>R(35,98),b=>(a1%10+b%10)>=10);
+  const a2=until(()=>R(101,189),a=>a%10>1),b2=until(()=>R(25,99),b=>(a2%10+b%10)>=10);
   const a3=R(111,189),b3=200-a3;
   const at=R(105,160),bt=R(45,89);
   const s1=10*R(5,9),t1=until(()=>R(12,s1-15),b=>b%10);
@@ -646,11 +714,16 @@ const DELPROV={
   C:{name:"Räknehändelser",desc:"Korta textuppgifter med plus, minus, gånger och delat.",instr:"",gens:()=>shuf(C_GENS).slice(0,8)},
   D:{name:"Geometri och tid",desc:"Former, omkrets, area, klockan och hur lång tid saker tar.",instr:"",gens:()=>[dShapes,dPerimeter,dArea,dClock,dTimeAdd,dQuarter,dEstimate,dFacts]},
   E:{name:"Problemlösning",desc:"Uppgifter i flera steg. Ibland finns det flera rätta svar.",instr:"Använd papper och penna och visa hur du tänker.",gens:()=>shuf(E_GENS).slice(0,6)},
-  F:{name:"Skriftlig räkning",desc:"Addition och subtraktion med uppställning, och tal med stenar.",instr:"Använd en skriftlig räknemetod och skriv svar. Räkna på ett papper.",gens:fSet},
+  F:{name:"Skriftlig räkning",desc:"Addition och subtraktion med uppställning, och tal med stenar.",instr:"Räkna med uppställning. Skriv svaret från höger till vänster. Minnessiffror och lån skriver du i de små rutorna överst. Vid minus kan du trycka på en siffra för att stryka den.",gens:fSet},
   G:{name:"Mönster, symboler och huvudräkning",desc:"Hemliga koder, bildekvationer, färgmönster, kalendern och snabb huvudräkning.",instr:"",gens:()=>[gSymbols,gPics,gMental,gMissing,gColors,gCalendar]},
   X:{name:"Blandat",desc:"Lite från varje delprov.",instr:"",gens:()=>[P([bOrder,bPlace,bLine,bCards,bPattern,bEq,bTally]),...shuf(C_GENS).slice(0,2),P([dShapes,dPerimeter,dArea,dClock,dTimeAdd,dQuarter]),...shuf(E_GENS).slice(0,2),P(fSet().slice(0,9)),P([gSymbols,gPics,gMental,gMissing,gColors,gCalendar])]}
 };
-const OLD=[["2018/2019",2019,"BCDEFG"],["2019/2020",2020,"BCDEFG"],["2020/2021",2021,"BCDEFG"],["2021/2022",2022,"BCDEFG"]];
+const HAS_EXAMS=()=>typeof EXAMS!=="undefined"&&EXAMS&&typeof EXAMS==="object";
+function oldList(){
+  if(!HAS_EXAMS())return[];
+  const ys={};Object.keys(EXAMS).forEach(k=>{const m=k.match(/^(\d{4})-([A-G])$/);if(m)(ys[m[1]]=ys[m[1]]||[]).push(m[2])});
+  return Object.keys(ys).sort().map(y=>[`${y-1}/${y}`,+y,ys[y].sort().join("")]);
+}
 // ===================== LOGIC END =====================
 </script>
 <script src="gamla.js"></script>
@@ -662,6 +735,10 @@ let cur=null;
 
 function setCover(h2,p){$("#h2").textContent=h2;$("#hp").textContent=p}
 
+const STORE="np3-resultat";
+function loadRes(){try{return JSON.parse(localStorage.getItem(STORE)||"{}")}catch(e){return{}}}
+function saveRes(key,right,total){try{const r=loadRes();r[key]={r:right,t:total,d:Date.now()};localStorage.setItem(STORE,JSON.stringify(r))}catch(e){}}
+function resBadge(key){const r=loadRes()[key];if(!r)return"";const all=r.r===r.t;return `<span class="badge${all?" full":""}" title="Senaste resultat">${all?"✓ ":""}${r.r}/${r.t}</span>`}
 function home(tab){
   cur=null;acts.hidden=true;res.textContent="";
   setCover("Träna inför provet","Nya uppgifter varje gång, i samma stil som det riktiga provet.");
@@ -670,18 +747,41 @@ function home(tab){
   if(tab==="prov"){
     app.innerHTML=`${tabs}<p class="lead">Här finns riktiga nationella prov från tidigare år. Tryck på en bokstav. Du ser provsidorna och skriver dina svar bredvid, så rättas de direkt. Du kan också ladda ner provet och göra det på papper.</p>
     <table class="oldtab"><thead><tr><th></th>${"BCDEFG".split("").map(l=>`<th>${l}</th>`).join("")}</tr></thead><tbody>
-    ${OLD.map(([lbl,y,ps])=>`<tr><th>${lbl}</th>${"BCDEFG".split("").map(l=>`<td>${ps.includes(l)?`<a class="pdf" href="#/prov/${y}-${l}" aria-label="Delprov ${l}, läsår ${lbl}">${l}</a>`:`<span class="none">–</span>`}</td>`).join("")}</tr>`).join("")}
+    ${oldList().map(([lbl,y,ps])=>`<tr><th>${lbl}</th>${"BCDEFG".split("").map(l=>`<td>${ps.includes(l)?`<a class="pdf" href="#/prov/${y}-${l}" aria-label="Delprov ${l}, läsår ${lbl}">${l}</a>${resBadge(y+"-"+l)}`:`<span class="none">–</span>`}</td>`).join("")}</tr>`).join("")}
     </tbody></table>
+    ${HAS_EXAMS()?"":`<p class="msgbox">De gamla proven kunde inte laddas. Kontrollera att filen <b>gamla.js</b> ligger i mappen np3 på GitHub.</p>`}
+    <p class="note">Siffrorna under bokstäverna visar senaste resultatet på den här enheten.</p>
     <p class="note">Delprov A är muntligt och görs tillsammans med läraren, därför finns det inte här. Proven kommer från Skolverket (PRIM-gruppen). Facit är inte Skolverkets officiella bedömning, utan gjort för att eleverna ska kunna öva själva.</p>`;
     return;
   }
   app.innerHTML=`${tabs}<p class="lead">Välj ett delprov. Du får nya uppgifter varje gång. Skriv dina svar och tryck på <b>Rätta</b>.</p>
-  <div class="dplist">${"BCDEFGX".split("").map(k=>`<a class="dp${k==="X"?" mix":""}" href="#/ova/${k}"><span class="dot">${k==="X"?"?":k}</span><span><b>${k==="X"?"Blandat":"Delprov "+k}</b><small>${k==="X"?DELPROV[k].desc:DELPROV[k].name+". "+DELPROV[k].desc}</small></span></a>`).join("")}</div>
+  <div class="dplist">${"BCDEFGX".split("").map(k=>`<a class="dp${k==="X"?" mix":""}" href="#/ova/${k}"><span class="dot">${k==="X"?"?":k}</span><span><b>${k==="X"?"Blandat":"Delprov "+k} ${resBadge("ova-"+k)}</b><small>${k==="X"?DELPROV[k].desc:DELPROV[k].name+". "+DELPROV[k].desc}</small></span></a>`).join("")}</div>
   <p class="note">Innehållet i varje delprov skiftar lite från år till år. Övningarna blandar sådant som brukar komma.</p>`;
 }
 
+function colWidget(x,y,op,attrs){
+  const A=String(x),B=String(y),w=Math.max(A.length,B.length)+(op==="+"?1:0);
+  const pd=s=>s.padStart(w," ").split("");
+  const mk=Array.from({length:w},(_,i)=>`<td class="dg"><input class="mkin" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="${op==="+"?"Minnessiffra":"Lån"}, kolumn ${i+1}"></td>`).join("");
+  const top=pd(A).map((d,i)=>`<td class="dg">${d===" "?"":op==="-"?`<button type="button" class="dgb" aria-label="Stryk siffran ${d}">${d}</button>`:d}</td>`).join("");
+  const bot=pd(B).map(d=>`<td class="dg">${d===" "?"":d}</td>`).join("");
+  const res=Array.from({length:w},(_,i)=>`<td class="dg"><input class="cin" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Svarssiffra, kolumn ${i+1}"></td>`).join("");
+  return `<div class="colpad" ${attrs}><table class="calcgrid live"><tr class="mkrow"><td class="opcell"></td>${mk}</tr><tr><td class="opcell"></td>${top}</tr><tr class="opline"><td class="opcell">${op==="+"?"+":"−"}</td>${bot}</tr><tr class="resrow"><td class="opcell">=</td>${res}</tr></table></div>`;
+}
+const PAD=`<details class="padwrap"><summary>Räkna med uppställning</summary><div class="padform"><input class="pa" inputmode="numeric" aria-label="Första talet" placeholder="tal"><select class="pop" aria-label="Räknesätt"><option value="+">+</option><option value="-">−</option></select><input class="pb" inputmode="numeric" aria-label="Andra talet" placeholder="tal"><button type="button" class="sm padgo">Ställ upp</button></div><div class="padarea"></div></details>`;
+function wantPad(q,key){
+  if(q.pad)return true;
+  if(/Gör en beräkning|Visa hur du löser/.test(q.html))return q.fields.some(fd=>fd.k==="num");
+  if(key&&/-(C|E)$/.test(key))return q.fields.some(fd=>fd.k==="num");
+  return false;
+}
+function qHTML(q,qi,num,key){
+  const body=q.html.replace(/@@(\d+)@@/g,(_,i)=>fieldHTML(q,qi,+i));
+  return `<li class="q" id="q${qi}"><span class="qn">${num}.</span><div>${body}${wantPad(q,key)?PAD:""}<div class="facit" hidden>${q.facit}</div></div></li>`;
+}
 function fieldHTML(q,qi,fi){
   const fd=q.fields[fi];
+  if(fd.k==="col")return colWidget(fd.x,fd.y,fd.op,`data-q="${qi}" data-f="${fi}"`);
   if(fd.k==="sel")return `<select class="ans sel" data-q="${qi}" data-f="${fi}" aria-label="Välj"><option value=""></option>${fd.opts.map((o,i)=>`<option value="${i}">${o}</option>`).join("")}</select>`;
   if(fd.k==="self")return `<span class="selfnote" data-q="${qi}" data-f="${fi}">Rätta själv med facit</span>`;
   if(fd.k==="multi")return `<span class="mc multi" data-q="${qi}" data-f="${fi}" role="group">${fd.opts.map((o,i)=>`<button type="button" class="opt" data-v="${i}">${o}</button>`).join("")}</span>`;
@@ -696,26 +796,39 @@ function practice(key){
   document.title=`${key==="X"?"Blandat":"Delprov "+key} – Träna nationella prov`;
   const qs=D.gens().map(build);cur={key,qs,facit:false};
   let html=`<a class="back" href="#/ova">← Alla delprov</a><article class="sheet">${D.instr?`<p class="instr">${D.instr}</p>`:""}<ol class="qs">`;
-  qs.forEach((q,qi)=>{const body=q.html.replace(/@@(\d+)@@/g,(_,i)=>fieldHTML(q,qi,+i));html+=`<li class="q" id="q${qi}"><span class="qn">${qi+1}.</span><div>${body}<div class="facit" hidden>${q.facit}</div></div></li>`});
+  qs.forEach((q,qi)=>{html+=qHTML(q,qi,qi+1,null)});
   html+=`</ol><div class="sheetfoot"><span>Övning Np3 Ma ${key==="X"?"Blandat":"Delprov "+key}</span><span>mattespel.github.io</span></div></article>`;
   app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";
   $("#bNew").textContent="Nya uppgifter";$("#bPrint").textContent="Skriv ut";
 }
 
+// Äldre versioner av gamla.js har en vanlig svarsrad på skriftlig räkning. Gör om den till uppställning.
+function upgradeCalc(q,key){
+  if(!/-F$/.test(key)||q.check||q.fields.length!==1||q.fields[0].k!=="num")return q;
+  const m=q.html.match(/(\d+)\s*([+−-])\s*(\d+)\s*=\s*@@0@@/);if(!m)return q;
+  const x=+m[1],y=+m[3],op=m[2]==="+"?"+":"-",r=op==="+"?x+y:x-y;if(r!==q.fields[0].a)return q;
+  q.fields[0]=COL(x,y,op);q.html=q.html.replace(m[0],`${x} ${op==="+"?"+":"−"} ${y} =</span></div><div>@@0@@`);
+  if(!/calcgrid/.test(q.facit))q.facit=colFormHTML(x,y,op==="+"?"+":"−",r);
+  return q;
+}
 function examView(key){
-  const pages=EXAMS[key];const[y,l]=key.split("-");const lbl=OLD.find(o=>o[1]==+y)[0];
+  const pages=EXAMS[key];const[y,l]=key.split("-");const lbl=`${y-1}/${y}`;
   setCover(`Delprov ${l}`,`Riktigt prov från läsår ${lbl}`);document.title=`Delprov ${l} ${lbl} – Gamla nationella prov`;
   const qs=[];let html=`<a class="back" href="#/prov">← Alla gamla prov</a><p class="lead">Titta på provsidan och skriv dina svar i rutan bredvid. Räkna på papper när det behövs. <a href="prov/${key}.pdf" target="_blank" rel="noopener">Ladda ner provet som PDF</a></p>`;
   pages.forEach(([pg,list])=>{
-    html+=`<section class="pg"><img src="sidor/${key}-${pg}.jpg" alt="Provsida ${pg}" loading="lazy" width="900" height="1273"><div class="ansbox"><h3>Svar, sida ${pg}</h3><ol class="qs">`;
-    list.forEach(([num,gen])=>{const q=build(gen);const qi=qs.length;qs.push(q);const body=q.html.replace(/@@(\d+)@@/g,(_,i)=>fieldHTML(q,qi,+i));
-      html+=`<li class="q" id="q${qi}"><span class="qn">${num}.</span><div>${body}<div class="facit" hidden>${q.facit}</div></div></li>`});
+    html+=`<section class="pg"><img src="sidor/${key}-${pg}.jpg" alt="Provsida ${pg}" loading="lazy" width="900" height="1273" onerror="this.outerHTML='<div class=&quot;imgmiss&quot;>Bilden för sida ${pg} hittades inte (sidor/${key}-${pg}.jpg).<br><a href=&quot;prov/${key}.pdf&quot; target=&quot;_blank&quot;>Öppna provet som PDF</a> i stället.</div>'"><div class="ansbox"><h3>Svar, sida ${pg}</h3><ol class="qs">`;
+    list.forEach(([num,gen])=>{const q=upgradeCalc(build(gen),key);const qi=qs.length;qs.push(q);html+=qHTML(q,qi,num,key)});
     html+=`</ol></div></section>`;
   });
   cur={key,qs,facit:false,exam:true};app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";
   $("#bNew").textContent="Börja om";$("#bPrint").textContent="Ladda ner PDF";
 }
+function readCol(cp){
+  const s=[...cp.querySelectorAll(".cin")].map(i=>i.value.trim()===""?" ":i.value.trim()).join("").trim();
+  return /\s/.test(s)?"x":s;
+}
 function readVal(qi,fi){
+  const cp=app.querySelector(`.colpad[data-q="${qi}"][data-f="${fi}"]`);if(cp)return readCol(cp);
   const mc=app.querySelector(`.mc[data-q="${qi}"][data-f="${fi}"]`);
   if(mc){if(mc.classList.contains("multi"))return[...mc.querySelectorAll(".opt.sel")].map(b=>+b.dataset.v);const s=mc.querySelector(".opt.sel");return s?+s.dataset.v:null}
   const sl=app.querySelector(`select[data-q="${qi}"][data-f="${fi}"]`);if(sl)return sl.value===""?null:+sl.value;
@@ -729,26 +842,57 @@ function grade(){
     r.forEach((ok,fi)=>{if(q.fields[fi].k==="self")return;const el=app.querySelector(`[data-q="${qi}"][data-f="${fi}"]`);el.classList.remove("ok","bad");el.classList.add(ok?"ok":"bad");total++;if(ok)right++;else allOk=false});
     app.querySelector(`#q${qi} .facit`).hidden=allOk&&!hasSelf&&!cur.facit;
   });
+  if(total===0){res.textContent="Här finns inget som rättas automatiskt. Jämför med facit.";return}
   res.textContent=right===total?`Alla ${total} rätt! Bra jobbat.`:`Du har ${right} av ${total} rätt. Titta på de röda och försök igen.`;
+  saveRes(cur.exam?cur.key:"ova-"+cur.key,right,total);
+  if(right<total){const bad=app.querySelector(".bad");if(bad){const r=bad.getBoundingClientRect();if(r.top<60||r.bottom>innerHeight-130)bad.scrollIntoView({block:"center",behavior:"smooth"})}}
 }
 app.addEventListener("click",e=>{
+  const dgb=e.target.closest(".dgb");if(dgb){dgb.classList.toggle("struck");if(dgb.classList.contains("struck")){const td=dgb.closest("td"),idx=[...td.parentElement.children].indexOf(td);const mk=td.closest("table").querySelector(".mkrow").children[idx].querySelector("input");if(mk&&!mk.value)mk.focus()}return}
+  const go=e.target.closest(".padgo");if(go){makePad(go.closest(".padwrap"));return}
+  const pc=e.target.closest(".padchk");if(pc){checkPad(pc.closest(".padwrap"));return}
   const b=e.target.closest(".opt");if(!b)return;const g=b.parentElement;
   if(!g.classList.contains("multi"))g.querySelectorAll(".opt").forEach(o=>o!==b&&o.classList.remove("sel"));b.classList.toggle("sel");g.classList.remove("ok","bad");
 });
-app.addEventListener("input",e=>{if(e.target.classList.contains("ans"))e.target.classList.remove("ok","bad")});
+app.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.classList.contains("ans"))t.classList.remove("ok","bad");
+  if(t.classList.contains("cin")||t.classList.contains("mkin")){
+    t.value=t.value.replace(/[^0-9]/g,"");const cp=t.closest(".colpad");if(cp){cp.classList.remove("ok","bad");cp.querySelectorAll(".cin").forEach(c=>c.classList.remove("dok","dbad"))}
+    if(t.classList.contains("cin")&&t.value){const row=[...t.closest("tr").querySelectorAll(".cin")],i=row.indexOf(t);if(i>0)row[i-1].focus()}
+  }
+});
+function makePad(w){
+  const a=parseInt(w.querySelector(".pa").value),b=parseInt(w.querySelector(".pb").value),op=w.querySelector(".pop").value,area=w.querySelector(".padarea");
+  if(isNaN(a)||isNaN(b)||a<0||b<0||a>9999||b>9999){area.innerHTML=`<p class="padmsg bad">Skriv två tal först.</p>`;return}
+  if(op==="-"&&b>a){area.innerHTML=`<p class="padmsg bad">Vid minus ska det första talet vara störst.</p>`;return}
+  area.innerHTML=colWidget(a,b,op,`data-pa="${a}" data-pb="${b}" data-pop="${op}"`)+`<div><button type="button" class="sm padchk">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
+  const c=area.querySelectorAll(".cin");if(c.length)c[c.length-1].focus();
+}
+function checkPad(w){
+  const cp=w.querySelector(".colpad");if(!cp)return;
+  const a=+cp.dataset.pa,b=+cp.dataset.pb,r=cp.dataset.pop==="+"?a+b:a-b,cins=[...cp.querySelectorAll(".cin")];
+  const exp=String(r).padStart(cins.length," ").split("");let ok=true;
+  cins.forEach((c,i)=>{c.classList.remove("dok","dbad");const want=exp[i]===" "?"":exp[i],got=c.value.trim();
+    if(want===""&&got==="")return;if(got===want)c.classList.add("dok");else{c.classList.add("dbad");ok=false}});
+  const m=w.querySelector(".padmsg");m.textContent=ok?`Rätt räknat! ${a} ${cp.dataset.pop==="+"?"+":"−"} ${b} = ${r}. Skriv svaret på svarsraden.`:"Titta på de röda rutorna och räkna en gång till.";m.className="padmsg "+(ok?"good":"bad");
+}
 app.addEventListener("change",e=>{if(e.target.classList.contains("sel"))e.target.classList.remove("ok","bad")});
 app.addEventListener("keydown",e=>{
+  const t=e.target;
+  if(t.classList.contains("cin")&&e.key==="Backspace"&&!t.value){const row=[...t.closest("tr").querySelectorAll(".cin")],i=row.indexOf(t);if(i<row.length-1){e.preventDefault();row[i+1].focus();row[i+1].value=""}return}
   if(e.key!=="Enter"||!e.target.classList.contains("ans"))return;e.preventDefault();
   const all=[...app.querySelectorAll("input.ans")],i=all.indexOf(e.target);if(all[i+1])all[i+1].focus();else grade();
 });
 $("#bCheck").onclick=grade;
-$("#bNew").onclick=()=>{cur.exam?examView(cur.key):practice(cur.key);window.scrollTo({top:0})};
+function hasAnswers(){return [...app.querySelectorAll("input.ans,input.cin,input.mkin")].some(i=>i.value.trim())||!!app.querySelector(".opt.sel,.dgb.struck")||[...app.querySelectorAll("select.sel")].some(s=>s.value!=="")}
+$("#bNew").onclick=()=>{if(hasAnswers()&&!confirm(cur.exam?"Vill du börja om? Dina svar försvinner.":"Vill du få nya uppgifter? Dina svar försvinner."))return;cur.exam?examView(cur.key):practice(cur.key);window.scrollTo({top:0})};
 $("#bFacit").onclick=()=>{cur.facit=!cur.facit;app.querySelectorAll(".facit").forEach(x=>x.hidden=!cur.facit);$("#bFacit").textContent=cur.facit?"Dölj facit":"Visa facit"};
 $("#bPrint").onclick=()=>cur&&cur.exam?window.open(`prov/${cur.key}.pdf`,"_blank"):window.print();
 
 function route(){
   const [a,b]=location.hash.replace(/^#\/?/,"").split("/");
-  if(a==="ova"&&DELPROV[b])practice(b);else if(a==="prov"&&EXAMS[b])examView(b);else home(a==="prov"?"prov":"ova");
+  if(a==="ova"&&DELPROV[b])practice(b);else if(a==="prov"&&HAS_EXAMS()&&EXAMS[b])examView(b);else home(a==="prov"?"prov":"ova");
   window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",route);route();
