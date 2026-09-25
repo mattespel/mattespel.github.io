@@ -213,5 +213,55 @@ const EXAMS={
   [4,[qStreck("3")]],
   [5,[qLinje1("4"),qLinje2("5"),SVAR("6",N(2),"2, mitt emellan 0 och 4"),SVAR("7",N(5),"5, mitt emellan 3 och 7")]],
   [6,[qKort("8")]],
-  pG7([16,12,18,80],[5,3,8,9],[6,2,9,18])]
+  pG7([16,12,18,80],[5,3,8,9],[6,2,9,18])],
+"2022-B":[
+  [3,[Q("1",[["a)","Nova",N(75)],["","Mika",N(125)],["","Elsa",N(150)],["","Rita staplarna för Troj och Omar på papper.",SELF()],
+      ["b)","Svar:",T("omar",8)],["c)","Svar:",T("nova",8)],["d)","Svar:",N(325),"klossar"],["e)","Svar:",N(50),"klossar"]],
+    "a) Nova 75, Mika 125, Elsa 150. Trojs stapel når till 125 och Omars till 175.<br>b) Omar (175)<br>c) Nova (75)<br>d) 150 + 175 = 325 klossar<br>e) 125 − 75 = 50 klossar")]],
+  [4,[(()=>{const A=["Längdhopp","Innebandy","Dans","Schack"];
+    return Q("2",[["a)","Blå bit (uppe till vänster):",SEL(A,1)],["","Gul bit (mitten till vänster):",SEL(A,0)],["","Lila bit (nere till vänster):",SEL(A,3)],["","Röd bit (till höger):",SEL(A,2)],
+      ["b)","Svar:",N(24),"elever"],["c)","",MC(A,2)]],
+      "a) Röd (halva cirkeln) är dans, 12 elever. Blå (en fjärdedel) är innebandy, 6 elever. Gul och lila (en åttondel var) är längdhopp och schack, 3 elever var. De två kan stå i vilken ordning som helst.<br>b) 3 + 6 + 12 + 3 = 24 elever<br>c) Dans (12 är hälften av 24)",
+      v=>{const s=[v[1],v[2]],ok=s.includes(0)&&s.includes(3);return[undefined,ok,ok]})})()]],
+  [5,[Q("3",[["a)","Ahmeds första hopp:",N(105),"cm"],["b)","Ahmeds andra hopp:",N(164),"cm"],["c)","Gabriels tredje hopp:",N(167),"cm"]],
+      "a) 105 cm<br>b) 105 + 59 = 164 cm<br>c) 163 + 4 = 167 cm"),
+    Q("4",[["a)","Svar:",N(163),"cm"],["b)","Svar:",N(70),"cm"],["c)","Svar:",N(23),"cm"]],"a) 163 cm<br>b) 179 − 109 = 70 cm<br>c) 179 − 156 = 23 cm")]],
+  [6,[Q("5",[[null,"Det är störst chans att få en svart klubba.",MC(SF,1)],[null,"Det är minst chans att få en blå klubba.",MC(SF,0)],
+      [null,"Det är lika stor chans att få en röd klubba som en svart.",MC(SF,1)],[null,"Det är större chans att få en svart klubba än en blå.",MC(SF,0)]],
+      "Falskt (det finns flest röda, 4 st)<br>Sant (det finns bara 2 blå)<br>Falskt (4 röda men bara 3 svarta)<br>Sant (3 svarta men bara 2 blå)"),
+    Q("6",[[null,"",MC(["Påse A","Påse B","Påse C"],2)],[null,"Förklara på papper.",SELF()]],
+      "Påse C. Där är 2 av 4 bollar blå, alltså hälften. I påse A är bara 1 av 4 blå. I påse B är 2 av 5 blå, och där finns fler andra bollar.")]]],
+"2022-C":[
+  [3,[SVAR("1",N(44),"26 + 18 = 44 elever","elever"),SVAR("2",N(23),"57 − 34 = 23 fönster","fönster"),SVAR("3",N(18),"27 − 9 = 18 bollar","bollar")]],
+  [4,[Q("4",[[null,"",MULTI([frac(10,5),"3 · 5","5 + 5 + 5","15 − 3",frac(15,3)],[1,2,4])]],"3 · 5, 5 + 5 + 5 och "+frac(15,3)+". Det är 3 grupper med 5 bollar i varje, 15 bollar."),
+    ["5",f=>{const s=(l,x)=>`<div class="sub"><span class="lbl">${l}</span><span class="sc">${x}</span></div>`,F=()=>f(FREE());
+      return{html:s("a)",`${F()} + ${F()} + ${F()} + ${F()} = ${F()}`)+s("b)",`${F()} · ${F()} = ${F()}`)+s("c)",`${F()} / ${F()} = ${F()}`),
+      facit:"Det är 4 grupper med 3 bollar i varje, 12 bollar.<br>a) 3 + 3 + 3 + 3 = 12<br>b) 4 · 3 = 12 (eller 3 · 4 = 12)<br>c) 12/4 = 3 (eller 12/3 = 4)",
+      check:v=>{const n=v.map(toNum),A=n.slice(0,4).every(x=>x===3)&&n[4]===12,B=((n[5]===4&&n[6]===3)||(n[5]===3&&n[6]===4))&&n[7]===12,
+        C=n[8]===12&&((n[9]===4&&n[10]===3)||(n[9]===3&&n[10]===4));return[A,A,A,A,A,B,B,B,C,C,C]}}}]]],
+  [5,[(()=>{const E=["10 · 5","10 + 5","10 − 5",frac(10,5)];return Q("6",[["a)","Vera och Omar (klubbor):",MC(E,2)],["","Troj (äpplen i påsar):",MC(E,0)],["","Nova (kulor i burkar):",MC(E,3)],
+      ["b)","Skriv på papper.",SELF()]],"a) Vera: 10 − 5. Troj: 10 · 5. Nova: "+frac(10,5)+". Uttrycket 10 + 5 blir över.<br>b) T.ex. Lisa har 10 kulor och får 5 till. Hur många kulor har hon nu?")})()]],
+  [6,[["7",f=>{const rows=[[6,2,12],[12,4,8],[9,3,3],[4,2,2]];
+    return{html:rows.map((r,i)=>`<div class="sub"><span class="lbl">${L[i]})</span><span class="sc">${r[0]} ${f(SEL(OPS,-1))} ${r[1]} ${f(SEL(OPS,-1))} ${r[2]}</span></div>`).join(""),
+      facit:"a) 6 · 2 = 12<br>b) 12 − 4 = 8 eller 12 = 4 + 8<br>c) 9 = 3 · 3<br>d) 4 = 2 + 2, 4 = 2 · 2 eller 4 − 2 = 2",
+      check:v=>{const out=[];rows.forEach((r,i)=>{const ok=signOK(r[0],r[1],r[2],v[2*i],v[2*i+1]);out.push(ok,ok)});return out}}}]]]],
+"2022-D":[
+  [3,[SVAR("1",TM(645),"10.30 + 15 minuter = 10.45"),SVAR("2",TM(700),"11.10 + 30 minuter = 11.40"),SVAR("3",N(20),"Från 11.45 till 12.00 är 15 minuter. Sen 5 minuter till. 15 + 5 = 20 minuter","minuter"),
+    Q("4",[[null,"",MC(["10 sekunder","30 minuter","5 timmar"],1)]],"30 minuter")]],
+  [4,[Q("5",[[null,"Ett år är",N(12),"månader."],[null,"En vecka är",N(7),"dagar."],[null,"En timme är",N(60),"minuter."]],"12 månader, 7 dagar, 60 minuter"),
+    Q("6",[["a)","Svar:",T(["januari","jan"],9)],["b)","Svar:",T(["juni","jun"],9)]],"a) Januari (mars → februari → januari)<br>b) Juni (mars → april → maj → juni)")]],
+  [5,[Q("7",[["a)","Svar:",N(12),"dl"],["b)","",MC(["1 liter","2 liter","4 liter","10 liter"],0)]],"a) 6 + 6 = 12 dl<br>b) Ungefär 1 liter. 10 dl är 1 liter, och 12 dl är lite mer."),
+    Q("8",[[null,"Ett mjölkpaket 1",li()],[null,"En läskflaska 15",dl()],[null,"En tekopp 3",dl()],[null,"En stor hink 10",li()]],"Mjölkpaket 1 liter, läskflaska 15 dl, tekopp 3 dl, stor hink 10 liter")]],
+  [6,[Q("9",[[null,"",MC(["Det är lika mycket saft i båda glasen.","Det är mest saft i glas A.","Det är mest saft i glas B."],1)],[null,"Förklara på papper.",SELF()]],
+      "Det är mest saft i glas A. Saften står lika högt i båda glasen, men glas A är mycket bredare.")]]],
+"2022-E":[
+  [2,[SVAR("1",N(12),"4 · 3 = 12 mål (3 + 3 + 3 + 3)","mål"),
+    Q("2",[[null,"Basket",N(2)],[null,"Fotboll",N(4)],[null,"Hopprep",N(3)]],"Basket 2. Fotboll är dubbelt så många, 4. Hopprep är resten: 9 − 2 − 4 = 3.")]],
+  [3,[SVAR("3",N(4),"Hälften av 18 är 9. 9 − 5 = 4 morötter","morötter"),SVAR("4",N(24),"3 · 8 = 24 dl vatten","dl")]],
+  [4,[SVAR("5",N(80),"50 + 10 + 20 = 80 kr","kr"),SVAR("6",N(4),"50 + 50 + 50 + 50 = 200. Vera ska simma 4 längder.","längder")]],
+  [5,[Q("7",[[null,"Sami, tredje kastet:",FREE(4)],[null,"Mika, tredje kastet:",FREE(4)],[null,"Nova, tredje kastet:",FREE(4)]],
+      "Många svar. Varje kast ger 0, 25, 50 eller 100 poäng. Innan tredje kastet har Sami 100, Mika 125 och Nova 100. T.ex. Sami 0, Mika 0, Nova 50. Då har Nova 150, Mika 125 och Sami 100.",
+      v=>{const n=v.map(toNum),okv=n.every(x=>[0,25,50,100].includes(x)),ok=okv&&100+n[2]>100+n[0]&&100+n[2]>125+n[1];return[ok,ok,ok]}),
+    SVAR("8",N(24),"Elsa hämtade 2 · 7 = 14 koner. 7 + 14 + 3 = 24 koner","koner")]]]
+
 };
