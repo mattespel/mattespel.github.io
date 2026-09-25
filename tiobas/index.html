@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tiobasmaterial – Matte-Portalen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --u:clamp(7px,2.1vw,13px);
+  --paper:#fbfcf7;--grid:rgba(59,134,198,.08);--ink:#1f2a44;--muted:#5b6478;
+  --a:#5aa2de;--a-d:#22609a;--b:#f4a640;--b-d:#b86a10;--x:#5cb86e;--x-d:#276b36;
+  --warn:#c63d4c;--warn-l:#fbe7e9;--ok:#2b8a55;--ok-l:#e2f3e8;--pencil:#f2c230;
+}
+*{box-sizing:border-box}
+html{font-size:18px;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Andika,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);line-height:1.45;background:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pencil);outline-offset:2px}
+.wrap{max-width:1000px;margin:0 auto;padding:14px 12px 40px}
+
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+header h1{margin:0;font-size:clamp(1.5rem,5vw,2.2rem);line-height:1.1}
+header a{font-weight:700;color:var(--a-d);text-decoration:none}
+
+.tabs{display:inline-flex;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:4px;gap:4px}
+.tabs button{border:0;background:none;padding:7px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+.task{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:12px 0;min-height:48px}
+.task .eq{font-size:clamp(1.5rem,6vw,2.1rem);font-weight:700;letter-spacing:.02em}
+.task input[type=number]{width:5.2em;padding:6px 8px;border:2px solid var(--ink);border-radius:10px;font-size:1.1rem;text-align:center;background:#fff}
+.btn{border:2px solid var(--ink);background:#fff;border-radius:12px;padding:8px 14px;font-weight:700;cursor:pointer}
+.btn:hover{background:#fff8dc}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.primary:hover{background:var(--a-d)}
+.btn:disabled{opacity:.35;cursor:default;background:#fff}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--c);border:1px solid var(--cd)}
+
+.msg{margin:6px 0 12px;padding:10px 14px;border-left:5px solid var(--pencil);background:#fffbea;border-radius:0 10px 10px 0;min-height:1.5em}
+.msg.warn{border-color:var(--warn);background:var(--warn-l)}
+.msg.ok{border-color:var(--ok);background:var(--ok-l)}
+
+/* platsvärdestavlan */
+.mat{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));background:#fff;border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.col{display:flex;flex-direction:column;border-left:2px solid var(--ink);min-width:0}
+.col:first-child{border-left:0}
+.col h2{margin:0;padding:6px 4px;text-align:center;font-size:clamp(.8rem,2.6vw,1rem);background:#e4e7eb;border-bottom:2px solid var(--ink)}
+.col.over h2{background:var(--warn-l);color:var(--warn)}
+.area{flex:1;min-height:calc(var(--u)*26);padding:10px 6px;display:flex;flex-wrap:wrap;align-content:flex-start;justify-content:center;gap:calc(var(--u)*.5)}
+.col[data-k="e"] .area{display:grid;grid-template-columns:repeat(5,var(--u));grid-auto-rows:var(--u);gap:calc(var(--u)*.35);align-content:start;justify-content:center}
+.col[data-k="e"] .area .unit:nth-child(10n+6){margin-top:0}
+.foot{border-top:2px solid var(--ink);padding:6px;display:flex;flex-direction:column;align-items:center;gap:6px;background:#f7f8fa}
+.count{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:700;line-height:1;min-width:1.6em;text-align:center;border:2px solid var(--ink);border-radius:8px;padding:4px 8px;background:#fff}
+.col.over .count{color:var(--warn);border-color:var(--warn)}
+.row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.sm{border:2px solid var(--ink);background:#fff;border-radius:10px;min-width:40px;padding:4px 8px;font-weight:700;cursor:pointer;font-size:.9rem}
+.sm.pm{font-size:1.2rem;padding:0 10px;height:38px}
+.sm:disabled{opacity:.3;cursor:default}
+.sm.xch{background:#fff4c7;border-color:#8a6d00}
+.sm.xch.hot{background:var(--pencil);animation:nudge 1.2s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateY(-2px)}}
+
+/* block */
+.blk{--c:var(--a);--cd:var(--a-d);cursor:pointer;flex:none}
+.blk.b{--c:var(--b);--cd:var(--b-d)}
+.blk.x{--c:var(--x);--cd:var(--x-d)}
+.unit{width:var(--u);height:var(--u);background:var(--c);border:1px solid var(--cd);border-radius:2px}
+.rod{width:var(--u);height:calc(var(--u)*10);border:1px solid var(--cd);border-radius:2px;
+  background:repeating-linear-gradient(to bottom,var(--c) 0 calc(var(--u) - 1px),var(--cd) calc(var(--u) - 1px) var(--u))}
+.flat{width:calc(var(--u)*10);height:calc(var(--u)*10);border:1px solid var(--cd);border-radius:2px;
+  background:repeating-linear-gradient(to bottom,transparent 0 calc(var(--u) - 1px),var(--cd) calc(var(--u) - 1px) var(--u)),
+             repeating-linear-gradient(to right,var(--c) 0 calc(var(--u) - 1px),var(--cd) calc(var(--u) - 1px) var(--u))}
+.cube{position:relative;width:calc(var(--u)*10);height:calc(var(--u)*10);margin:calc(var(--u)*1.2) calc(var(--u)*1.2) 0 0;
+  box-shadow:calc(var(--u)*.4) calc(var(--u)*-.4) 0 -1px var(--cd),calc(var(--u)*.8) calc(var(--u)*-.8) 0 -1px var(--c),calc(var(--u)*1.2) calc(var(--u)*-1.2) 0 -1px var(--cd)}
+.cube::after{content:"1000";position:absolute;inset:0;display:grid;place-items:center;font-weight:700;color:#fff;font-size:calc(var(--u)*2);text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.pop{animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(.5);opacity:.3}to{transform:scale(1);opacity:1}}
+
+.total{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.total b{font-size:1.4rem}
+.answer{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+label.chk{display:flex;align-items:center;gap:6px;font-size:.95rem;cursor:pointer}
+.help{font-size:.9rem;color:var(--muted);max-width:70ch}
+
+@media (max-width:560px){
+  html{font-size:16px}
+  .sm{min-width:34px;padding:3px 6px;font-size:.8rem}
+  .sm.pm{height:34px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Tiobasmaterial</h1>
+    <a href="../">← Matte-Portalen</a>
+  </header>
+
+  <div class="tabs" role="group" aria-label="Läge">
+    <button data-mode="fri" aria-pressed="true">Fritt</button>
+    <button data-mode="plus" aria-pressed="false">Plus</button>
+    <button data-mode="minus" aria-pressed="false">Minus</button>
+  </div>
+
+  <div class="task" id="task"></div>
+  <div class="msg" id="msg" aria-live="polite"></div>
+
+  <div class="mat" id="mat"></div>
+
+  <div class="total">
+    <div class="answer" id="answer"></div>
+    <label class="chk"><input type="checkbox" id="showVal"> Visa talet</label>
+    <b id="val" hidden></b>
+  </div>
+
+  <p class="help">Tryck på ett block för att ta bort det. <b>← Växla 10</b> gör om tio block till ett större. <b>Växla 1 →</b> delar ett block i tio mindre.</p>
+</div>
+
+<script>
+const K=["th","h","t","e"];
+const NAME={th:"tusental",h:"hundratal",t:"tiotal",e:"ental"};
+const HEAD={th:"Tusental",h:"Hundratal",t:"Tiotal",e:"Ental"};
+const VAL={th:1000,h:100,t:10,e:1};
+const SHAPE={th:"cube",h:"flat",t:"rod",e:"unit"};
+const MAXCOL=20;
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $=s=>document.querySelector(s);
+
+let S={mode:"fri",cols:{th:[],h:[],t:[],e:[]},a:null,b:null,rem:null,busy:false,fresh:null};
+
+const total=()=>K.reduce((s,k)=>s+S.cols[k].length*VAL[k],0);
+const digits=n=>({th:Math.floor(n/1000),h:Math.floor(n/100)%10,t:Math.floor(n/10)%10,e:n%10});
+function place(n,c){const d=digits(n);K.forEach(k=>{for(let i=0;i<d[k];i++)S.cols[k].push({c})})}
+function clear(){K.forEach(k=>S.cols[k]=[])}
+
+// ---------- rendering ----------
+function render(){
+  const showTh=S.cols.th.length>0||total()>=1000;
+  const ks=showTh?K:K.slice(1);
+  const mat=$("#mat");mat.style.setProperty("--cols",ks.length);
+  mat.innerHTML=ks.map(k=>{
+    const n=S.cols[k].length,i=K.indexOf(k),over=n>9&&k!=="th";
+    const blocks=S.cols[k].map((b,j)=>`<div class="blk ${SHAPE[k]} ${b.c}${S.fresh&&S.fresh.k===k&&j>=S.fresh.from?" pop":""}" data-k="${k}" data-i="${j}" role="button" aria-label="${NAME[k]}"></div>`).join("");
+    const up=k!=="th"?`<button class="sm xch${over?" hot":""}" data-act="up" data-k="${k}" ${n>=10?"":"disabled"} aria-label="Växla 10 ${NAME[k]} till 1 ${NAME[K[i-1]]}">← Växla 10</button>`:"";
+    const down=k!=="e"?`<button class="sm xch" data-act="down" data-k="${k}" ${n>=1&&S.cols[K[i+1]].length<=19?"":"disabled"} aria-label="Växla 1 ${NAME[k]} till 10 ${NAME[K[i+1]]}">Växla 1 →</button>`:"";
+    const canAdd=S.mode==="fri"&&k!=="th"&&n<MAXCOL&&total()+VAL[k]<=1000;
+    const canSub=S.mode==="fri"?n>0:(S.mode==="minus"&&n>0&&S.rem[k]>0);
+    const pm=S.mode==="plus"?"":`<div class="row">${S.mode==="fri"&&k!=="th"?`<button class="sm pm" data-act="add" data-k="${k}" ${canAdd?"":"disabled"} aria-label="Lägg till 1 ${NAME[k]}">+</button>`:""}<button class="sm pm" data-act="sub" data-k="${k}" ${canSub?"":"disabled"} aria-label="Ta bort 1 ${NAME[k]}">−</button></div>`;
+    return `<section class="col${over?" over":""}" data-k="${k}"><h2>${HEAD[k]}</h2><div class="area">${blocks}</div><div class="foot"><div class="count" aria-label="${n} ${NAME[k]}">${n}</div>${pm}<div class="row">${up||'<span class="sm" style="visibility:hidden">← Växla 10</span>'}${down||'<span class="sm" style="visibility:hidden">Växla 1 →</span>'}</div></div></section>`;
+  }).join("");
+  S.fresh=null;
+  const v=$("#val");v.textContent=`= ${total()}`;v.hidden=!$("#showVal").checked;
+  guide();
+}
+
+// ---------- guidning ----------
+function say(t,cls=""){const m=$("#msg");m.className="msg"+(cls?" "+cls:"");m.innerHTML=t}
+function guide(){
+  const over=K.filter(k=>k!=="th"&&S.cols[k].length>9);
+  if(S.mode==="fri"){
+    if(over.length){const k=over[0];say(`Det är ${S.cols[k].length} ${NAME[k]}. När det är 10 eller fler kan du växla 10 ${NAME[k]} till 1 ${NAME[K[K.indexOf(k)-1]]}.`)}
+    else say(total()?`Blocken visar ${K.filter(k=>S.cols[k].length).map(k=>`${S.cols[k].length} ${NAME[k]}`).join(", ")}.`:"Lägg ut block med plusknapparna.");
+    return;
+  }
+  if(S.mode==="plus"){
+    if(S.a==null){say("Välj en uppgift eller skriv två egna tal.");return}
+    if(over.length){const k=over[over.length-1];say(`Det är ${S.cols[k].length} ${NAME[k]}. Växla 10 ${NAME[k]} till 1 ${NAME[K[K.indexOf(k)-1]]}.`,"warn")}
+    else say("Nu har alla kolumner 9 eller färre. Vilket tal visar blocken?");
+    return;
+  }
+  if(S.mode==="minus"){
+    if(S.a==null){say("Välj en uppgift eller skriv två egna tal.");return}
+    const need=["e","t","h"].find(k=>S.rem[k]>S.cols[k].length);
+    const left=K.filter(k=>S.rem[k]>0);
+    if(need){const up=K[K.indexOf(need)-1];say(`Du ska ta bort ${S.rem[need]} ${NAME[need]} men har bara ${S.cols[need].length}. Växla 1 ${NAME[up]} till 10 ${NAME[need]}.`,"warn")}
+    else if(left.length)say(`Ta bort ${left.map(k=>`${S.rem[k]} ${NAME[k]}`).join(", ")}. Tryck på blocken eller på minus.`);
+    else say("Allt är borttaget. Vilket tal är kvar?");
+  }
+}
+
+// ---------- uppgifter ----------
+function renderTask(){
+  const t=$("#task"),ans=$("#answer");
+  if(S.mode==="fri"){t.innerHTML=`<button class="btn" id="clr">Töm tavlan</button><span class="legend"><span style="--c:var(--a);--cd:var(--a-d)">Block</span><span style="--c:var(--x);--cd:var(--x-d)">Växlat block</span></span>`;ans.innerHTML="";
+    $("#clr").onclick=()=>{clear();render()};return}
+  const op=S.mode==="plus"?"+":"−";
+  t.innerHTML=`${S.a!=null?`<span class="eq">${S.a} ${op} ${S.b}</span>`:""}
+    <button class="btn primary" id="rnd">Ny uppgift</button>
+    <span style="display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap"><input type="number" id="ia" min="0" max="999" placeholder="tal" aria-label="Första talet"> ${op} <input type="number" id="ib" min="0" max="999" placeholder="tal" aria-label="Andra talet"> <button class="btn" id="own">Lägg ut</button></span>
+    ${S.mode==="plus"?`<span class="legend"><span style="--c:var(--a);--cd:var(--a-d)">${S.a??"Första talet"}</span><span style="--c:var(--b);--cd:var(--b-d)">${S.b??"Andra talet"}</span><span style="--c:var(--x);--cd:var(--x-d)">Växlat</span></span>`:""}`;
+  $("#rnd").onclick=()=>newTask();
+  $("#own").onclick=()=>{const a=parseInt($("#ia").value),b=parseInt($("#ib").value);
+    if(isNaN(a)||isNaN(b)||a<0||b<0){say("Skriv två tal först.","warn");return}
+    if(S.mode==="plus"&&(a>999||b>999||a+b>1000)){say("Talen får vara högst 999 och summan högst 1000.","warn");return}
+    if(S.mode==="minus"&&(a>1000||b>a)){say("Det första talet ska vara högst 1000 och större än det andra.","warn");return}
+    start(a,b)};
+  ans.innerHTML=S.a!=null?`Svar: <input type="number" id="ians" aria-label="Svar" style="width:5em;padding:6px 8px;border:2px solid var(--ink);border-radius:10px;font-size:1.1rem;text-align:center"> <button class="btn" id="chk">Kolla</button>`:"";
+  if(S.a!=null){$("#chk").onclick=check;$("#ians").onkeydown=e=>{if(e.key==="Enter")check()}}
+}
+function newTask(){
+  let a,b;
+  if(S.mode==="plus"){
+    const two=Math.random()<.3;
+    do{a=two?R(12,89):R(105,789);b=two?R(12,89):R(15,399)}while(a+b>999||(a%10+b%10<10&&(Math.floor(a/10)%10+Math.floor(b/10)%10)<10));
+  }else{
+    const two=Math.random()<.3;
+    do{a=two?R(21,99):R(201,999);b=two?R(11,a-5):R(11,a-20)}while(b>=a||(a%10>=b%10&&Math.floor(a/10)%10>=Math.floor(b/10)%10));
+  }
+  start(a,b);
+}
+function start(a,b){
+  S.a=a;S.b=b;clear();
+  if(S.mode==="plus"){place(a,"a");place(b,"b");S.rem=null}
+  else{place(a,"a");S.rem=digits(b)}
+  $("#showVal").checked=false;renderTask();render();
+}
+function check(){
+  const v=parseInt($("#ians").value),right=S.mode==="plus"?S.a+S.b:S.a-S.b;
+  if(isNaN(v)){say("Skriv ditt svar först.","warn");return}
+  if(v===right){say(`Rätt! ${S.a} ${S.mode==="plus"?"+":"−"} ${S.b} = ${right}.`,"ok")}
+  else{
+    const over=K.some(k=>k!=="th"&&S.cols[k].length>9),left=S.rem&&K.some(k=>S.rem[k]>0);
+    say(over?"Inte riktigt. Någon kolumn har fler än 9. Växla först och räkna sedan blocken.":left?"Inte riktigt. Du har inte tagit bort allt än.":"Inte riktigt. Räkna blocken i varje kolumn en gång till.","warn");
+  }
+}
+
+// ---------- växla ----------
+async function fly(els,target){
+  if(reduce||!els.length)return;
+  const tr=target.getBoundingClientRect(),cx=tr.left+tr.width/2,cy=tr.top+Math.min(tr.height/2,120);
+  await Promise.all(els.map((el,i)=>{const r=el.getBoundingClientRect();
+    return el.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${cx-r.left-r.width/2}px,${cy-r.top-r.height/2}px) scale(.4)`,opacity:.1}],{duration:480,delay:i*25,easing:"ease-in",fill:"forwards"}).finished}));
+}
+async function exchange(k,dir){
+  if(S.busy)return;const i=K.indexOf(k);
+  if(dir==="up"){
+    if(S.cols[k].length<10)return;const to=K[i-1];S.busy=true;
+    const els=[...document.querySelectorAll(`.col[data-k="${k}"] .blk`)].slice(-10);
+    const target=document.querySelector(`.col[data-k="${to}"] .area`)||document.querySelector(`.col[data-k="${k}"] h2`);
+    await fly(els,target);
+    S.cols[k].splice(-10,10);S.cols[to].push({c:"x"});S.fresh={k:to,from:S.cols[to].length-1};
+  }else{
+    if(!S.cols[k].length)return;const to=K[i+1];S.busy=true;
+    const els=[...document.querySelectorAll(`.col[data-k="${k}"] .blk`)].slice(-1);
+    await fly(els,document.querySelector(`.col[data-k="${to}"] .area`));
+    S.cols[k].pop();const from=S.cols[to].length;for(let j=0;j<10;j++)S.cols[to].push({c:"x"});S.fresh={k:to,from};
+  }
+  S.busy=false;render();
+}
+
+// ---------- händelser ----------
+$("#mat").addEventListener("click",e=>{
+  const b=e.target.closest("button");
+  if(b){const k=b.dataset.k,act=b.dataset.act;
+    if(act==="up"||act==="down")return exchange(k,act);
+    if(act==="add"){S.cols[k].push({c:"a"});S.fresh={k,from:S.cols[k].length-1};render()}
+    if(act==="sub")removeOne(k,S.cols[k].length-1);
+    return}
+  const blk=e.target.closest(".blk");if(blk)removeOne(blk.dataset.k,+blk.dataset.i);
+});
+function removeOne(k,idx){
+  if(S.busy||idx<0)return;
+  if(S.mode==="plus"){say("I plusläget lägger du inte till eller tar bort block. Växla i stället.","warn");return}
+  if(S.mode==="minus"){if(!(S.rem[k]>0)){say(`Du ska inte ta bort fler ${NAME[k]}.`,"warn");return}S.rem[k]--}
+  const el=document.querySelector(`.col[data-k="${k}"] .blk[data-i="${idx}"]`);
+  const done=()=>{S.cols[k].splice(idx,1);render()};
+  if(el&&!reduce){S.busy=true;el.animate([{opacity:1,transform:"scale(1)"},{opacity:0,transform:"scale(.3)"}],{duration:220,fill:"forwards"}).finished.then(()=>{S.busy=false;done()})}else done();
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  S.mode=b.dataset.mode;S.a=S.b=null;S.rem=null;clear();
+  if(S.mode==="fri"){place(128,"a");$("#showVal").checked=true}else $("#showVal").checked=false;
+  renderTask();render();
+  if(S.mode!=="fri")newTask();
+});
+$("#showVal").onchange=()=>{$("#val").hidden=!$("#showVal").checked};
+
+// start
+place(128,"a");S.cols.e.push({c:"a"},{c:"a"},{c:"a"},{c:"a"});$("#showVal").checked=true;renderTask();render();
+</script>
+</body>
+</html>

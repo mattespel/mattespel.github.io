@@ -49,10 +49,13 @@
             font-size: 1rem; font-weight: bold; border-radius: 8px;
             cursor: pointer; width: 100%;
         }
+        a.start-game-btn { display: block; text-align: center; text-decoration: none; font-family: inherit; }
         .start-game-btn.color-1 { background: #4caf50; }
         .start-game-btn.color-2 { background: #2196F3; }
         .start-game-btn.color-3 { background: #f5a623; }
         .start-game-btn.color-4 { background: var(--ak2-primary); }
+        .start-game-btn.color-5 { background: #22609a; }
+        .start-game-btn.color-6 { background: #3c9a50; }
 
         .portal-back-btn {
             background: #607d8b; color: white; padding: 10px 18px;
@@ -381,6 +384,20 @@
                 <p>Svårare uppgifter från bedömningsstödet Åk 2.</p>
             </div>
             <button class="start-game-btn color-4" onclick="showView('portal-game4'); document.body.style.backgroundColor='var(--ak2-bg)'; game4_switchPage('grannar');">Starta Mattestudion Åk 2</button>
+        </div>
+        <div class="game-card">
+            <div>
+                <h3>Nationella prov (Åk 3)</h3>
+                <p>Träna på delprov B–G med nya uppgifter varje gång, eller gör riktiga gamla prov som rättar sig själva.</p>
+            </div>
+            <a class="start-game-btn color-5" href="np3/">Träna nationella prov</a>
+        </div>
+        <div class="game-card">
+            <div>
+                <h3>Tiobasmaterial</h3>
+                <p>Hundraplattor, tiostavar och ental. Växla och räkna plus och minus upp till 1000.</p>
+            </div>
+            <a class="start-game-btn color-6" href="tiobas/">Öppna tiobasmaterialet</a>
         </div>
     </div>
 </div>

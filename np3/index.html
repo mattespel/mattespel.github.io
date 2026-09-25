@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Träna nationella prov – Matematik åk 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fbfcf7; --grid:rgba(59,134,198,.09);
+  --ink:#1f2a44; --muted:#5b6478;
+  --blue:#3b86c6; --blue-d:#22609a; --blue-l:#d7e6f3;
+  --pencil:#f2c230; --ok:#2b8a55; --ok-l:#e2f3e8; --err:#c63d4c; --err-l:#fbe7e9;
+}
+*{box-sizing:border-box}
+html{font-size:18px;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Andika,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);line-height:1.5;
+  background:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px}
+a{color:var(--blue-d)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pencil);outline-offset:2px}
+
+/* ---------- Omslaget (efterliknar provhäftet) ---------- */
+.cover{max-width:980px;margin:0 auto;padding:16px 16px 0}
+.band{position:relative;background:var(--blue);color:#fff;border-radius:0 30px 0 0;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;overflow:hidden;min-height:58px}
+.band::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.3) 8px,transparent 9px);background-size:36px 36px;background-position:6px 4px;-webkit-mask-image:linear-gradient(90deg,#000 0,transparent 42%);mask-image:linear-gradient(90deg,#000 0,transparent 42%)}
+.band a{white-space:nowrap;position:relative;color:#fff;text-decoration:none;font-weight:700;padding:4px 10px;border-radius:8px;background:rgba(255,255,255,.14)}
+.band a:hover{background:rgba(255,255,255,.26)}
+.band .kicker{position:relative;font-size:1.25rem}
+.band .kicker b{font-weight:700}
+.cbody{display:grid;grid-template-columns:1fr 160px;background:var(--blue-l);border-radius:0 0 30px 0;overflow:hidden}
+.ctitle{padding:18px 22px 22px}
+.ctitle h1{font-size:clamp(2.1rem,6vw,3.4rem);font-weight:400;margin:0;line-height:1.05}
+.ctitle h2{font-size:clamp(1.3rem,3.4vw,1.8rem);margin:.5rem 0 0;line-height:1.2}
+.ctitle p{margin:.25rem 0 0;color:var(--muted)}
+.grade{background:var(--blue);color:#fff;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;padding:10px 16px 0}
+.grade small{font-weight:700;font-size:.95rem}
+.grade b{font-weight:400;font-size:8rem;line-height:.85}
+
+.wrap{max-width:980px;margin:0 auto;padding:22px 16px 140px}
+
+/* ---------- Startsidan ---------- */
+.tabs{display:inline-flex;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:4px;gap:4px;margin:4px 0 20px}
+.tabs a{padding:8px 16px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:700}
+.tabs a[aria-current="page"]{background:var(--ink);color:#fff}
+.lead{max-width:60ch;margin:0 0 18px}
+.dplist{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.dp{display:flex;gap:14px;align-items:flex-start;background:#fff;border:2px solid #dfe5ee;border-radius:16px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.dp:hover{border-color:var(--blue)}
+.dot{flex:none;width:52px;height:52px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:1.6rem;font-weight:700}
+.dp.mix .dot{background:var(--pencil);color:var(--ink)}
+.dp b{display:block;font-size:1.1rem}
+.dp small{display:block;color:var(--muted);font-size:.9rem;line-height:1.35;margin-top:2px}
+.note{font-size:.9rem;color:var(--muted);max-width:65ch;margin-top:18px}
+
+.oldtab{border-collapse:separate;border-spacing:6px;margin-left:-6px}
+.oldtab th{text-align:left;font-weight:700;padding:0 8px 0 0;white-space:nowrap}
+.oldtab thead th{text-align:center;color:var(--muted);font-size:.9rem}
+.oldtab td{text-align:center}
+.pdf{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:12px;background:#fff;border:2px solid var(--blue);color:var(--blue-d);font-weight:700;font-size:1.2rem;text-decoration:none}
+.pdf:hover{background:var(--blue);color:#fff}
+.none{color:#b8bfcb}
+
+/* ---------- Provbladet ---------- */
+.back{display:inline-block;margin-bottom:14px;font-weight:700;text-decoration:none}
+.sheet{background:#fff;border:1px solid #dde3ec;box-shadow:0 2px 0 #dde3ec;max-width:820px;margin:0 auto;padding:34px 40px 28px}
+.instr{font-style:italic;margin:0 0 18px}
+.qs{list-style:none;margin:0;padding:0}
+.q{display:grid;grid-template-columns:2.2em 1fr;padding:18px 0 22px;border-bottom:1px dashed #e0e5ed}
+.q:last-child{border-bottom:0}
+.qn{font-weight:700}
+.sub{margin:.55rem 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem .5rem}
+.sub.row{justify-content:space-between}
+.lbl{min-width:1.6em;flex:none}
+.sc{flex:1 1 0;min-width:0}
+.grow{flex:1 1 16em}
+.svar{margin-top:.8rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.big{font-size:1.6rem;letter-spacing:.4em;margin:.4rem 0 .6rem}
+.calc{font-size:1.35rem}
+.fig{display:block;margin:.6rem 0;color:var(--ink);max-width:100%;height:auto}
+.sheetfoot{margin-top:18px;font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between}
+
+input.ans{font:inherit;font-size:1.1rem;color:var(--blue-d);background:transparent;border:0;border-bottom:2px solid var(--ink);padding:2px 4px;text-align:center;border-radius:4px 4px 0 0;min-width:3ch;max-width:100%}
+input.ans:focus{outline:none;background:#fff8dc;border-bottom-color:var(--pencil)}
+.ok{background:var(--ok-l)!important;border-color:var(--ok)!important}
+.bad{background:var(--err-l)!important;border-color:var(--err)!important}
+
+.mc{display:inline-flex;flex-wrap:wrap;gap:8px;vertical-align:middle}
+.mc.col{display:flex;flex-direction:column;align-items:flex-start}
+.opt{background:#fff;border:2px solid transparent;border-radius:999px;padding:4px 14px;cursor:pointer;font-size:1.1rem;box-shadow:inset 0 0 0 1px #cfd6e2}
+.opt:hover{box-shadow:inset 0 0 0 1px var(--blue)}
+.opt.sel{border-color:var(--blue-d);border-radius:48% 52% 46% 54%/55% 45% 55% 45%;box-shadow:none}
+.mc.col .opt{font-size:1.5rem;letter-spacing:.25em;padding:4px 18px}
+.mc.ok .opt.sel{border-color:var(--ok);background:var(--ok-l)}
+.mc.bad .opt.sel{border-color:var(--err);background:var(--err-l)}
+.mc.ok,.mc.bad{background:none!important}
+
+.facit{margin-top:.8rem;padding:8px 12px;border-left:4px solid var(--pencil);background:#fffbea;font-size:.95rem}
+.facit pre{margin:.3rem 0 0;font-size:1.05rem;line-height:1.25}
+.col{font-family:ui-monospace,Menlo,Consolas,monospace}
+
+.cloud{display:inline-flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;max-width:260px;padding:18px 28px;margin:.5rem 0;background:#dcecf8;border:1.5px solid #2c3e5c;border-radius:48% 52% 45% 55%/60% 55% 45% 40%;font-size:1.05rem}
+.cards{display:flex;gap:18px;margin:.6rem 0 .8rem;padding-left:.3rem}
+.card{display:grid;place-items:center;width:46px;height:58px;background:#ffe600;border:1.5px solid #333;font-size:1.6rem;transform:rotate(var(--r,0deg))}
+.box{display:table;border:2px solid var(--blue);border-radius:6px;padding:10px 16px;margin:.5rem 0}
+.box div{margin:.2rem 0}
+.sym{letter-spacing:.5em;font-size:1.1rem;display:inline-block;min-width:6.5em;border:1px solid #999;padding:2px 10px;margin-right:.6rem}
+.eq{font-size:1.5rem;line-height:1.9}
+.e{font-size:1.8rem;vertical-align:middle;line-height:1}
+.eq .e{font-size:2rem}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;margin:0 .15em}
+.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 .2em}
+table.t{border-collapse:collapse;margin:.6rem 0}
+table.t th,table.t td{border:1px solid #555;padding:5px 12px;text-align:left}
+table.t th{background:#e4e7eb}
+table.t td.c{text-align:center}
+.cal{border-collapse:collapse;margin:.6rem 0;font-size:.95rem}
+.cal caption{background:#d7262c;color:#fff;font-weight:700;padding:4px}
+.cal th,.cal td{border:1px solid #aaa;width:2.8em;height:2.2em;text-align:center}
+.colors{display:flex;flex-wrap:wrap;gap:4px;margin:.6rem 0}
+.cc{width:70px;height:54px;display:grid;place-items:center;border:1.5px solid #333;font-weight:700;font-size:.9rem;color:#fff}
+.cc.blank{background:#fff}
+.cc.blank input{width:62px!important;font-size:.9rem}
+
+/* ---------- Gamla prov ---------- */
+.pg{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start;margin-bottom:28px}
+.pg img{width:100%;height:auto;display:block;background:#fff;border:1px solid #dde3ec;box-shadow:0 2px 0 #dde3ec;position:sticky;top:12px}
+.ansbox{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:14px 18px}
+.ansbox h3{margin:0 0 4px;font-size:1rem;color:var(--muted)}
+.ansbox .q{padding:12px 0 14px}
+select.sel{font:inherit;font-size:1.2rem;min-width:2.8em;height:2.1em;border:2px solid var(--ink);border-radius:6px;background:#fff;color:var(--blue-d);text-align:center;padding:0 4px}
+.selfnote{font-size:.85rem;color:var(--muted);border:1.5px dashed #b9c1ce;border-radius:8px;padding:2px 8px}
+.arrowbox{display:inline-grid;place-items:center;width:2em;height:2em;border:1.5px solid #555;font-size:1.1rem}
+.mc.multi .opt.sel{border-radius:10px}
+@media (max-width:760px){.pg{grid-template-columns:1fr}.pg img{position:static}}
+
+/* ---------- Knappraden ---------- */
+.actions{position:fixed;left:0;right:0;bottom:0;background:rgba(251,252,247,.96);border-top:2px solid var(--ink);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:5}
+.actions .in{max-width:820px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:2px solid var(--ink);background:#fff;border-radius:12px;padding:9px 16px;font-weight:700;cursor:pointer}
+.btn.primary{background:var(--ink);color:#fff}
+.btn:hover{background:#fff8dc}
+.btn.primary:hover{background:var(--blue-d)}
+.result{flex:1 1 100%;font-weight:700;font-size:1.05rem}
+.result:empty{display:none}
+.spacer{flex:1}
+
+@media (max-width:620px){
+  html{font-size:17px}
+  .cbody{grid-template-columns:1fr 96px}
+  .grade b{font-size:5.4rem}
+  .band .kicker{font-size:1rem}
+  .sheet{padding:22px 16px 18px;border-left:0;border-right:0}
+  .wrap{padding-left:8px;padding-right:8px}
+  .q{grid-template-columns:1.8em 1fr}
+  .btn{padding:7px 10px;font-size:.9rem;border-radius:10px}
+  #bPrint,.spacer{display:none}
+  .actions .in{flex-wrap:nowrap;gap:6px}
+  .actions .in{flex-wrap:wrap}
+  .result{font-size:.9rem}
+  .band{padding:10px 12px}
+  .band a{font-size:.85rem}
+  .oldtab{border-spacing:4px}
+  .pdf{width:40px;height:40px;font-size:1rem;border-radius:10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  body{background:#fff}
+  .band a,.tabs,.back,.actions,.note{display:none!important}
+  .wrap{padding:0}
+  .sheet{border:0;box-shadow:none;padding:0;max-width:none}
+  .q{break-inside:avoid}
+  input.ans{background:none!important}
+  .ok,.bad{background:none!important;border-color:var(--ink)!important}
+}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="band">
+    <span class="kicker"><b>Nationellt prov</b>, övning</span>
+    <a href="../">Matte-Portalen</a>
+  </div>
+  <div class="cbody">
+    <div class="ctitle">
+      <h1>Matematik</h1>
+      <h2 id="h2">Träna inför provet</h2>
+      <p id="hp">Nya uppgifter varje gång, i samma stil som det riktiga provet.</p>
+    </div>
+    <div class="grade"><small>Årskurs</small><b>3</b></div>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+<div class="actions" id="actions" hidden><div class="in">
+  <div class="result" id="result" aria-live="polite"></div>
+  <button class="btn primary" id="bCheck">Rätta</button>
+  <button class="btn" id="bNew">Nya uppgifter</button>
+  <span class="spacer"></span>
+  <button class="btn" id="bFacit">Visa facit</button>
+  <button class="btn" id="bPrint">Skriv ut</button>
+</div></div>
+
+<script>
+// ===================== LOGIC START =====================
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const P=a=>a[Math.floor(Math.random()*a.length)];
+const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const until=(fn,ok)=>{let v,n=0;do{v=fn();n++}while(!ok(v)&&n<5000);return v};
+const L="abcdefgh";
+const norm=s=>String(s==null?"":s).trim().toLowerCase().replace(/\s+/g," ");
+const toNum=v=>{const d=String(v==null?"":v).replace(/[^0-9]/g,"");return d===""?NaN:parseInt(d,10)};
+const toTime=v=>{const m=String(v==null?"":v).trim().match(/^(\d{1,2})\s*[.:,]?\s*(\d{2})$/);if(!m)return NaN;const h=+m[1],mi=+m[2];if(mi>59)return NaN;return (h*60+mi)%720};
+const fmtT=(h,m)=>`${String(h).padStart(2,"0")}.${String(m).padStart(2,"0")}`;
+const frac=(a,b)=>`<span class="frac"><span>${a}</span><span>${b}</span></span>`;
+const svar=x=>`<div class="svar">Svar: ${x}</div>`;
+const sub=(i,x)=>`<div class="sub"><span class="lbl">${L[i]})</span><span class="sc">${x}</span></div>`;
+const it=s=>`<i>${s}</i>`;
+const GOR=it("Gör en beräkning och skriv svar.");
+const VISA=it("Visa hur du löser uppgiften och skriv svar.");
+
+// fält
+const N=(a,w)=>({k:"num",a,w:w||Math.max(3,String(a).length+1)});
+const T=(a,w)=>({k:"txt",a:[].concat(a).map(norm),w:w||8});
+const TM=(mins)=>({k:"time",a:((mins%1440)+1440)%720,w:5});
+const MC=(opts,a,layout)=>({k:"mc",opts,a,layout});
+const FREE=(w,num=true)=>({k:"free",w:w||3,num});
+
+function checkField(fd,v){
+  if(fd.k==="num")return toNum(v)===fd.a;
+  if(fd.k==="txt")return fd.a.includes(norm(v));
+  if(fd.k==="time")return toTime(v)===fd.a;
+  if(fd.k==="mc"||fd.k==="sel")return v===fd.a;
+  if(fd.k==="multi")return Array.isArray(v)&&v.length===fd.a.length&&fd.a.every(i=>v.includes(i));
+  if(fd.k==="self")return true;
+  return false;
+}
+function build(gen){const fields=[];const f=s=>{fields.push(s);return `@@${fields.length-1}@@`};const q=gen(f);q.fields=fields;return q}
+function gradeQ(q,vals){
+  const r=q.check?(q.check(vals)||[]):[];
+  return q.fields.map((fd,i)=>r[i]!==undefined?!!r[i]:checkField(fd,vals[i]));
+}
+
+const PEOPLE=[["Nova","hon"],["Troj","han"],["Amir","han"],["Sara","hon"],["Hanna","hon"],["Victor","han"],["Fatima","hon"],["Leo","han"],["Melvin","han"],["Karim","han"],["Lisa","hon"],["Olle","han"],["Jelena","hon"],["Ahmed","han"],["Alice","hon"],["Elias","han"],["Maja","hon"],["Noah","han"]];
+const people=n=>shuf(PEOPLE).slice(0,n).map(([n,p])=>({n,p,P:p==="hon"?"Hon":"Han"}));
+
+// ---------- bilder (SVG) ----------
+function nline({min,max,ticks,labels,arrow}){
+  const W=480,x=v=>24+(v-min)/(max-min)*420;
+  let s=`<svg class="fig" viewBox="0 0 ${W} 92" width="${W}" role="img" aria-label="Tallinje">`;
+  s+=`<line x1="10" y1="30" x2="464" y2="30" stroke="currentColor" stroke-width="2"/><path d="M464 24 L477 30 L464 36Z" fill="currentColor"/>`;
+  ticks.forEach(v=>{const lb=labels.includes(v);s+=`<line x1="${x(v)}" y1="${lb?19:24}" x2="${x(v)}" y2="${lb?41:36}" stroke="currentColor" stroke-width="${lb?2:1.4}"/>`});
+  labels.forEach(v=>s+=`<text x="${x(v)}" y="62" text-anchor="middle" font-size="17" fill="currentColor">${v}</text>`);
+  if(arrow!=null){const X=x(arrow);s+=`<line x1="${X}" y1="88" x2="${X}" y2="42" stroke="#22609a" stroke-width="2.5"/><path d="M${X-6} 51 L${X} 41 L${X+6} 51" fill="none" stroke="#22609a" stroke-width="2.5"/>`}
+  return s+"</svg>";
+}
+function tally(n){
+  let s="",x=5;const g=Math.floor(n/5),r=n%5;
+  for(let i=0;i<g;i++){for(let j=0;j<4;j++)s+=`<line x1="${x+j*6}" y1="4" x2="${x+j*6}" y2="22"/>`;s+=`<line x1="${x-4}" y1="19" x2="${x+22}" y2="7"/>`;x+=34}
+  for(let j=0;j<r;j++)s+=`<line x1="${x+j*6}" y1="4" x2="${x+j*6}" y2="22"/>`;
+  const w=x+r*6+4;
+  return `<svg viewBox="0 0 ${w} 26" width="${w}" height="26" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="${n}">${s}</svg>`;
+}
+function poly(n,r,rot){const p=[];for(let i=0;i<n;i++){const a=rot+i*2*Math.PI/n;p.push(`${(60+r*Math.cos(a)).toFixed(1)},${(60+r*Math.sin(a)).toFixed(1)}`)}return p.join(" ")}
+function shapeSVG(name){
+  const rot=Math.random()*Math.PI;let inner;
+  if(name==="cirkel")inner=`<circle cx="60" cy="60" r="42"/>`;
+  else if(name==="triangel"){const p=[[R(12,40),R(88,106)],[R(80,108),R(75,106)],[R(35,95),R(10,28)]];inner=`<polygon points="${p.map(q=>q.join(",")).join(" ")}"/>`}
+  else if(name==="kvadrat")inner=`<polygon points="${poly(4,46,rot)}"/>`;
+  else if(name==="rektangel"){const w=R(78,100),h=R(34,46);inner=`<rect x="${60-w/2}" y="${60-h/2}" width="${w}" height="${h}" transform="rotate(${R(-35,35)} 60 60)"/>`}
+  else if(name==="femhörning")inner=`<polygon points="${poly(5,46,rot)}"/>`;
+  else inner=`<polygon points="${poly(6,46,rot)}"/>`;
+  return `<svg viewBox="0 0 120 120" width="104" height="104" fill="#8cc152" stroke="#2d4a1a" stroke-width="1.5" aria-hidden="true">${inner}</svg>`;
+}
+function clockSVG(h,m){
+  const ma=m/60*2*Math.PI,ha=((h%12)+m/60)/12*2*Math.PI;
+  const hand=(a,l,w)=>`<line x1="60" y1="60" x2="${(60+l*Math.sin(a)).toFixed(1)}" y2="${(60-l*Math.cos(a)).toFixed(1)}" stroke="#1f2a44" stroke-width="${w}" stroke-linecap="round"/>`;
+  let s=`<svg class="fig" viewBox="0 0 120 120" width="160" height="160" aria-label="Klocka"><circle cx="60" cy="60" r="55" fill="#f7e36e" stroke="#1f2a44" stroke-width="3"/>`;
+  for(let i=0;i<60;i++){const a=i/60*2*Math.PI,r1=i%5?51:48;s+=`<line x1="${(60+r1*Math.sin(a)).toFixed(1)}" y1="${(60-r1*Math.cos(a)).toFixed(1)}" x2="${(60+54*Math.sin(a)).toFixed(1)}" y2="${(60-54*Math.cos(a)).toFixed(1)}" stroke="#1f2a44" stroke-width="${i%5?.8:1.6}"/>`}
+  for(let i=1;i<=12;i++){const a=i/12*2*Math.PI;s+=`<text x="${(60+40*Math.sin(a)).toFixed(1)}" y="${(60-40*Math.cos(a)+4.5).toFixed(1)}" text-anchor="middle" font-size="13" fill="#1f2a44">${i}</text>`}
+  return s+hand(ha,26,4.5)+hand(ma,41,2.6)+`<circle cx="60" cy="60" r="3.5" fill="#1f2a44"/></svg>`;
+}
+function stones(n){
+  let s="";for(let i=0;i<n;i++){const x=12+(i%3)*26,y=12+Math.floor(i/3)*20;s+=`<ellipse cx="${x}" cy="${y}" rx="11" ry="8" fill="#b7aea0" stroke="#4a4540" stroke-width="1.3" transform="rotate(-18 ${x} ${y})"/>`}
+  const h=Math.max(1,Math.ceil(n/3))*20+4;
+  return n?`<svg viewBox="0 0 80 ${h}" width="80" height="${h}" aria-label="${n} stenar">${s}</svg>`:"";
+}
+
+// ======================= DELPROV B =======================
+function bOrder(f){
+  const a=R(1,9),b=until(()=>R(1,9),v=>v!==a);
+  const s=new Set([10*a+b,10*b+a,10*a,10*b]);while(s.size<5)s.add(10*P([a,b])+R(0,9));
+  const two=shuf([...s]);
+  const d=shuf([1,2,3,4,5,6,7,8,9]).slice(0,3);
+  const three=shuf([[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]].map(p=>100*d[p[0]]+10*d[p[1]]+d[p[2]])).slice(0,5);
+  const sa=[...two].sort((x,y)=>x-y),sb=[...three].sort((x,y)=>x-y);
+  const cloud=n=>`<div><span class="cloud">${n.map(x=>`<span>${x}</span>`).join("")}</span></div>`;
+  return{html:`Skriv talen i storleksordning. Börja med det minsta talet.${cloud(two)}${sub(0,sa.map(x=>f(N(x,4))).join(" "))}${cloud(three)}${sub(1,sb.map(x=>f(N(x,4))).join(" "))}`,
+    facit:`a) ${sa.join(", ")}<br>b) ${sb.join(", ")}`};
+}
+function bPlace(f){
+  const h=R(1,9),t=R(1,9),e=R(1,9),h2=R(1,9),t2=R(1,9),h3=R(1,9),e3=R(1,9),n4=R(110,480),k=R(2,8),n5=100*R(1,8)+10*R(0,1)+R(1,9);
+  const rows=[[`Vilket tal har ${h} hundratal, ${t} tiotal och ${e} ental?`,100*h+10*t+e],[`Vilket tal har ${h2} hundratal och ${t2} tiotal?`,100*h2+10*t2],[`Vilket tal har ${h3} hundratal och ${e3} ental?`,100*h3+e3],[`Vilket tal är ${k} ental större än ${n4}?`,n4+k],[`Vilket tal är 1 tiotal mindre än ${n5}?`,n5-10]];
+  return{html:rows.map((r,i)=>`<div class="sub row"><span class="lbl">${L[i]})</span><span class="grow">${r[0]}</span><span>Svar: ${f(N(r[1],5))}</span></div>`).join(""),
+    facit:rows.map((r,i)=>`${L[i]}) ${r[1]}`).join("&nbsp;&nbsp; ")};
+}
+function bLine(f){
+  const a=R(0,20),d=R(1,8),b=a+2*d;
+  const top=10*R(2,4),step=P([1,2]);const v=until(()=>step*R(1,top/step-1),x=>x%10!==0);
+  const ticks=[];for(let i=0;i<=top;i+=step)ticks.push(i);
+  const labels=[];for(let i=0;i<=top;i+=10)labels.push(i);
+  return{html:`Vilket tal ska stå vid pilen?${sub(0,"")}${nline({min:a,max:b,ticks:[a,a+d,b],labels:[a,b],arrow:a+d})}${svar(f(N(a+d)))}${sub(1,"")}${nline({min:0,max:top,ticks,labels,arrow:v})}${svar(f(N(v)))}`,
+    facit:`a) ${a+d} (mitt emellan ${a} och ${b})<br>b) ${v} (varje streck är ${step})`};
+}
+function perms3(d){return[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]].map(p=>p.map(i=>d[i]))}
+function bCards(f){
+  const d=until(()=>shuf([0,1,2,3,4,5,6,7,8,9]).slice(0,3),d=>{const ps=perms3(d).filter(p=>p[0]!==0);return ps.some(p=>p[2]%2)&&ps.some(p=>p[2]%2===0)});
+  const key=[...d].map(String).sort().join("");
+  const ok=(v,par)=>{const s=String(v||"").replace(/\s/g,"");return /^\d{3}$/.test(s)&&s[0]!=="0"&&[...s].sort().join("")===key&&(+s[2])%2===par};
+  const max=+[...d].sort((x,y)=>y-x).join(""),min=+perms3(d).filter(p=>p[0]!==0).map(p=>p.join("")).sort()[0];
+  const ex=par=>perms3(d).filter(p=>p[0]!==0&&p[2]%2===par).map(p=>p.join("")).join(" eller ");
+  const card=n=>`<span class="card" style="--r:${R(-10,10)}deg">${n}</span>`;
+  return{html:`${P(people(1)).n} har tre sifferkort. Använd alla sifferkorten varje gång.<div class="cards">${d.map(card).join("")}</div>
+    <div class="sub row"><span class="lbl">a)</span><span class="grow">Skriv det största talet.</span><span>Svar: ${f(N(max,4))}</span></div>
+    <div class="sub row"><span class="lbl">b)</span><span class="grow">Skriv det minsta talet.</span><span>Svar: ${f(N(min,4))}</span></div>
+    <div class="sub row"><span class="lbl">c)</span><span class="grow">Skriv ett udda tal.</span><span>Svar: ${f(FREE(4))}</span></div>
+    <div class="sub row"><span class="lbl">d)</span><span class="grow">Skriv ett jämnt tal.</span><span>Svar: ${f(FREE(4))}</span></div>`,
+    check:v=>[undefined,undefined,ok(v[2],1),ok(v[3],0)],
+    facit:`a) ${max}&nbsp;&nbsp; b) ${min}&nbsp;&nbsp; c) ${ex(1)}&nbsp;&nbsp; d) ${ex(0)}`};
+}
+function bPattern(f){
+  const tp=shuf(["AABC","ABAC","ABBC","ABCC","ABCB","AABB"]).slice(0,3);
+  const syms=shuf(["●","■","▲","★","♥","◆","✚","☾","✿","▼","○","□"]);
+  const opts=tp.map((t,i)=>{const s=syms.slice(i*3,i*3+3);return (t+t).split("").map(c=>s["ABC".indexOf(c)]).join(" ")});
+  const order=shuf([0,1,2]);
+  return{html:`Titta på raden med bokstäver. Bokstäverna är ordnade efter ett visst mönster.<div class="big">${(tp[0]+tp[0]).split("").join(" ")}</div>Här är tre andra mönster. Ett av dem är ordnat på samma sätt som bokstäverna. ${it("Ringa in det.")}<div style="margin-top:.6rem">${f(MC(order.map(i=>opts[i]),order.indexOf(0),"col"))}</div>`,
+    facit:`Rätt mönster: ${opts[0]}`};
+}
+function bEq(f){
+  const a=R(6,12),b=R(1,a-1),c=until(()=>R(1,a-1),x=>x!==b),a2=R(10,20),c2=R(1,a2-1);
+  return{html:`Skriv tal på strecken så att likheterna stämmer.${sub(0,`${a} = ${b} + ${f(N(a-b))} = ${f(N(a-c))} + ${c}`)}${sub(1,`${a2} = ${f(FREE())} + ${f(FREE())} = ${f(N(a2-c2))} + ${c2}`)}`,
+    check:v=>{const s=toNum(v[2])+toNum(v[3])===a2;return[undefined,undefined,s,s,undefined]},
+    facit:`a) ${a} = ${b} + ${a-b} = ${a-c} + ${c}<br>b) t.ex. ${a2} = ${a2-5} + 5 = ${a2-c2} + ${c2}`};
+}
+function bTally(f){
+  const items=shuf(["bollar","hopprep","klubbor","styltor","rockringar","koner","mål"]).slice(0,5);
+  const cnt=shuf([2,3,4,5,6,7,8,9,10,11,12,13]).slice(0,5);
+  const [i,j]=until(()=>[R(0,4),R(0,4)],([x,y])=>cnt[x]<cnt[y]);
+  const k=R(0,4);const cap=s=>s[0].toUpperCase()+s.slice(1);
+  return{html:`De här sakerna finns i skolans rastbod.<table class="t"><tr><th>Saker</th><th>Antal</th></tr>${items.map((s,n)=>`<tr><td>${cap(s)}</td><td>${tally(cnt[n])}</td></tr>`).join("")}</table>
+    <div class="sub row"><span class="lbl">a)</span><span class="grow">Hur många ${items[k]} finns det?</span><span>Svar: ${f(N(cnt[k]))}</span></div>
+    <div class="sub row"><span class="lbl">b)</span><span class="grow">Hur många ${items[i]} och ${items[j]} finns det tillsammans?</span><span>Svar: ${f(N(cnt[i]+cnt[j]))}</span></div>
+    <div class="sub row"><span class="lbl">c)</span><span class="grow">Hur många fler ${items[j]} än ${items[i]} finns det?</span><span>Svar: ${f(N(cnt[j]-cnt[i]))}</span></div>`,
+    facit:`a) ${cnt[k]}&nbsp;&nbsp; b) ${cnt[i]} + ${cnt[j]} = ${cnt[i]+cnt[j]}&nbsp;&nbsp; c) ${cnt[j]} − ${cnt[i]} = ${cnt[j]-cnt[i]}`};
+}
+
+// ======================= DELPROV C =======================
+function cAdd(f){
+  const[p]=people(1);const a=R(15,48),b=until(()=>R(12,39),b=>(a%10+b%10)>=10);
+  const t=P([`${p.n} spelar ett spel. ${p.P} har ${a} poäng. ${p.P} får ${b} poäng till. Hur många poäng har ${p.p} sammanlagt?`,
+    `${p.n} samlar på kort. ${p.P} har ${a} kort och får ${b} kort till på sin födelsedag. Hur många kort har ${p.p} nu?`,
+    `I en skål finns ${a} pärlor. ${p.n} häller i ${b} pärlor till. Hur många pärlor finns det i skålen nu?`]);
+  return{html:`${t}<br>${GOR}${svar(f(N(a+b,6)))}`,facit:`${a} + ${b} = ${a+b}`};
+}
+function cPartWhole(f){
+  const tot=R(40,69),part=R(15,tot-12);
+  const [what,x,y]=P([["personer som spelar brännboll","vuxna","barn"],["kaniner med i en tävling","vita","bruna"],["bilar på parkeringen","röda","blå"],["böcker i bokhyllan","faktaböcker","sagoböcker"]]);
+  return{html:`Det är ${tot} ${what}. Av dem är ${part} ${x} och resten är ${y}.<br>Hur många är ${y}?<br>${GOR}${svar(f(N(tot-part,6)))}`,facit:`${tot} − ${part} = ${tot-part}`};
+}
+function cCompare(f){
+  const[p,q]=people(2);const a=R(18,45),d=R(4,12);
+  const t=P([`${p.n} kastar ${a} m med en liten boll. Det är ${d} m längre än vad ${q.n} kastar.<br>Hur långt kastar ${q.n}?`,
+    `${p.n}s kanin hoppar ${a} cm högt. Det är ${d} cm högre än vad ${q.n}s kanin hoppar.<br>Hur högt hoppar ${q.n}s kanin?`,
+    `${p.n} har ${a} gosedjur. ${p.P} har ${d} gosedjur fler än ${q.n}.<br>Hur många gosedjur har ${q.n}?`]);
+  return{html:`${t}<br>${GOR}${svar(f(N(a-d,6)))}`,facit:`${a} − ${d} = ${a-d} (${q.n} har mindre, så det blir minus)`};
+}
+function cStart(f){
+  const[p]=people(1);const n=R(18,32),k=R(3,9);
+  const t=P([`Det har börjat ${k} nya elever i klass 3a. Nu är det ${n} elever i klassen.<br>Hur många elever var det i klassen innan de nya eleverna började?`,
+    `I en bur finns det fåglar. ${p.n} släpper in ${k} fåglar till. Nu är det ${n} fåglar i buren.<br>Hur många fåglar var det från början?`]);
+  return{html:`${t}<br>${GOR}${svar(f(N(n-k,6)))}`,facit:`${n} − ${k} = ${n-k}`};
+}
+function cFewer(f){
+  const a=R(10,25),b=a+R(8,20);
+  const [x,y,thing]=P([["vita","röda","bollar"],["vita","bruna","möss"],["gröna","gula","äpplen"]]);
+  if(Math.random()<.5)return{html:`Det finns ${a} ${x} ${thing} och ${b} ${y} ${thing}.<br>Hur många färre ${x} ${thing} finns det?<br>${GOR}${svar(f(N(b-a,6)))}`,facit:`${b} − ${a} = ${b-a}`};
+  return{html:`Det finns ${b} päron och ${a} bananer i en låda.<br>Hur många fler päron än bananer finns det i lådan?<br>${GOR}${svar(f(N(b-a,6)))}`,facit:`${b} − ${a} = ${b-a}`};
+}
+function cGroups(f){
+  const k=R(2,5),g=R(3,8),tot=k*g;
+  const t=P([`Det är ${tot} elever som går en tipspromenad. Eleverna går ${k} i varje grupp.<br>Hur många grupper är det?`,
+    `Affären har ${tot} marsvin i olika burar. I varje bur finns det ${k} marsvin.<br>Hur många burar är det?`,
+    `Barnen på fritids har bakat ${tot} bullar. Bullarna läggs i påsar med ${k} i varje påse.<br>Hur många påsar behövs?`]);
+  return{html:`${t}<br>${GOR}${svar(f(N(g,6)))}`,facit:`${tot} / ${k} = ${g}`};
+}
+function cMult(f){
+  if(Math.random()<.35){const n=R(3,7);return{html:`I affären finns ${n} kaniner.<br>Hur många ben har de tillsammans?<br>${GOR}${svar(f(N(4*n,6)))}`,facit:`En kanin har 4 ben. ${n} · 4 = ${4*n}`}}
+  const a=P([2,3,4,5,10]),b=R(3,9);
+  return{html:`På ett bord finns ${b} burkar med pennor. I varje burk är det ${a} pennor.<br>Hur många pennor är det tillsammans?<br>${GOR}${svar(f(N(a*b,6)))}`,facit:`${b} · ${a} = ${a*b}`};
+}
+function cShare(f){
+  const[p,q,r]=people(3);const three=Math.random()<.3,k=three?3:2,each=R(4,15),tot=each*k;const what=P(["kulor","kronor","klistermärken"]);
+  const who=three?`${p.n}, ${q.n} och ${r.n}`:`${p.n} och ${q.n}`;
+  return{html:`${who} ska dela lika på ${tot} ${what}.<br>Hur många ${what} får de var?<br>${GOR}${svar(f(N(each,6)))}`,facit:`${tot} / ${k} = ${each}`};
+}
+function cExpr(f){
+  const kind=P(["mult","div","sub","add"]);let a,b,t;
+  if(kind==="mult"){a=R(4,9);b=R(2,5);t=`Det finns ${a} askar med ${b} kulor i varje ask.<br>Hur många kulor finns det sammanlagt?`}
+  else if(kind==="div"){b=P([2,5,10]);a=b*R(3,6);t=`Barnen på fritids har bakat ${a} bullar. Bullarna ska läggas i påsar med ${b} i varje påse.<br>Hur många påsar behövs?`}
+  else if(kind==="sub"){a=R(12,30);b=R(3,9);const[q]=people(1);t=`${q.n} har ${a} klistermärken och ger bort ${b}.<br>Hur många klistermärken har ${q.p} kvar?`}
+  else{a=R(12,30);b=R(3,9);t=`I en påse finns ${a} godisbitar. Man lägger i ${b} till.<br>Hur många godisbitar finns det nu?`}
+  const opts=[`${a} + ${b}`,`${a} − ${b}`,`${a} · ${b}`,frac(a,b)];
+  const ans={add:0,sub:1,mult:2,div:3}[kind];
+  return{html:`${t}<br>${it("Ringa in det uttryck som passar.")}<div style="margin-top:.5rem">${f(MC(opts,ans))}</div>`,facit:`Rätt uttryck: ${opts[ans]}`};
+}
+function cMake(f){
+  const t=P([12,16,18,20,24]);
+  return{html:`Skriv olika uttryck där svaret är ${t}.${sub(0,`${t} = ${f(FREE())} + ${f(FREE())}`)}${sub(1,`${f(FREE())} − ${f(FREE())} = ${t}`)}${sub(2,`${t} = ${f(FREE())} · ${f(FREE())}`)}${sub(3,`<span class="frac"><span>${f(FREE())}</span><span>${f(FREE())}</span></span> = ${t}`)}`,
+    check:v=>{const n=v.map(toNum);const A=n[0]+n[1]===t,B=n[2]-n[3]===t,C=n[4]*n[5]===t,D=n[7]>0&&n[6]/n[7]===t;return[A,A,B,B,C,C,D,D]},
+    facit:`Det finns många svar, t.ex. ${t} = ${t-5} + 5, ${t+10} − 10 = ${t}, ${t} = 2 · ${t/2}, ${frac(t*2,2)} = ${t}`};
+}
+const C_GENS=[cAdd,cPartWhole,cCompare,cStart,cFewer,cGroups,cMult,cShare,cExpr,cMake];
+
+// ======================= DELPROV D =======================
+const SHAPES={cirkel:["cirkel"],triangel:["triangel","trekant","trehörning"],kvadrat:["kvadrat"],rektangel:["rektangel"],femhörning:["femhörning","pentagon"],sexhörning:["sexhörning","hexagon"]};
+function dShapes(f){
+  const pick=shuf(Object.keys(SHAPES)).slice(0,4);
+  return{html:`Skriv de geometriska objektens namn.<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:.5rem">${pick.map(s=>`<div style="text-align:center">${shapeSVG(s)}<br>${f(T(SHAPES[s],10))}</div>`).join("")}</div>`,
+    facit:pick.join(", ")};
+}
+function dPerimeter(f){
+  const w=R(3,8),h=until(()=>R(2,5),x=>x!==w),s=28;
+  const rect=`<svg class="fig" viewBox="0 0 ${w*s+90} ${h*s+50}" width="${w*s+90}"><rect x="50" y="24" width="${w*s}" height="${h*s}" fill="#a6cdea" stroke="#1f2a44" stroke-width="1.5"/><text x="${50+w*s/2}" y="17" text-anchor="middle" font-size="14">${w} cm</text><text x="44" y="${24+h*s/2+5}" text-anchor="end" font-size="14">${h} cm</text></svg>`;
+  const a=R(3,7),b=R(3,7),c=until(()=>R(2,8),c=>c<a+b&&a<b+c&&b<a+c);
+  const tri=`<svg class="fig" viewBox="0 0 240 130" width="240"><polygon points="20,110 210,110 140,20" fill="#a6cdea" stroke="#1f2a44" stroke-width="1.5"/><text x="115" y="127" text-anchor="middle" font-size="14">${a} cm</text><text x="68" y="58" text-anchor="end" font-size="14">${b} cm</text><text x="182" y="58" font-size="14">${c} cm</text></svg>`;
+  return{html:`<b>Omkrets</b>${sub(0,"Figuren är en rektangel. Hur stor omkrets har den?")}${rect}${svar(f(N(2*(w+h)))+" cm")}${sub(1,"Hur stor omkrets har triangeln?")}${tri}${svar(f(N(a+b+c))+" cm")}`,
+    facit:`a) ${w} + ${h} + ${w} + ${h} = ${2*(w+h)} cm<br>b) ${a} + ${b} + ${c} = ${a+b+c} cm`};
+}
+function dArea(f){
+  const rs=until(()=>[0,1,2].map(()=>[R(1,4),R(1,5)]),r=>{const A=r.map(x=>x[0]*x[1]);const m=Math.max(...A);return A.filter(x=>x===m).length===1&&new Set(A).size===3});
+  const S=22,cols=rs.reduce((s,r)=>s+r[0]+1,1),W=cols*S,H=7*S;
+  let g=`<svg class="fig" viewBox="0 0 ${W} ${H}" width="${W}">`;
+  for(let x=0;x<=cols;x++)g+=`<line x1="${x*S}" y1="0" x2="${x*S}" y2="${H}" stroke="#cdd5df"/>`;
+  for(let y=0;y<=7;y++)g+=`<line x1="0" y1="${y*S}" x2="${W}" y2="${y*S}" stroke="#cdd5df"/>`;
+  const cols3=["#9dc8ea","#f2b8d0","#f7e08a"];let x=1;
+  rs.forEach((r,i)=>{g+=`<rect x="${x*S}" y="${S}" width="${r[0]*S}" height="${r[1]*S}" fill="${cols3[i]}" stroke="#1f2a44" stroke-width="1.5"/><text x="${(x+r[0]/2)*S}" y="${(r[1]+2)*S-6}" text-anchor="middle" font-size="15">${"ABC"[i]}</text>`;x+=r[0]+1});
+  g+="</svg>";
+  const A=rs.map(r=>r[0]*r[1]),mx=A.indexOf(Math.max(...A)),k=R(0,2);
+  return{html:`<b>Area</b>${g}${sub(0,`Vilket objekt har störst area? ${f(MC(["A","B","C"],mx))}`)}${sub(1,`Hur många rutor stor är arean på ${"ABC"[k]}? ${f(N(A[k]))} rutor`)}`,
+    facit:`A: ${A[0]}, B: ${A[1]}, C: ${A[2]} rutor. Störst är ${"ABC"[mx]}.`};
+}
+function clockWord(h,m){const nx=h%12+1;return m===0?`${h}`:m===15?`kvart över ${h}`:m===30?`halv ${nx}`:`kvart i ${nx}`}
+function dClock(f){
+  const h=R(1,12),m=P([0,15,30,45]),right=clockWord(h,m);
+  const cand=new Set();[h,h%12+1,(h+10)%12+1].forEach(H=>[0,15,30,45].forEach(M=>cand.add(clockWord(H,M))));cand.delete(right);
+  const trap=m===30?`halv ${h}`:null;
+  let others=shuf([...cand].filter(x=>x!==trap)).slice(0,trap?2:3);if(trap)others.push(trap);
+  const opts=shuf([right,...others]);
+  return{html:`Vad är klockan? ${it("Ringa in ditt svar.")}${clockSVG(h,m)}${f(MC(opts,opts.indexOf(right)))}`,facit:`Klockan är ${right}.`};
+}
+function dTimeAdd(f){
+  const[p,q]=people(2);const h=R(7,10),m=P([0,10,15,30,40]),dh=P([0,1,1]),dm=P([20,30,40,45,50]);
+  const end=h*60+m+dh*60+dm;const dur=dh?`1 timme och ${dm} minuter`:`${dm} minuter`;
+  const place=P(["simhallen","djuraffären","mormor","museet"]);
+  return{html:`${p.n} och ${q.n} åker buss till ${place}. De börjar sin bussresa klockan ${fmtT(h,m)}. Bussresan tar ${dur}.<br>Hur mycket är klockan när de går av bussen?${svar(f(TM(end)))}`,
+    facit:`${fmtT(h,m)} + ${dur} = ${fmtT(Math.floor(end/60),end%60)}`};
+}
+function dQuarter(f){
+  const[p,q]=people(2);const h=R(9,12),m=P([0,15,30,45]);const t1=h*60+m+15;
+  const th=R(7,9);const t2=th*60-15,t3=th*60+30;
+  return{html:`${sub(0,`${p.n} matar djuren. ${p.P} börjar klockan ${fmtT(h,m)} och är färdig efter en kvart. Hur mycket är klockan då?`)}${svar(f(TM(t1)))}
+    ${sub(1,`${q.n}s tåg går klockan ${fmtT(th,0)}. ${q.P} ska vara på stationen en kvart innan tåget åker. Hur mycket är klockan då?`)}${svar(f(TM(t2)))}
+    ${sub(2,`Tågresan tar en halvtimme. Hur mycket är klockan när ${q.n} kommer fram?`)}${svar(f(TM(t3)))}`,
+    facit:`a) ${fmtT(Math.floor(t1/60),t1%60)}&nbsp;&nbsp; b) ${fmtT(Math.floor(t2/60),t2%60)}&nbsp;&nbsp; c) ${fmtT(th,30)}`};
+}
+const EST=[["borsta tänderna",["2 sekunder","2 minuter","2 timmar"],1],["äta frukost",["15 sekunder","15 minuter","15 timmar"],1],["sova en natt",["10 minuter","10 timmar","10 dagar"],1],["knyta skorna",["20 sekunder","20 minuter","20 timmar"],0],["vara i skolan en dag",["6 minuter","6 timmar","6 dagar"],1],["se en film på bio",["2 minuter","2 timmar","2 dagar"],1],["blinka med ögonen",["1 sekund","1 minut","1 timme"],0],["välja några fiskar i djuraffären och betala",["10 sekunder","20 minuter","10 timmar"],1],["gå till skolan",["10 sekunder","10 minuter","10 dagar"],1]];
+function dEstimate(f){
+  const two=shuf(EST).slice(0,2);
+  return{html:`Ungefär hur lång tid tar det? ${it("Ringa in ditt svar.")}${two.map((e,i)=>sub(i,`Att ${e[0]}.<br>${f(MC(e[1],e[2]))}`)).join("")}`,
+    facit:two.map((e,i)=>`${L[i]}) ${e[1][e[2]]}`).join("&nbsp;&nbsp; ")};
+}
+const FACTS=[["Ett år är","månader",12],["En vecka är","dagar",7],["En timme är","minuter",60],["En minut är","sekunder",60],["Ett dygn är","timmar",24],["En kvart är","minuter",15],["En halvtimme är","minuter",30]];
+function dFacts(f){
+  const fs=shuf(FACTS).slice(0,3);
+  return{html:`Fyll i de tal som saknas.${fs.map((x,i)=>sub(i,`${x[0]} ${f(N(x[2]))} ${x[1]}.`)).join("")}`,facit:fs.map(x=>`${x[0].toLowerCase()} ${x[2]} ${x[1]}`).join(", ")};
+}
+
+// ======================= DELPROV E =======================
+function eGroups(f){
+  const[p]=people(1);const a=R(3,6),b=R(3,6);
+  const t=P([`${p.n} ska köpa fiskar till klassens akvarium. Det finns ${a} olika sorters fiskar. ${p.P} köper ${b} fiskar av varje sort.<br>Hur många fiskar köper ${p.n}?`,
+    `På rasten går ${a} elever till biblioteket och lånar böcker. De lånar ${b} böcker var.<br>Hur många böcker lånar de sammanlagt?`]);
+  return{html:`${t}<br>${VISA}${svar(f(N(a*b,6)))}`,facit:`${a} · ${b} = ${a*b}`};
+}
+function eSplit(f){
+  const[p,q,r]=people(3);const T0=R(7,14);
+  return{html:`${p.n}, ${q.n} och ${r.n} har ${T0} fiskar tillsammans. Alla har minst en fisk var. ${p.n} och ${q.n} har lika många fiskar.<br>Hur många fiskar kan var och en ha? Ge ett förslag.
+    <div class="sub">${p.n} har ${f(FREE())} fiskar.</div><div class="sub">${q.n} har ${f(FREE())} fiskar.</div><div class="sub">${r.n} har ${f(FREE())} fiskar.</div>`,
+    check:v=>{const n=v.map(toNum);const ok=n.every(x=>x>=1)&&n[0]===n[1]&&n[0]+n[1]+n[2]===T0;return[ok,ok,ok]},
+    facit:`Det finns flera svar. T.ex. ${p.n} 1, ${q.n} 1, ${r.n} ${T0-2}. Eller ${p.n} 2, ${q.n} 2, ${r.n} ${T0-4}.`};
+}
+function eDouble(f){
+  const[p]=people(1);
+  if(Math.random()<.5){const r=R(1,3),bl=R(1,5),T0=3*r+bl;
+    return{html:`${p.n} har ${T0} kulor i olika färger. Hur många kulor av varje färg har ${p.p}?<ul><li>${r===1?"En kula är röd":`${["","","Två","Tre"][r]} kulor är röda`}.</li><li>De gula kulorna är dubbelt så många som de röda.</li><li>Resten av kulorna är svarta.</li></ul>Fyll i tabellen.<table class="t"><tr><th></th><th>Röda</th><th>Gula</th><th>Svarta</th></tr><tr><td>${T0} kulor</td><td class="c">${f(N(r))}</td><td class="c">${f(N(2*r))}</td><td class="c">${f(N(bl))}</td></tr></table>`,
+      facit:`Röda ${r}, gula ${2*r}, svarta ${T0} − ${r} − ${2*r} = ${bl}`}}
+  const w=R(1,4),b=R(2,6),T0=b+3*w;
+  return{html:`Det finns ${T0} får i en hage. De är svarta, bruna eller vita.<ul><li>Det är ${b} svarta får.</li><li>De bruna fåren är dubbelt så många som de vita fåren.</li></ul>Hur många får av varje färg finns det? Fyll i tabellen.<table class="t"><tr><th></th><th>Svarta</th><th>Bruna</th><th>Vita</th></tr><tr><td>${T0} får</td><td class="c">${f(N(b))}</td><td class="c">${f(N(2*w))}</td><td class="c">${f(N(w))}</td></tr></table>`,
+    facit:`Svarta ${b}. Då är ${T0-b} kvar, och de ska delas så att bruna är dubbelt så många som vita: vita ${w}, bruna ${2*w}.`};
+}
+function eFraction(f){
+  const a=2*R(5,15),b=3*R(3,9);
+  return{html:`${sub(0,`Det är ${a} elever i en klass. Hälften av eleverna leker kull. Hur många elever leker kull?`)}${svar(f(N(a/2)))}${sub(1,`Det är ${b} elever i en annan klass. En tredjedel av eleverna spelar fotboll. Hur många elever spelar fotboll?`)}${svar(f(N(b/3)))}`,
+    facit:`a) ${a} / 2 = ${a/2}&nbsp;&nbsp; b) ${b} / 3 = ${b/3}`};
+}
+function eMoneyBack(f){
+  const[p]=people(1);const x=5*R(6,12),y=5*R(1,4),z=5*R(1,8);
+  return{html:`${p.n} köper en påse med hundmat för ${x} kr och en leksak för ${y} kr till sin hund. Nu har ${p.p} ${z} kronor kvar.<br>Hur mycket pengar hade ${p.p} från början?<br>${VISA}${svar(f(N(x+y+z,6))+" kr")}`,
+    facit:`${x} + ${y} + ${z} = ${x+y+z} kr`};
+}
+function eRatio(f){
+  const k=R(2,4),m=R(3,5),c=R(4,6);
+  return{html:`När kaninmamman hoppar 1 hopp måste kaninungen hoppa ${k} hopp.<br>Skriv det som saknas på strecken.${sub(0,`När mamman hoppar 2 hopp måste ungen hoppa ${f(N(2*k))} hopp.`)}${sub(1,`När mamman hoppar ${m} hopp måste ungen hoppa ${f(N(m*k))} hopp.`)}${sub(2,`När mamman hoppar ${f(N(c))} hopp måste ungen hoppa ${c*k} hopp.`)}`,
+    facit:`a) ${2*k}&nbsp;&nbsp; b) ${m*k}&nbsp;&nbsp; c) ${c}`};
+}
+function eBags(f){
+  const[p]=people(1);const s=R(4,6),d=until(()=>R(10,20),d=>d%s!==0);const bags=Math.ceil(d/s);
+  return{html:`${p.n}s hund äter 1 ben varje dag.${sub(0,`Hur många ben äter hunden på en vecka?`)}${svar(f(N(7)))}${sub(1,`Benen ligger i påsar. I varje påse finns det ${s} ben. Hur många påsar måste ${p.n} köpa för att benen ska räcka i ${d} dagar?<br>${VISA}`)}${svar(f(N(bags))+" påsar")}`,
+    facit:`a) 7 ben (en vecka har 7 dagar)<br>b) ${bags-1} påsar räcker bara ${(bags-1)*s} dagar. Det behövs ${bags} påsar.`};
+}
+function eMuffins(f){
+  const[p,q]=people(2);
+  return{html:`${p.n} och ${q.n} har bakat muffins. ${p.n} ger en av sina muffins till ${q.n}. Då har de lika många.<br>Hur många muffins kan ${p.n} och ${q.n} ha haft från början? Ge ett förslag.<div class="sub">${p.n} hade ${f(FREE())} muffins från början.</div><div class="sub">${q.n} hade ${f(FREE())} muffins från början.</div>`,
+    check:v=>{const a=toNum(v[0]),b=toNum(v[1]);const ok=b>=0&&a===b+2;return[ok,ok]},
+    facit:`${p.n} ska ha 2 fler än ${q.n}. T.ex. ${p.n} 7 och ${q.n} 5 (sedan har båda 6).`};
+}
+function eShop(f){
+  const[p]=people(1);const B=P([100,120,150]),min=B-25;
+  return{html:`<table class="t" style="float:right;margin:0 0 8px 12px"><tr><th>Prislista</th></tr><tr><td>Växter 30 kr/styck<br>Fiskar 20 kr/styck</td></tr></table>${p.n} har ${B} kr och köper både växter och fiskar till sitt akvarium. ${p.P} köper för mer än ${min} kronor.<br>Hur många växter och hur många fiskar kan ${p.n} ha köpt?<br>${VISA}<div class="sub" style="clear:both">Växter: ${f(FREE())} st</div><div class="sub">Fiskar: ${f(FREE())} st</div>`,
+    check:v=>{const a=toNum(v[0]),b=toNum(v[1]);const c=30*a+20*b;const ok=a>=1&&b>=1&&c>min&&c<=B;return[ok,ok]},
+    facit:`Kostnaden ska vara mer än ${min} kr men högst ${B} kr. T.ex. ${B>=120?"2 växter och 3 fiskar = 60 + 60 = 120 kr":"2 växter och 2 fiskar = 60 + 40 = 100 kr"}.`};
+}
+function eMilk(f){
+  const a=5*R(2,5),d=5*R(1,3);
+  return{html:`Ett paket mjölk kostar ${a} kr. En smörgås kostar ${d} kr mer än mjölken.<br>Hur mycket kostar ett paket mjölk och en smörgås tillsammans?<br>${VISA}${svar(f(N(2*a+d,6))+" kr")}`,
+    facit:`Smörgåsen kostar ${a} + ${d} = ${a+d} kr. Tillsammans ${a} + ${a+d} = ${2*a+d} kr.`};
+}
+function eMore(f){
+  const[p,q]=people(2);const a=R(4,9),dbl=2*a,left=R(2,6);
+  return{html:`${p.n} har köpt ${a} fiskar och ${q.n} har köpt dubbelt så många. Nu finns det ${left} fiskar kvar i akvariet.<br>Hur många fiskar fanns det från början i akvariet?<br>${VISA}${svar(f(N(a+dbl+left,6)))}`,
+    facit:`${q.n} köpte ${dbl}. ${a} + ${dbl} + ${left} = ${a+dbl+left}`};
+}
+const E_GENS=[eGroups,eSplit,eDouble,eFraction,eMoneyBack,eRatio,eBags,eMuffins,eShop,eMilk,eMore];
+
+// ======================= DELPROV F =======================
+function colForm(a,b,op,r){const w=Math.max(String(a).length,String(b).length,String(r).length)+2;return[String(a).padStart(w),op+String(b).padStart(w-1),"─".repeat(w),String(r).padStart(w)].join("\n")}
+const fCalc=(a,b,op,text)=>f=>{const r=op==="+"?a+b:a-b;const o=op==="+"?"+":"−";
+  return{html:text?`${text}${svar(f(N(r,5)))}`:`<span class="calc">${a} ${o} ${b} =</span>${svar(f(N(r,5)))}`,facit:`<pre class="col">${colForm(a,b,o,r)}</pre>`}};
+function fSet(){
+  const[p,q]=people(2);
+  const a1=R(55,98),b1=until(()=>R(35,98),b=>(a1%10+b%10)>=10);
+  const a2=R(101,189),b2=until(()=>R(25,99),b=>(a2%10+b%10)>=10);
+  const a3=R(111,189),b3=200-a3;
+  const at=R(105,160),bt=R(45,89);
+  const s1=10*R(5,9),t1=until(()=>R(12,s1-15),b=>b%10);
+  const s2=R(51,99),t2=until(()=>R(11,s2-10),b=>b%10>s2%10);
+  const s3=P([100,200,300]),t3=until(()=>R(21,89),b=>b%10);
+  const s4=R(111,199),t4=until(()=>R(41,99),b=>b%10>s4%10&&b<s4-20);
+  const st=R(140,199),tt=until(()=>R(29,69),b=>b%10>st%10);
+  const what=P(["bilder på djur","klistermärken","pärlor"]);
+  return[fCalc(a1,b1,"+"),fCalc(a2,b2,"+"),fCalc(a3,b3,"+"),fCalc(at,bt,"+",`${p.n} har ${at} kronor och ${q.n} har ${bt} kronor.<br>Hur många kronor har de tillsammans?`),
+    fCalc(s1,t1,"-"),fCalc(s2,t2,"-"),fCalc(s3,t3,"-"),fCalc(s4,t4,"-"),fCalc(st,tt,"-",`${q.n} har ${st} ${what}. ${q.P} ger bort ${tt} stycken.<br>Hur många ${what} har ${q.p} kvar?`),fStones];
+}
+function fStones(f){
+  const[p,q]=people(2);const h=R(1,3),t=R(0,6),e=R(0,6),n=100*h+10*t+e;
+  const n2=100*R(1,3)+10*R(0,5)+R(0,5);const H2=Math.floor(n2/100),T2=Math.floor(n2/10)%10,E2=n2%10;
+  const tb=(a,b,c)=>`<table class="t"><tr><th>Hundratal</th><th>Tiotal</th><th>Ental</th></tr><tr><td class="c" style="height:80px">${a}</td><td class="c">${b}</td><td class="c">${c}</td></tr></table>`;
+  return{html:`${sub(0,`${p.n} har lagt ett tal med stenar. Vilket tal är det?`)}${tb(stones(h),stones(t),stones(e))}${svar(f(N(n)))}${sub(1,`${q.n} ska lägga talet ${n2} med stenar. Hur många stenar ska ligga i varje ruta?`)}${tb(f(N(H2,2)),f(N(T2,2)),f(N(E2,2)))}`,
+    facit:`a) ${h} hundratal, ${t} tiotal och ${e} ental är ${n}<br>b) ${H2} hundratal, ${T2} tiotal, ${E2} ental`};
+}
+
+// ======================= DELPROV G =======================
+function gSymbols(f){
+  const[p,q]=people(2);const codes=shuf(["✕✕✕","✕✕△","✕△✕","✕△△","△✕✕","△✕△","△△✕","△△△"]).slice(0,5);
+  const letters=shuf("AEILMNORSTU".split("")).slice(0,5);const sp=c=>c.split("").join(" ");
+  const ask=shuf([0,1,2,3,4]).slice(0,3),bIdx=R(0,4);
+  const opts=shuf([0,1,2,3,4]).slice(0,4);if(!opts.includes(bIdx))opts[0]=bIdx;const o2=shuf(opts);
+  return{html:`${p.n} och ${q.n} har hittat på ett hemligt språk med symboler i stället för bokstäver.<div class="box">${codes.map((c,i)=>`<div><span class="sym">${sp(c)}</span> betyder <b>${letters[i]}</b></div>`).join("")}</div>
+    ${sub(0,"Skriv rätt bokstav efter symbolerna.")}${ask.map(i=>`<div class="sub" style="padding-left:2em"><span class="sym">${sp(codes[i])}</span> ${f(T(letters[i],2))}</div>`).join("")}
+    ${sub(1,`Vilka symboler betyder <b>${letters[bIdx]}</b>? ${it("Ringa in.")}`)}<div style="padding-left:2em">${f(MC(o2.map(i=>sp(codes[i])),o2.indexOf(bIdx)))}</div>`,
+    facit:`a) ${ask.map(i=>letters[i]).join(", ")}&nbsp;&nbsp; b) ${sp(codes[bIdx])}`};
+}
+const EMO=[["🐟","🐭","🐱"],["🍎","🥕","🍌"],["🐸","🐞","🐢"],["🐰","🦜","🐶"],["⭐","🌙","🍄"]];
+function gPics(f){
+  const e=P(EMO),S=x=>`<span class="e">${x}</span>`;
+  let eqs,vals;
+  if(Math.random()<.5){const a=R(2,6),b=R(3,9),c=R(4,12);vals=[a,b,c];eqs=[`${S(e[0])} + ${S(e[0])} = ${2*a}`,`${S(e[1])} + ${S(e[0])} = ${a+b}`,`${S(e[2])} + ${S(e[0])} = ${a+c}`]}
+  else{const a=R(4,8),k=R(1,a-1),b=a-k;vals=[a,b,a+b];eqs=[`${S(e[0])} = ${S(e[1])} + ${k}`,`${2*a} = ${S(e[0])} + ${S(e[0])}`,`${S(e[2])} = ${S(e[1])} + ${S(e[0])}`]}
+  return{html:`<div class="box eq">${eqs.map(x=>`<div>${x}</div>`).join("")}</div><br>Vad är varje sak värd?${e.map((x,i)=>sub(i,`${S(x)} = ${f(N(vals[i]))}`)).join("")}`,
+    facit:e.map((x,i)=>`${x} = ${vals[i]}`).join("&nbsp;&nbsp; ")};
+}
+function gMental(f){
+  const h1=R(1,5),h2=R(1,9-h1),a=R(11,17),b=until(()=>R(3,9),b=>a%10+b>=10),c=R(5,9),d=R(5,9),m1=R(2,5),m2=R(3,9),dv=P([2,3,4]),dq=R(3,9);
+  const parts=[[`${h1*100} + ${h2*100} = ${f(N(100*(h1+h2),5))}`,100*(h1+h2)],[`${a} + ${b} = ${f(N(a+b))}`,a+b],[`${f(N(c+d))} = ${c} + ${d}`,c+d],[`${m1} · ${m2} = ${f(N(m1*m2))}`,m1*m2],[`${frac(dv*dq,dv)} = ${f(N(dq))}`,dq],null];
+  const x=100+R(1,5);parts[5]=[`${x} − 99 = ${f(N(x-99))}`,x-99];
+  return{html:`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px 16px">${parts.map((p,i)=>sub(i,p[0])).join("")}</div>`,
+    facit:parts.map((p,i)=>`${L[i]}) ${p[1]}`).join("&nbsp;&nbsp; ")};
+}
+function gMissing(f){
+  const a=R(11,18),b=R(6,9),c=R(5,9),d=R(1,10-c),e=R(2,c+d-1),g=R(12,19),k=R(5,9),h=R(9,15),j=R(3,7);
+  const parts=[[`${a} = ${f(N(a-b))} + ${b}`,a-b],[`${c} + ${d} = ${f(N(c+d-e))} + ${e}`,c+d-e],[`${g} − ${f(N(g-10))} = 10`,g-10],[`${h} = ${f(N(h+j))} − ${j}`,h+j]];
+  return{html:`Skriv talet som saknas.<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px 16px">${parts.map((p,i)=>sub(i,p[0])).join("")}</div>`,
+    facit:parts.map((p,i)=>`${L[i]}) ${p[1]}`).join("&nbsp;&nbsp; ")};
+}
+const COLS={"Röd":"#d9443b","Blå":"#3b6fc4","Gul":"#f2c230","Svart":"#222","Grön":"#3c9a50"};
+function gColors(f){
+  const len=R(3,4),pat=shuf(Object.keys(COLS)).slice(0,len),n=len*3;
+  const blanks=shuf([...Array(n).keys()].slice(len)).slice(0,R(3,4));
+  let html=`Här är ett mönster. I de vita rutorna har färgerna försvunnit.<br>Skriv de färger som saknas.<div class="colors">`;
+  const missing=[];
+  for(let i=0;i<n;i++){const c=pat[i%len];if(blanks.includes(i)){html+=`<div class="cc blank">${f(T(c,6))}</div>`;missing.push(c)}else html+=`<div class="cc" style="background:${COLS[c]};color:${c==="Gul"?"#222":"#fff"}">${c}</div>`}
+  return{html:html+"</div>",facit:`Mönstret är ${pat.join(", ")} om och om igen.`};
+}
+const MONTHS=["januari","februari","mars","april","maj","juni","juli","augusti","september","oktober","november","december"];
+const DAYS=["måndag","tisdag","onsdag","torsdag","fredag","lördag","söndag"];
+function gCalendar(f){
+  const y=R(2026,2028),mo=R(0,11),first=(new Date(y,mo,1).getDay()+6)%7,len=new Date(y,mo+1,0).getDate();
+  let t=`<table class="cal"><caption>${MONTHS[mo][0].toUpperCase()+MONTHS[mo].slice(1)} ${y}</caption><tr>${["Mån","Tis","Ons","Tors","Fre","Lör","Sön"].map(d=>`<th>${d}</th>`).join("")}</tr><tr>`;
+  for(let i=0;i<first;i++)t+="<td></td>";
+  for(let d=1;d<=len;d++){t+=`<td>${d}</td>`;if((first+d-1)%7===6&&d<len)t+="</tr><tr>"}
+  t+="</tr></table>";
+  const dd=R(2,len),wd=(first+dd-1)%7,tgt=R(0,6),firstT=((tgt-first+7)%7)+1;
+  let cnt=0;for(let d=1;d<=len;d++)if((first+d-1)%7===tgt)cnt++;
+  const tgt2=until(()=>R(0,6),x=>x!==tgt);let cnt2=0;for(let d=1;d<=len;d++)if((first+d-1)%7===tgt2)cnt2++;
+  return{html:`Titta i kalendern.${t}${sub(0,`Vilken veckodag är den ${dd} ${MONTHS[mo]}?<br>${f(MC(DAYS,wd))}`)}${sub(1,`Vilket datum är den första ${DAYS[tgt]}en i ${MONTHS[mo]}? ${f(N(firstT))}`)}${sub(2,`Hur många ${DAYS[tgt2]}ar finns det i ${MONTHS[mo]}? ${f(N(cnt2))}`)}`,
+    facit:`a) ${DAYS[wd]}&nbsp;&nbsp; b) den ${firstT}&nbsp;&nbsp; c) ${cnt2}`};
+}
+
+const DELPROV={
+  B:{name:"Tal och mönster",desc:"Storleksordning, hundratal, tiotal och ental, tallinjen, sifferkort och tabeller.",instr:"",gens:()=>[bOrder,bPlace,bLine,bCards,bPattern,bEq,bTally]},
+  C:{name:"Räknehändelser",desc:"Korta textuppgifter med plus, minus, gånger och delat.",instr:"",gens:()=>shuf(C_GENS).slice(0,8)},
+  D:{name:"Geometri och tid",desc:"Former, omkrets, area, klockan och hur lång tid saker tar.",instr:"",gens:()=>[dShapes,dPerimeter,dArea,dClock,dTimeAdd,dQuarter,dEstimate,dFacts]},
+  E:{name:"Problemlösning",desc:"Uppgifter i flera steg. Ibland finns det flera rätta svar.",instr:"Använd papper och penna och visa hur du tänker.",gens:()=>shuf(E_GENS).slice(0,6)},
+  F:{name:"Skriftlig räkning",desc:"Addition och subtraktion med uppställning, och tal med stenar.",instr:"Använd en skriftlig räknemetod och skriv svar. Räkna på ett papper.",gens:fSet},
+  G:{name:"Mönster, symboler och huvudräkning",desc:"Hemliga koder, bildekvationer, färgmönster, kalendern och snabb huvudräkning.",instr:"",gens:()=>[gSymbols,gPics,gMental,gMissing,gColors,gCalendar]},
+  X:{name:"Blandat",desc:"Lite från varje delprov.",instr:"",gens:()=>[P([bOrder,bPlace,bLine,bCards,bPattern,bEq,bTally]),...shuf(C_GENS).slice(0,2),P([dShapes,dPerimeter,dArea,dClock,dTimeAdd,dQuarter]),...shuf(E_GENS).slice(0,2),P(fSet().slice(0,9)),P([gSymbols,gPics,gMental,gMissing,gColors,gCalendar])]}
+};
+const OLD=[["2018/2019",2019,"BCDEFG"],["2019/2020",2020,"BCDEFG"],["2020/2021",2021,"BCDEFG"],["2021/2022",2022,"FG"]];
+// ===================== LOGIC END =====================
+</script>
+<script src="gamla.js"></script>
+<script>
+
+if(typeof document!=="undefined"){
+const $=s=>document.querySelector(s),app=$("#app"),acts=$("#actions"),res=$("#result");
+let cur=null;
+
+function setCover(h2,p){$("#h2").textContent=h2;$("#hp").textContent=p}
+
+function home(tab){
+  cur=null;acts.hidden=true;res.textContent="";
+  setCover("Träna inför provet","Nya uppgifter varje gång, i samma stil som det riktiga provet.");
+  document.title="Träna nationella prov – Matematik åk 3";
+  const tabs=`<nav class="tabs" aria-label="Välj"><a href="#/ova" ${tab==="ova"?'aria-current="page"':""}>Öva på nya uppgifter</a><a href="#/prov" ${tab==="prov"?'aria-current="page"':""}>Gamla prov</a></nav>`;
+  if(tab==="prov"){
+    app.innerHTML=`${tabs}<p class="lead">Här finns riktiga nationella prov från tidigare år. Tryck på en bokstav. Du ser provsidorna och skriver dina svar bredvid, så rättas de direkt. Du kan också ladda ner provet och göra det på papper.</p>
+    <table class="oldtab"><thead><tr><th></th>${"BCDEFG".split("").map(l=>`<th>${l}</th>`).join("")}</tr></thead><tbody>
+    ${OLD.map(([lbl,y,ps])=>`<tr><th>${lbl}</th>${"BCDEFG".split("").map(l=>`<td>${ps.includes(l)?`<a class="pdf" href="#/prov/${y}-${l}" aria-label="Delprov ${l}, läsår ${lbl}">${l}</a>`:`<span class="none">–</span>`}</td>`).join("")}</tr>`).join("")}
+    </tbody></table>
+    <p class="note">Delprov A är muntligt och görs tillsammans med läraren, därför finns det inte här. Proven kommer från Skolverket (PRIM-gruppen). Facit är inte Skolverkets officiella bedömning, utan gjort för att eleverna ska kunna öva själva.</p>`;
+    return;
+  }
+  app.innerHTML=`${tabs}<p class="lead">Välj ett delprov. Du får nya uppgifter varje gång. Skriv dina svar och tryck på <b>Rätta</b>.</p>
+  <div class="dplist">${"BCDEFGX".split("").map(k=>`<a class="dp${k==="X"?" mix":""}" href="#/ova/${k}"><span class="dot">${k==="X"?"?":k}</span><span><b>${k==="X"?"Blandat":"Delprov "+k}</b><small>${k==="X"?DELPROV[k].desc:DELPROV[k].name+". "+DELPROV[k].desc}</small></span></a>`).join("")}</div>
+  <p class="note">Innehållet i varje delprov skiftar lite från år till år. Övningarna blandar sådant som brukar komma.</p>`;
+}
+
+function fieldHTML(q,qi,fi){
+  const fd=q.fields[fi];
+  if(fd.k==="sel")return `<select class="ans sel" data-q="${qi}" data-f="${fi}" aria-label="Välj"><option value=""></option>${fd.opts.map((o,i)=>`<option value="${i}">${o}</option>`).join("")}</select>`;
+  if(fd.k==="self")return `<span class="selfnote" data-q="${qi}" data-f="${fi}">Rätta själv med facit</span>`;
+  if(fd.k==="multi")return `<span class="mc multi" data-q="${qi}" data-f="${fi}" role="group">${fd.opts.map((o,i)=>`<button type="button" class="opt" data-v="${i}">${o}</button>`).join("")}</span>`;
+  if(fd.k==="mc")return `<span class="mc ${fd.layout||""}" data-q="${qi}" data-f="${fi}" role="group">${fd.opts.map((o,i)=>`<button type="button" class="opt" data-v="${i}">${o}</button>`).join("")}</span>`;
+  const im=fd.k==="num"||(fd.k==="free"&&fd.num)?'inputmode="numeric"':fd.k==="time"?'inputmode="decimal" placeholder="tt.mm"':'autocapitalize="off"';
+  return `<input class="ans" data-q="${qi}" data-f="${fi}" ${im} autocomplete="off" spellcheck="false" style="width:${fd.w+2}ch" aria-label="Svar">`;
+}
+
+function practice(key){
+  const D=DELPROV[key];
+  setCover(key==="X"?"Blandat":`Delprov ${key}`,D.name===("Blandat")?"Lite från varje delprov":D.name);
+  document.title=`${key==="X"?"Blandat":"Delprov "+key} – Träna nationella prov`;
+  const qs=D.gens().map(build);cur={key,qs,facit:false};
+  let html=`<a class="back" href="#/ova">← Alla delprov</a><article class="sheet">${D.instr?`<p class="instr">${D.instr}</p>`:""}<ol class="qs">`;
+  qs.forEach((q,qi)=>{const body=q.html.replace(/@@(\d+)@@/g,(_,i)=>fieldHTML(q,qi,+i));html+=`<li class="q" id="q${qi}"><span class="qn">${qi+1}.</span><div>${body}<div class="facit" hidden>${q.facit}</div></div></li>`});
+  html+=`</ol><div class="sheetfoot"><span>Övning Np3 Ma ${key==="X"?"Blandat":"Delprov "+key}</span><span>mattespel.github.io</span></div></article>`;
+  app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";
+  $("#bNew").textContent="Nya uppgifter";$("#bPrint").textContent="Skriv ut";
+}
+
+function examView(key){
+  const pages=EXAMS[key];const[y,l]=key.split("-");const lbl=OLD.find(o=>o[1]==+y)[0];
+  setCover(`Delprov ${l}`,`Riktigt prov från läsår ${lbl}`);document.title=`Delprov ${l} ${lbl} – Gamla nationella prov`;
+  const qs=[];let html=`<a class="back" href="#/prov">← Alla gamla prov</a><p class="lead">Titta på provsidan och skriv dina svar i rutan bredvid. Räkna på papper när det behövs. <a href="prov/${key}.pdf" target="_blank" rel="noopener">Ladda ner provet som PDF</a></p>`;
+  pages.forEach(([pg,list])=>{
+    html+=`<section class="pg"><img src="sidor/${key}-${pg}.jpg" alt="Provsida ${pg}" loading="lazy" width="900" height="1273"><div class="ansbox"><h3>Svar, sida ${pg}</h3><ol class="qs">`;
+    list.forEach(([num,gen])=>{const q=build(gen);const qi=qs.length;qs.push(q);const body=q.html.replace(/@@(\d+)@@/g,(_,i)=>fieldHTML(q,qi,+i));
+      html+=`<li class="q" id="q${qi}"><span class="qn">${num}.</span><div>${body}<div class="facit" hidden>${q.facit}</div></div></li>`});
+    html+=`</ol></div></section>`;
+  });
+  cur={key,qs,facit:false,exam:true};app.innerHTML=html;acts.hidden=false;res.textContent="";$("#bFacit").textContent="Visa facit";
+  $("#bNew").textContent="Börja om";$("#bPrint").textContent="Ladda ner PDF";
+}
+function readVal(qi,fi){
+  const mc=app.querySelector(`.mc[data-q="${qi}"][data-f="${fi}"]`);
+  if(mc){if(mc.classList.contains("multi"))return[...mc.querySelectorAll(".opt.sel")].map(b=>+b.dataset.v);const s=mc.querySelector(".opt.sel");return s?+s.dataset.v:null}
+  const sl=app.querySelector(`select[data-q="${qi}"][data-f="${fi}"]`);if(sl)return sl.value===""?null:+sl.value;
+  const el=app.querySelector(`input[data-q="${qi}"][data-f="${fi}"]`);return el?el.value:"";
+}
+function grade(){
+  if(!cur)return;let right=0,total=0;
+  cur.qs.forEach((q,qi)=>{
+    const vals=q.fields.map((_,fi)=>readVal(qi,fi)),r=gradeQ(q,vals);
+    let allOk=true;const hasSelf=q.fields.some(fd=>fd.k==="self");
+    r.forEach((ok,fi)=>{if(q.fields[fi].k==="self")return;const el=app.querySelector(`[data-q="${qi}"][data-f="${fi}"]`);el.classList.remove("ok","bad");el.classList.add(ok?"ok":"bad");total++;if(ok)right++;else allOk=false});
+    app.querySelector(`#q${qi} .facit`).hidden=allOk&&!hasSelf&&!cur.facit;
+  });
+  res.textContent=right===total?`Alla ${total} rätt! Bra jobbat.`:`Du har ${right} av ${total} rätt. Titta på de röda och försök igen.`;
+}
+app.addEventListener("click",e=>{
+  const b=e.target.closest(".opt");if(!b)return;const g=b.parentElement;
+  if(!g.classList.contains("multi"))g.querySelectorAll(".opt").forEach(o=>o!==b&&o.classList.remove("sel"));b.classList.toggle("sel");g.classList.remove("ok","bad");
+});
+app.addEventListener("input",e=>{if(e.target.classList.contains("ans"))e.target.classList.remove("ok","bad")});
+app.addEventListener("change",e=>{if(e.target.classList.contains("sel"))e.target.classList.remove("ok","bad")});
+app.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"||!e.target.classList.contains("ans"))return;e.preventDefault();
+  const all=[...app.querySelectorAll("input.ans")],i=all.indexOf(e.target);if(all[i+1])all[i+1].focus();else grade();
+});
+$("#bCheck").onclick=grade;
+$("#bNew").onclick=()=>{cur.exam?examView(cur.key):practice(cur.key);window.scrollTo({top:0})};
+$("#bFacit").onclick=()=>{cur.facit=!cur.facit;app.querySelectorAll(".facit").forEach(x=>x.hidden=!cur.facit);$("#bFacit").textContent=cur.facit?"Dölj facit":"Visa facit"};
+$("#bPrint").onclick=()=>cur&&cur.exam?window.open(`prov/${cur.key}.pdf`,"_blank"):window.print();
+
+function route(){
+  const [a,b]=location.hash.replace(/^#\/?/,"").split("/");
+  if(a==="ova"&&DELPROV[b])practice(b);else if(a==="prov"&&EXAMS[b])examView(b);else home(a==="prov"?"prov":"ova");
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);route();
+}
+</script>
+</body>
+</html>
