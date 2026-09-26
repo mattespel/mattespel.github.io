@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tiotalsövergång – Matte-Portalen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --sun:#FFC93C; --accent:#3D5AFE;
+  --blue:#3D8BFD; --orange:#FF9F43; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --d:clamp(16px,5.2vw,26px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:560px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none !important}
+.back{display:inline-block;color:var(--muted);font-weight:700;text-decoration:none;padding:6px 0;font-size:1rem}
+h1{font-size:2.5rem;line-height:1;margin:14px 0 4px;font-weight:800;letter-spacing:-.5px}
+h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
+.lead{margin:0 0 16px;color:var(--muted);font-size:1.1rem}
+
+/* Val */
+.pick{margin-bottom:14px}
+.pick .lbl{font-weight:700;color:var(--muted);font-size:.95rem;margin-bottom:4px}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;padding:10px 6px;border-radius:14px;background:var(--card);font-weight:800;font-size:1.1rem;box-shadow:0 3px 0 var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+
+.levels{display:grid;gap:12px;margin-top:20px}
+.big{display:flex;align-items:center;gap:14px;width:100%;padding:12px 16px;border-radius:18px;background:var(--card);
+  box-shadow:0 4px 0 var(--line);text-align:left;transition:transform .08s,box-shadow .08s}
+.big:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.big .num{width:2.4rem;height:2.4rem;flex:none;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.3rem}
+.big b{display:block;font-size:1.3rem;line-height:1.2}
+.big small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3}
+.big .side{margin-left:auto;text-align:right;font-weight:700;font-size:.95rem;color:var(--muted);flex:none;white-space:pre-line}
+.stars{color:var(--gold);font-size:1.3rem;letter-spacing:1px}
+.stars .off{color:#D5DDEC}
+.big.locked{opacity:.5}
+.big.locked .num{background:#9AA7BF}
+.note{color:var(--muted);font-size:.95rem;margin-top:18px}
+
+/* Spel */
+.gtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.info{font-weight:800;font-size:1.2rem}
+.visual{background:var(--card);border-radius:20px;padding:10px 8px 4px;box-shadow:0 4px 0 var(--line);margin-top:10px}
+.blocks{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-end}
+.rods{display:flex;gap:4px;align-items:flex-end}
+.rod{width:11px;height:calc(var(--d)*2 + 22px);border-radius:3px;
+  background:repeating-linear-gradient(to bottom,var(--blue) 0 calc(10% - 1px),#fff calc(10% - 1px) 10%);border:1px solid var(--blue)}
+.frame{display:grid;grid-template-columns:repeat(5,var(--d));gap:4px;padding:5px;border:3px solid var(--ink);border-radius:8px}
+.frame i{width:var(--d);height:var(--d);border-radius:50%;border:2px dashed #C9D3E6;position:relative}
+.frame i.b{background:var(--blue);border-color:var(--blue)}
+.frame i.o{background:var(--orange);border-color:var(--orange)}
+.frame i.x{background:#E3E8F2;border-color:#C9D3E6}
+.frame i.x::after{content:"×";position:absolute;inset:0;display:grid;place-items:center;color:var(--bad);font-weight:800;font-size:calc(var(--d)*.8);line-height:1}
+.frame i.pop{animation:pop .35s ease-out backwards}
+@keyframes pop{from{transform:scale(0)}60%{transform:scale(1.2)}to{transform:scale(1)}}
+.nline{display:block;width:100%;height:auto;margin-top:6px}
+.nline text{font-family:var(--font);font-weight:700}
+
+.qbox{background:var(--card);border-radius:22px;padding:10px 14px;text-align:center;box-shadow:0 5px 0 var(--line);margin:12px 0;transition:background .15s}
+.qbox.ok{background:#DDF5E7}
+.qbox.bad{background:#FDE4E4}
+.prompt{font-weight:700;font-size:1.1rem;min-height:1.5em;margin-bottom:4px}
+.erow{font-size:clamp(1.6rem,7.5vw,2.2rem);font-weight:800;line-height:1.35;white-space:nowrap}
+.erow.main{font-size:clamp(2.6rem,13vw,4rem)}
+.erow span{margin:0 .08em}
+.box{display:inline-block;min-width:1.7em;padding:0 .2em;border-radius:10px;border:3px dashed var(--line);color:#B4C0D8;line-height:1.15}
+.box.act{border:3px solid var(--accent);color:var(--accent);background:#EEF1FF}
+.box.done{border:3px solid transparent;background:#FFE9D2;color:#C96A0C}
+.feedback{min-height:1.5em;font-weight:800;font-size:1.1rem;margin-top:4px}
+.qbox.ok .feedback{color:var(--good)}
+.qbox.bad .feedback{color:var(--bad)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pad button{height:56px;border-radius:16px;background:var(--card);font-size:1.8rem;font-weight:800;box-shadow:0 4px 0 var(--line);transition:transform .06s,box-shadow .06s}
+.pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.pad .okbtn{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.4rem}
+
+.track{background:var(--card);border-radius:18px;padding:4px 12px;margin-top:12px;box-shadow:0 4px 0 var(--line)}
+.lane{position:relative;height:46px;margin-right:34px}
+.lane+.lane{border-top:2px dashed var(--line)}
+.lane .who{position:absolute;left:0;top:1px;font-size:.75rem;font-weight:700;color:var(--muted)}
+.lane .flag{position:absolute;right:-32px;top:50%;transform:translateY(-50%);font-size:1.4rem}
+.car{position:absolute;bottom:4px;left:0;width:46px;transition:left .3s ease-out}
+.car.ghost{transition:none;opacity:.45}
+.racestatus{text-align:center;font-weight:700;color:var(--muted);font-size:1rem;min-height:1.4em;margin-top:6px}
+
+/* Resultat */
+.result{text-align:center;padding-top:20px}
+.rbig{font-size:clamp(3.2rem,16vw,4.6rem);font-weight:800;line-height:1;margin:6px 0}
+.rbig .stars{font-size:inherit}
+.rsub{color:var(--muted);font-size:1.15rem;margin:0 0 14px}
+.unlock{background:#FFF4CC;border-radius:14px;padding:8px 12px;font-weight:700;margin:0 0 12px}
+.slow{background:var(--card);border-radius:18px;padding:12px;box-shadow:0 4px 0 var(--line);margin:8px 0 6px}
+.slow p{margin:0 0 8px;font-weight:700}
+.slow .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.slow .row span{background:var(--bg);border-radius:10px;padding:2px 12px;font-weight:800;font-size:1.2rem}
+.go{display:block;width:100%;padding:14px;border-radius:18px;background:var(--good);color:#fff;font-size:1.3rem;font-weight:800;box-shadow:0 5px 0 var(--good-dark);margin-top:12px}
+.result .big{justify-content:center;text-align:center;font-weight:800;font-size:1.2rem;margin-top:12px}
+
+.count{position:fixed;inset:0;display:grid;place-items:center;background:rgba(234,243,255,.85);font-size:6rem;font-weight:800;z-index:5}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:10px 18px;border-radius:14px;font-weight:700;z-index:6;max-width:90vw;text-align:center}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Start -->
+<section id="home" class="screen">
+  <a class="back" href="../">← Till huvudmenyn</a>
+  <h1>Tiotalsövergång</h1>
+  <p class="lead">Lär dig räkna via tiotalet. Klara en nivå för att låsa upp nästa.</p>
+  <div class="pick"><div class="lbl">Talområde</div>
+    <div class="seg" id="segRange"><button data-v="20">Upp till 20</button><button data-v="100">Upp till 100</button></div></div>
+  <div class="pick"><div class="lbl">Räknesätt</div>
+    <div class="seg" id="segOp"><button data-v="plus">Plus</button><button data-v="minus">Minus</button></div></div>
+  <div class="pick" id="pickStrat"><div class="lbl">Strategi för minus</div>
+    <div class="seg" id="segStrat"><button data-v="take">Ta bort till 10</button><button data-v="think">Tänk plus</button></div></div>
+  <div class="levels" id="levels"></div>
+  <p class="note">Två stjärnor på en nivå låser upp nästa. Tre stjärnor får du om alla uppgifter blir rätt direkt.</p>
+</section>
+
+<!-- Spel -->
+<section id="game" class="screen" hidden>
+  <div class="gtop"><button class="back" id="quit">← Avsluta</button><span class="info" id="info"></span></div>
+  <div id="raceBox" hidden>
+    <div class="track">
+      <div class="lane"><span class="who">Du</span><span class="flag">🏁</span><div class="car" id="carMe"></div></div>
+      <div class="lane"><span class="who" id="ghostWho">Spöket</span><div class="car ghost" id="carGhost"></div></div>
+    </div>
+    <div class="racestatus" id="raceStatus"></div>
+  </div>
+  <div class="visual" id="visual">
+    <div class="blocks"><div class="rods" id="rods"></div><div class="frame" id="f1"></div><div class="frame" id="f2"></div></div>
+    <svg class="nline" id="nline" viewBox="0 0 340 84" aria-hidden="true"></svg>
+  </div>
+  <div class="qbox" id="qbox">
+    <div class="prompt" id="prompt"></div>
+    <div id="rows"></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+  </div>
+  <div class="pad" id="pad">
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okbtn">OK</button>
+  </div>
+</section>
+
+<!-- Resultat -->
+<section id="result" class="screen result" hidden>
+  <h2 id="rTitle"></h2>
+  <div class="rbig" id="rBig"></div>
+  <p class="rsub" id="rSub"></p>
+  <p class="unlock" id="rUnlock" hidden></p>
+  <div class="slow" id="rSlow" hidden><p>Dina långsammaste</p><div class="row" id="rSlowList"></div>
+    <button class="go" id="rTrainSlow">Träna på dessa steg för steg</button></div>
+  <button class="go" id="rNext" hidden>Till nästa nivå</button>
+  <button class="big" id="rAgain">Spela igen</button>
+  <button class="big" id="rHome">Till nivåerna</button>
+</section>
+
+</div>
+<div class="count" id="count" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<canvas id="fx" hidden></canvas>
+
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const RACE_LEN=20, ROUND=10;
+const carSvg=c=>`<svg viewBox="0 0 48 28" width="46" height="27" aria-hidden="true"><path d="M3 19Q3 13 9 12.5L15 12L21 5H33L39.5 12Q46 13 46 19V21H3Z" fill="${c}"/><path d="M23 7H32L36.5 12H23Z" fill="#fff" opacity=".85"/><circle cx="12" cy="21" r="5" fill="#1D2B53"/><circle cx="37" cy="21" r="5" fill="#1D2B53"/><circle cx="12" cy="21" r="2" fill="#fff"/><circle cx="37" cy="21" r="2" fill="#fff"/></svg>`;
+
+/* ---------- Lagring (bara i den här webbläsaren) ---------- */
+const KEY='mattespel-tiotal-v1';
+let data=load();
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.stars)return Object.assign({race:{},set:{range:20,op:'plus',strat:'take'}},d);}catch(e){}
+  return{stars:{},race:{},set:{range:20,op:'plus',strat:'take'}};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
+const set=data.set;
+const unlockAll=new URLSearchParams(location.search).has('alla'); // lärarlänk: ?alla låser upp alla nivåer
+const pkey=()=>set.range+set.op;
+const starsOf=lv=>(data.stars[pkey()]||{})[lv]||0;
+const unlocked=lv=>unlockAll||lv===1||starsOf(lv-1)>=2;
+const think=()=>set.op==='minus'&&set.range===20&&set.strat==='think';
+
+/* ---------- Startsida ---------- */
+let G=null,curLevel=1;
+function show(id){$$('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);}
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600);}
+const fmt=ms=>(ms/1000).toFixed(1).replace('.',',')+' s';
+const starHtml=n=>`<span class="stars">${[1,2,3].map(i=>i<=n?'★':'<span class="off">★</span>').join('')}</span>`;
+function levelInfo(lv){
+  const r=set.range===20,p=set.op==='plus';
+  if(lv===1)return p?['Tiokamrater',r?'Hur mycket fattas till 10?':'Hur mycket fattas till nästa tiotal?']
+                    :['Ner till tiotalet',r?'Hur mycket ska bort för att komma till 10?':'Hur mycket ska bort för att komma till tiotalet?'];
+  if(lv===2)return think()?['Hoppa via 10','Hur långt är det till 10, och sedan vidare?']:['Dela upp',`Dela upp talet så att du landar på ${r?'10':'tiotalet'}.`];
+  if(lv===3)return['Hela strategin',`Räkna via ${r?'10':'tiotalet'}, steg för steg.`];
+  return['Racet',`${RACE_LEN} uppgifter utan stöd. Kör mot ditt spöke.`];
+}
+function openHome(){
+  G=null;
+  $$('#segRange button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===set.range));
+  $$('#segOp button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===set.op));
+  $$('#segStrat button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===set.strat));
+  $('#pickStrat').hidden=!(set.op==='minus'&&set.range===20);
+  const L=$('#levels');L.innerHTML='';
+  [1,2,3,4].forEach(lv=>{
+    const [t,d]=levelInfo(lv),open=unlocked(lv),b=document.createElement('button');
+    b.className='big'+(open?'':' locked');
+    const side=!open?'🔒':lv===4?(data.race[pkey()]?'Rekord\n'+fmt(data.race[pkey()].time):''):starHtml(starsOf(lv));
+    b.innerHTML=`<span class="num">${lv}</span><span><b>${t}</b><small>${d}</small></span><span class="side">${side}</span>`;
+    b.onclick=()=>open?startGame(lv):toast(`Få två stjärnor på nivå ${lv-1} först.`);
+    L.appendChild(b);
+  });
+  show('home');
+}
+$$('#segRange button').forEach(b=>b.onclick=()=>{set.range=+b.dataset.v;save();openHome();});
+$$('#segOp button').forEach(b=>b.onclick=()=>{set.op=b.dataset.v;save();openHome();});
+$$('#segStrat button').forEach(b=>b.onclick=()=>{set.strat=b.dataset.v;save();openHome();});
+
+/* ---------- Uppgifter ---------- */
+function genTask(lv){
+  const r20=set.range===20,a0=()=>{};
+  let a,b=null;
+  if(set.op==='plus'){
+    if(lv===1){a=r20?rnd(1,9):(()=>{let x;do{x=rnd(11,89);}while(x%10===0);return x;})();}
+    else if(r20){a=rnd(2,9);b=rnd(11-a,9);}
+    else{do{a=rnd(21,89);}while(a%10<2);b=rnd(11-a%10,9);}
+  }else{
+    if(lv===1){a=r20?rnd(11,19):(()=>{let x;do{x=rnd(21,99);}while(x%10===0);return x;})();}
+    else if(r20){a=rnd(11,18);b=rnd(a-9,9);}
+    else{do{a=rnd(21,99);}while(a%10<1||a%10>8);b=rnd(a%10+1,9);}
+  }
+  return{a,b,op:set.op};
+}
+const tkey=t=>t.a+t.op+t.b;
+const tres=t=>t.op==='plus'?t.a+t.b:t.a-t.b;
+const sym=t=>t.op==='plus'?'+':'−';
+const ttext=t=>`${t.a} ${sym(t)} ${t.b}`;
+function buildTasks(lv,n){const out=[],seen=new Set();let guard=0;
+  while(out.length<n&&guard++<500){const t=genTask(lv);const k=tkey(t);if(seen.has(k)&&guard<300)continue;seen.add(k);out.push(t);}return out;}
+
+/* Steg och rader för varje uppgift */
+function plan(t,lv){
+  const {a,b}=t,box=k=>({k});
+  if(t.op==='plus'){
+    const D=Math.ceil(a/10)*10,p1=D-a;
+    if(lv===1)return{D,rows:[[a,'+',box('p1'),'=',D]],steps:[{k:'p1',v:p1}]};
+    const p2=b-p1,rows=[[a,'+',box('p1'),'=',D],[b,'=',box('p1'),'+',box('p2')]],steps=[{k:'p1',v:p1},{k:'p2',v:p2}];
+    if(lv===3){rows.push([a,'+',b,'=',box('res')]);steps.push({k:'res',v:a+b});}
+    if(lv===4)return{D,rows:[[a,'+',b,'=',box('res')]],steps:[{k:'res',v:a+b}],main:true};
+    return{D,p1,p2,rows,steps};
+  }
+  const D=Math.floor(a/10)*10,p1=a-D;
+  if(lv===1)return{D,rows:[[a,'−',box('p1'),'=',D]],steps:[{k:'p1',v:p1}]};
+  if(lv===4)return{D,rows:[[a,'−',b,'=',box('res')]],steps:[{k:'res',v:a-b}],main:true};
+  if(think()){
+    const q1=10-b,q2=a-10,rows=[[b,'+',box('p1'),'=',10],[10,'+',box('p2'),'=',a]],steps=[{k:'p1',v:q1},{k:'p2',v:q2}];
+    if(lv===3){rows.push([a,'−',b,'=',box('res')]);steps.push({k:'res',v:a-b});}
+    return{D:10,p1:q1,p2:q2,rows,steps};
+  }
+  const p2=b-p1,rows=[[a,'−',box('p1'),'=',D],[b,'=',box('p1'),'+',box('p2')]],steps=[{k:'p1',v:p1},{k:'p2',v:p2}];
+  if(lv===3){rows.push([a,'−',b,'=',box('res')]);steps.push({k:'res',v:a-b});}
+  return{D,p1,p2,rows,steps};
+}
+function promptFor(t,P,k){
+  const {a,b}=t;
+  if(P.main)return'';
+  if(t.op==='plus'){
+    if(k==='p1')return`Hur mycket behöver ${a} för att bli ${P.D}?`;
+    if(k==='p2')return`Dela upp ${b}: ${P.p1} och hur mycket mer?`;
+    return`Vad blir ${a} + ${b}?`;
+  }
+  if(think()){
+    if(k==='p1')return`Hur långt är det från ${b} till 10?`;
+    if(k==='p2')return`Hur långt är det från 10 till ${a}?`;
+    return`Lägg ihop hoppen. Vad blir ${a} − ${b}?`;
+  }
+  if(k==='p1')return`Hur mycket ska bort för att ${a} ska bli ${P.D}?`;
+  if(k==='p2')return`Dela upp ${b}: ${P.p1} och hur mycket mer?`;
+  return`Vad blir ${a} − ${b}?`;
+}
+function hintFor(t,P,k){
+  if(t.op==='plus'){
+    if(k==='p1')return'Räkna de tomma rutorna i den första tiorutan.';
+    if(k==='p2')return`${P.p1} + ? = ${t.b}`;
+    return`Du är på ${P.D}. ${P.D} + ${P.p2} = ?`;
+  }
+  if(think()){
+    if(k==='p1')return'Räkna de tomma rutorna i tiorutan.';
+    if(k==='p2')return`10 + ? = ${t.a}`;
+    return`Lägg ihop hoppen: ${P.p1} + ${P.p2} = ?`;
+  }
+  if(k==='p1')return'Hur många prickar finns i den högra tiorutan?';
+  if(k==='p2')return`${P.p1} + ? = ${t.b}`;
+  return`Du är på ${P.D}. ${P.D} − ${P.p2} = ?`;
+}
+
+/* ---------- Bild: tiostavar, tiorutor och tallinje ---------- */
+function cells(t,lv,stage){
+  const f1=Array(10).fill(''),f2=Array(10).fill('');let rods=0;const {a,b}=t;
+  if(t.op==='minus'&&think()&&lv>1){
+    for(let i=0;i<10;i++)f1[i]=i<b?'b':(stage>=1?'o':'');
+    if(stage>=2)for(let i=0;i<a-10;i++)f2[i]='o';
+  }else if(t.op==='plus'){
+    const D=Math.ceil(a/10)*10,u=a-(D-10);rods=D/10-1;
+    for(let i=0;i<10;i++)f1[i]=i<u?'b':(stage>=1?'o':'');
+    if(stage>=2&&b!=null)for(let i=0;i<b-(D-a);i++)f2[i]='o';
+  }else{
+    const D=Math.floor(a/10)*10,r=a-D;rods=D/10-1;
+    for(let i=0;i<10;i++)f1[i]='b';
+    for(let i=0;i<r;i++)f2[i]=stage>=1?'x':'b';
+    if(stage>=2&&b!=null)for(let i=10-(b-r);i<10;i++)f1[i]='x';
+  }
+  return{rods,f1,f2};
+}
+let prevCells=null;
+function renderVisual(){
+  const c=cells(G.t,G.lv,G.si);
+  $('#rods').innerHTML=Array.from({length:c.rods},()=>'<div class="rod"></div>').join('');
+  $('#rods').hidden=!c.rods;
+  ['f1','f2'].forEach(f=>{const el=$('#'+f);el.innerHTML=c[f].map((v,i)=>{
+    const pop=prevCells&&prevCells[f][i]!==v&&v?' pop':'';return`<i class="${v}${pop}"></i>`;}).join('');});
+  prevCells=c;
+  renderLine();
+}
+function renderLine(){
+  const t=G.t,P=G.P,svg=$('#nline');
+  let lo,hi,start,jumps;
+  if(t.op==='minus'&&think()&&G.lv>1){lo=0;hi=20;start=t.b;jumps=[[t.b,10,'+'+P.p1],[10,t.a,'+'+P.p2]];}
+  else if(t.op==='plus'){lo=P.D-10;hi=P.D+10;start=t.a;jumps=[[t.a,P.D,'+'+(P.D-t.a)]];if(G.lv>1)jumps.push([P.D,t.a+t.b,'+'+P.p2]);}
+  else{lo=P.D-10;hi=P.D+10;start=t.a;jumps=[[t.a,P.D,'−'+(t.a-P.D)]];if(G.lv>1)jumps.push([P.D,t.a-t.b,'−'+P.p2]);}
+  const x=n=>16+(n-lo)*(308/(hi-lo)),Y=56;
+  let s=`<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#FF9F43"/></marker></defs>`;
+  s+=`<line x1="10" y1="${Y}" x2="330" y2="${Y}" stroke="#1D2B53" stroke-width="3"/>`;
+  for(let n=lo;n<=hi;n++){const major=n%5===0;s+=`<line x1="${x(n)}" y1="${Y-(major?9:5)}" x2="${x(n)}" y2="${Y+(major?9:5)}" stroke="#1D2B53" stroke-width="${major?2.5:1.5}"/>`;
+    if(major)s+=`<text x="${x(n)}" y="${Y+26}" text-anchor="middle" font-size="14" fill="${n===P.D?'#1D2B53':'#56668F'}">${n}</text>`;}
+  let pos=start;
+  jumps.forEach((j,i)=>{if(i>=G.si)return;const x1=x(j[0]),x2=x(j[1]),mx=(x1+x2)/2,h=Math.min(34,10+Math.abs(x2-x1)*.35);
+    s+=`<path d="M${x1} ${Y-4}Q${mx} ${Y-4-h*2} ${x2} ${Y-4}" fill="none" stroke="#FF9F43" stroke-width="3" marker-end="url(#ah)"/>`;
+    s+=`<text x="${mx}" y="${Y-8-h}" text-anchor="middle" font-size="15" fill="#C96A0C">${j[2]}</text>`;pos=j[1];});
+  s+=`<circle cx="${x(start)}" cy="${Y}" r="6" fill="#3D8BFD"/>`;
+  if(pos!==start)s+=`<circle cx="${x(pos)}" cy="${Y}" r="6" fill="#FF9F43"/>`;
+  svg.innerHTML=s;
+}
+
+/* ---------- Spelet ---------- */
+function startGame(lv,custom){
+  curLevel=lv;
+  const race=lv===4;
+  G={lv,race,custom:custom||null,tasks:custom?custom.map(t=>({...t})):buildTasks(lv,race?RACE_LEN:ROUND),i:-1,
+     missed:0,correct:0,times:[],slow:{},paused:0,start:performance.now(),busy:true,over:false,raf:0,input:''};
+  G.total=G.tasks.length;G.best=race&&!custom?data.race[pkey()]:null;
+  $('#raceBox').hidden=!race;$('#visual').hidden=race;
+  if(race){$('#carMe').innerHTML=carSvg('#3D8BFD');$('#carGhost').innerHTML=carSvg('#8E9AB5');setPos($('#carMe'),0);setPos($('#carGhost'),0);
+    $('#carGhost').hidden=!G.best;$('#ghostWho').textContent=G.best?'Spöket (ditt rekord)':'Inget spöke än. Nu sätter du rekordet!';$('#raceStatus').textContent='';}
+  $('#rows').innerHTML='';$('#prompt').textContent='';$('#feedback').textContent='';$('#qbox').className='qbox';$('#info').textContent='';
+  if(document.activeElement)document.activeElement.blur();
+  show('game');
+  if(race)countdown(()=>{G.start=performance.now();nextTask();loop();});else nextTask();
+}
+function countdown(done){
+  const c=$('#count');const steps=['3','2','1','Kör!'];let i=0;c.hidden=false;
+  (function tick(){if(!G||G.over){c.hidden=true;return;}if(i<steps.length){c.textContent=steps[i++];setTimeout(tick,650);}else{c.hidden=true;done();}})();
+}
+const elapsed=()=>performance.now()-G.start-G.paused;
+function setPos(el,p){p=Math.max(0,Math.min(1,p));el.style.left=`calc(${p*100}% - ${p*46}px)`;}
+function ghostPos(pace,t){let i=0;while(i<pace.length&&pace[i]<=t)i++;if(i>=pace.length)return pace.length;const prev=i?pace[i-1]:0;return i+(t-prev)/(pace[i]-prev);}
+function loop(){
+  if(!G||G.over)return;
+  if(G.best){const gp=ghostPos(G.best.pace,elapsed());setPos($('#carGhost'),gp/RACE_LEN);
+    const d=G.correct-gp,s=d>0.4?'Du leder!':d<-0.4?'Spöket leder. Kom igen!':'Jämnt lopp!';
+    if($('#raceStatus').textContent!==s)$('#raceStatus').textContent=s;}
+  G.raf=requestAnimationFrame(loop);
+}
+function nextTask(){
+  if(!G||G.over)return;G.i++;
+  if(G.i>=G.total)return finish();
+  G.t=G.tasks[G.i];G.P=plan(G.t,G.lv);G.steps=G.P.steps;G.si=0;G.tries=0;G.taskMissed=false;G.tStart=performance.now();
+  prevCells=null;$('#info').textContent=G.race?`${G.correct} / ${G.total}`:`Uppgift ${G.i+1} av ${G.total}`;
+  if(!G.race)renderVisual();
+  startStep();
+}
+function startStep(){G.input='';G.tries=0;G.busy=false;$('#qbox').className='qbox';$('#feedback').textContent='';renderRows();}
+function renderRows(){
+  const step=G.steps[G.si];
+  $('#prompt').textContent=step?promptFor(G.t,G.P,step.k):'';
+  $('#prompt').hidden=!!G.P.main;
+  $('#rows').innerHTML=G.P.rows.map(r=>`<div class="erow${G.P.main?' main':''}">`+r.map(p=>{
+    if(typeof p!=='object')return`<span>${p}</span>`;
+    const idx=G.steps.findIndex(s=>s.k===p.k),done=idx<G.si,act=idx===G.si;
+    const val=done?G.steps[idx].v:act?(G.input||'?'):'?';
+    return`<span class="box${done?' done':''}${act?' act':''}">${val}</span>`;}).join('')+'</div>').join('');
+}
+function press(k){
+  if(!G||G.busy||G.over)return;
+  const step=G.steps[G.si];
+  if(k==='del')G.input=G.input.slice(0,-1);
+  else if(k==='ok'){if(G.input)submit();return;}
+  else if(G.input.length<3)G.input+=k;
+  renderRows();
+  if(G.input.length>=String(step.v).length)setTimeout(submit,120); // svarar automatiskt när rätt antal siffror är inskrivna
+}
+$$('#pad button').forEach(b=>b.onclick=()=>press(b.dataset.k));
+const PRAISE=['Rätt!','Snyggt!','Bra!','Toppen!','Klockrent!'];
+function submit(){
+  if(!G||G.busy||G.over||!G.input)return;
+  const step=G.steps[G.si],ok=+G.input===step.v;G.busy=true;
+  if(ok){
+    G.si++;$('#qbox').classList.add('ok');renderRows();
+    if(!G.race)renderVisual();
+    if(G.si<G.steps.length){$('#feedback').textContent=PRAISE[Math.floor(Math.random()*PRAISE.length)];setTimeout(startStep,650);return;}
+    // uppgiften klar
+    G.correct++;const ms=performance.now()-G.tStart+(G.taskMissed?6000:0);G.slow[tkey(G.t)]={t:G.t,w:ms};
+    $('#feedback').textContent=G.taskMissed?'Nu blev det rätt!':PRAISE[Math.floor(Math.random()*PRAISE.length)];
+    if(G.race){G.times.push(elapsed());setPos($('#carMe'),G.correct/RACE_LEN);$('#info').textContent=`${G.correct} / ${G.total}`;}
+    setTimeout(nextTask,G.race?300:(G.lv===1?700:1100));
+  }else{
+    if(!G.taskMissed){G.taskMissed=true;G.missed++;}
+    G.tries++;$('#qbox').classList.add('bad');
+    $('#feedback').textContent=G.race?'Försök igen!':G.tries>=2?`Svaret är ${step.v}. Skriv ${step.v}.`:hintFor(G.t,G.P,step.k);
+    setTimeout(()=>{if(!G||G.over)return;G.input='';G.busy=false;renderRows();$('#qbox').className='qbox bad';},G.race?450:700);
+  }
+}
+document.addEventListener('keydown',e=>{
+  if($('#game').hidden||!G||G.over)return;
+  if(/^[0-9]$/.test(e.key))press(e.key);
+  else if(e.key==='Backspace'){e.preventDefault();press('del');}
+  else if(e.key==='Enter'){e.preventDefault();press('ok');}
+});
+$('#quit').onclick=()=>{if(G){G.over=true;cancelAnimationFrame(G.raf);}$('#count').hidden=true;openHome();};
+
+/* ---------- Resultat ---------- */
+function finish(){
+  if(!G||G.over)return;G.over=true;cancelAnimationFrame(G.raf);
+  let party=false;$('#rUnlock').hidden=true;$('#rNext').hidden=true;$('#rSlow').hidden=true;
+  if(G.race){
+    const t=elapsed(),best=G.best,ranked=!G.custom,rec=ranked&&(!best||t<best.time);
+    if(rec){data.race[pkey()]={time:Math.round(t),pace:G.times.map(Math.round)};save();}
+    $('#rTitle').textContent=rec?(best?'Nytt rekord!':'Första racet klart!'):'I mål!';
+    $('#rBig').textContent=fmt(t);
+    $('#rSub').textContent=!ranked?'':rec&&best?`Du slog ditt gamla rekord med ${fmt(best.time-t)}.`:rec?'Nästa gång kör du mot ditt spöke.':`Ditt rekord är ${fmt(best.time)}. Bara ${fmt(t-best.time)} ifrån!`;
+    party=rec;
+    const slow=Object.values(G.slow).sort((x,y)=>y.w-x.w).slice(0,3);G.slowTasks=slow.map(s=>s.t);
+    $('#rSlowList').innerHTML=slow.map(s=>`<span>${ttext(s.t)} = ${tres(s.t)}</span>`).join('');$('#rSlow').hidden=slow.length<2;
+  }else{
+    const right=G.total-G.missed,st=right===G.total?3:right>=G.total-2?2:1;
+    $('#rTitle').textContent=st===3?'Alla rätt direkt!':st===2?'Bra jobbat!':'Klart!';
+    $('#rBig').innerHTML=starHtml(st);
+    $('#rSub').textContent=`${right} av ${G.total} uppgifter utan fel.`+(st<2?' Två stjärnor låser upp nästa nivå.':'');
+    if(!G.custom){
+      const wasOpen=unlocked(G.lv+1),k=pkey();data.stars[k]=data.stars[k]||{};
+      if(st>(data.stars[k][G.lv]||0)){data.stars[k][G.lv]=st;save();}
+      if(G.lv<4&&unlocked(G.lv+1)){$('#rNext').hidden=false;if(!wasOpen){$('#rUnlock').hidden=false;$('#rUnlock').textContent=`Nivå ${G.lv+1} är upplåst!`;party=true;}}
+    }
+    if(st===3)party=true;
+  }
+  show('result');if(party)confetti();
+}
+$('#rAgain').onclick=()=>startGame(G.lv,G.custom);
+$('#rHome').onclick=openHome;
+$('#rNext').onclick=()=>startGame(G.lv+1);
+$('#rTrainSlow').onclick=()=>startGame(3,G.slowTasks);
+
+/* ---------- Konfetti ---------- */
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cols=['#3D8BFD','#FF9F43','#2BB673','#FFC93C','#7B61FF','#FF6B6B'];
+  const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
+  c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,
+    r:Math.random()*7+5,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  const t0=performance.now();
+  (function f(now){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
+    x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(now-t0<2800)requestAnimationFrame(f);else{x.clearRect(0,0,W,H);c.hidden=true;}})(t0);
+}
+
+openHome();
+</script>
+</body>
+</html>
