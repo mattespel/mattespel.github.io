@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taluppfattning – Matte-Portalen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE;
+  --blue:#3D8BFD; --orange:#FF9F43; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:560px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none !important}
+.back{display:inline-block;color:var(--muted);font-weight:700;text-decoration:none;padding:6px 0;font-size:1rem}
+h1{font-size:2.5rem;line-height:1;margin:14px 0 4px;font-weight:800;letter-spacing:-.5px}
+h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
+.lead{margin:0 0 16px;color:var(--muted);font-size:1.1rem}
+.seg{display:flex;gap:8px;margin-bottom:16px}
+.seg button{flex:1;padding:10px 6px;border-radius:14px;background:var(--card);font-weight:800;font-size:1.2rem;box-shadow:0 3px 0 var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff;box-shadow:0 3px 0 #0E1735}
+
+/* Områden */
+.areas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acard{background:var(--card);border-radius:18px;padding:12px 12px 10px;box-shadow:0 4px 0 var(--line);text-align:left;display:flex;flex-direction:column;gap:2px;transition:transform .08s,box-shadow .08s}
+.acard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.acard .ic{font-size:2rem;line-height:1.1}
+.acard b{font-size:1.15rem;line-height:1.2}
+.acard .meta{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:2px}
+.diagmark{font-size:.85rem;font-weight:700;color:var(--muted)}
+.diagmark .y{color:var(--good)} .diagmark .n{color:var(--bad)}
+.stars{color:var(--gold);font-size:1.15rem;letter-spacing:1px}
+.stars .off{color:#D5DDEC}
+.big{display:flex;align-items:center;gap:14px;width:100%;padding:12px 16px;border-radius:18px;background:var(--card);
+  box-shadow:0 4px 0 var(--line);text-align:left;margin-top:16px;transition:transform .08s,box-shadow .08s}
+.big:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.big .ic{font-size:1.7rem;width:2.2rem;text-align:center;flex:none}
+.big b{display:block;font-size:1.3rem;line-height:1.2}
+.big small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3}
+
+/* Uppgift */
+.gtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.info{font-weight:800;font-size:1.2rem}
+.progress{height:10px;border-radius:5px;background:var(--card);overflow:hidden;margin-top:6px;box-shadow:inset 0 0 0 2px var(--line)}
+.progress i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.task{background:var(--card);border-radius:22px;padding:12px 14px 10px;box-shadow:0 5px 0 var(--line);margin:12px 0;transition:background .15s}
+.task.ok{background:#DDF5E7}
+.task.bad{background:#FDE4E4}
+.instr{display:flex;gap:10px;align-items:center;font-weight:700;font-size:1.15rem;line-height:1.3}
+.spk{flex:none;width:46px;height:46px;border-radius:50%;background:var(--bg);font-size:1.4rem;box-shadow:0 3px 0 var(--line)}
+.content{margin-top:10px;text-align:center}
+.feedback{min-height:1.5em;font-weight:800;font-size:1.1rem;margin-top:6px;text-align:center}
+.task.ok .feedback{color:var(--good)}
+.task.bad .feedback{color:var(--bad)}
+.eqrow{font-size:clamp(1.8rem,8.5vw,2.6rem);font-weight:800;line-height:1.4;white-space:nowrap}
+.eqrow.sm{font-size:clamp(1.3rem,6vw,1.8rem);white-space:normal}
+.box{display:inline-block;min-width:1.7em;padding:0 .2em;border-radius:10px;border:3px dashed var(--line);color:#B4C0D8;line-height:1.15;text-align:center}
+.box.act{border:3px solid var(--accent);color:var(--accent);background:#EEF1FF}
+.box.done{border:3px solid transparent;background:#DDF5E7;color:var(--good-dark)}
+.box.given{border:3px solid transparent;background:#E8EDF7;color:var(--ink)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pad button{height:56px;border-radius:16px;background:var(--card);font-size:1.8rem;font-weight:800;box-shadow:0 4px 0 var(--line);transition:transform .06s,box-shadow .06s}
+.pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.pad .okbtn{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.4rem}
+
+/* Tallinje */
+.nlsvg{display:block;width:100%;height:auto;touch-action:manipulation}
+.nlsvg text{font-family:var(--font)}
+.nlsvg.tap{cursor:pointer}
+/* Storleksordna */
+.slots{display:flex;justify-content:center;align-items:flex-end;gap:3px;flex-wrap:nowrap;font-size:clamp(1.25rem,6vw,2rem);font-weight:800;margin:6px 0 14px}
+.slot{display:inline-block;min-width:1.6em;border-bottom:4px dashed var(--line);text-align:center;min-height:1.3em}
+.slot.fill{border-bottom-color:var(--good);color:var(--good-dark)}
+.slots .lt{color:var(--muted);font-size:.8em}
+.cloud{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;background:#E1F0FF;border-radius:40px;padding:14px}
+.num{min-width:64px;height:58px;border-radius:16px;background:var(--card);font-size:1.7rem;font-weight:800;box-shadow:0 4px 0 var(--line)}
+.num.used{visibility:hidden}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+/* Dela upp */
+.stree{width:170px;margin:0 auto 8px;font-size:1.8rem;font-weight:800}
+.st-top{width:62px;height:56px;margin:0 auto;border:3px solid var(--ink);border-radius:10px;display:grid;place-items:center;background:#fff}
+.st-legs{display:block;width:100%;height:30px}
+.st-bot{display:flex;justify-content:space-between}
+.st-bot>span{width:62px;height:56px;display:grid;place-items:center}
+.st-bot>.giv{border:3px solid var(--ink);border-radius:10px}
+.st-bot .box{width:62px;height:56px;display:grid;place-items:center;min-width:0}
+.dots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:330px;margin:4px auto 0}
+.dots i{width:24px;height:24px;border-radius:50%;background:var(--blue)}
+.dots i.e{background:transparent;border:2px dashed #AFC0DE}
+.dots i.o{background:var(--orange);border:0;animation:pop .35s ease-out backwards}
+@keyframes pop{from{transform:scale(0)}60%{transform:scale(1.2)}to{transform:scale(1)}}
+/* Talföljd */
+.seq{display:flex;flex-wrap:wrap;gap:6px 1px;justify-content:center;align-items:flex-start;font-size:clamp(1.1rem,5vw,1.9rem);font-weight:800}
+.seq .sn,.seq .box{min-width:1.45em;text-align:center;line-height:1.3}
+.arr{display:inline-flex;flex-direction:column;align-items:center;color:var(--muted);font-size:.6em;line-height:1.1;padding-top:.25em}
+.arr b{font-size:.75em;color:#C96A0C;visibility:hidden}
+.showd .arr b{visibility:visible}
+/* Grannar */
+.nb{display:flex;justify-content:center;font-size:clamp(1.5rem,7vw,2rem);font-weight:800;margin:6px 0}
+.nb>span{min-width:2.8em;height:1.9em;border:3px solid var(--ink);margin-left:-3px;display:grid;place-items:center;background:#E8EDF7}
+.nb>span .box{border:0;border-radius:0;width:100%;height:100%;display:grid;place-items:center;background:#fff}
+.nb>span .box.act{background:#EEF1FF}
+.nb>span .box.done{background:#DDF5E7}
+/* Grupper (multiplikation) */
+.groups{display:flex;flex-direction:column;gap:5px;align-items:center;margin:4px 0 8px}
+.groups div{display:flex;gap:4px;padding:3px 6px;border-radius:10px;background:var(--bg)}
+.groups i{width:13px;height:13px;border-radius:50%;background:var(--blue)}
+/* Affär */
+.shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin:6px 0 10px}
+.item{background:var(--bg);border-radius:14px;padding:8px 4px;border:3px solid transparent;font-weight:800;font-size:1.15rem;line-height:1.2}
+.item .em{font-size:2.1rem;display:block}
+.item small{display:block;font-size:.8rem;color:var(--muted);font-weight:700}
+button.item.sel{border-color:var(--accent);background:#EEF1FF}
+button.item.bad{border-color:var(--bad);background:#FDE4E4}
+button.item.right{border-color:var(--good);background:#DDF5E7}
+.money{font-size:clamp(1.2rem,5.5vw,1.6rem);font-weight:800;line-height:1.6}
+
+/* Resultat */
+.result{text-align:center;padding-top:20px}
+.rbig{font-size:clamp(3.2rem,16vw,4.6rem);font-weight:800;line-height:1;margin:6px 0}
+.rbig .stars{font-size:inherit}
+.rsub{color:var(--muted);font-size:1.15rem;margin:0 0 14px}
+.dlist{background:var(--card);border-radius:18px;padding:10px 14px;box-shadow:0 4px 0 var(--line);text-align:left;margin-bottom:10px}
+.dlist .r{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-weight:700;font-size:1.1rem}
+.dlist .r+.r{border-top:1px solid var(--bg)}
+.dlist .y{color:var(--good)} .dlist .n{color:var(--bad)}
+.dlist h3{margin:4px 0 6px;font-size:1.15rem}
+.dlist p{margin:4px 0;font-size:1rem}
+.dlist p small{color:var(--muted)}
+.result .big{justify-content:center;text-align:center;font-weight:800;font-size:1.2rem;margin-top:12px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:10px 18px;border-radius:14px;font-weight:700;z-index:6;max-width:90vw;text-align:center}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Start -->
+<section id="home" class="screen">
+  <a class="back" href="../">← Till huvudmenyn</a>
+  <h1>Taluppfattning</h1>
+  <p class="lead">Välj årskurs och tryck på det du vill träna.</p>
+  <div class="seg" id="segGrade"><button data-v="1">Åk 1</button><button data-v="2">Åk 2</button></div>
+  <div class="areas" id="areas"></div>
+  <button class="big" id="btnDiag"><span class="ic">📋</span><span><b>Diagnos</b><small id="diagInfo">Två uppgifter från varje område. Svaren rättas i slutet.</small></span></button>
+</section>
+
+<!-- Uppgift -->
+<section id="game" class="screen" hidden>
+  <div class="gtop"><button class="back" id="quit">← Avsluta</button><span class="info" id="info"></span></div>
+  <div class="progress"><i id="prog"></i></div>
+  <div class="task" id="task">
+    <div class="instr"><button class="spk" id="spk" aria-label="Läs upp">🔊</button><span id="instr"></span></div>
+    <div class="content" id="content"></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+  </div>
+  <div class="pad" id="pad">
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okbtn">OK</button>
+  </div>
+</section>
+
+<!-- Resultat -->
+<section id="result" class="screen result" hidden>
+  <h2 id="rTitle"></h2>
+  <div class="rbig" id="rBig"></div>
+  <p class="rsub" id="rSub"></p>
+  <div id="rDetails"></div>
+  <button class="big" id="rAgain">Spela igen</button>
+  <button class="big" id="rHome">Till områdena</button>
+</section>
+
+</div>
+<div class="toast" id="toast" hidden></div>
+<canvas id="fx" hidden></canvas>
+
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickOne=a=>a[Math.floor(Math.random()*a.length)];
+const range=(a,b)=>Array.from({length:Math.max(0,b-a+1)},(_,i)=>a+i);
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const B=i=>`<span class="box" data-b="${i}">?</span>`;
+const say=s=>s.replace(/\?/g,'något').replace(/−/g,' minus ').replace(/\+/g,' plus ').replace(/·/g,' gånger ').replace(/=/g,' är lika med ');
+
+/* ---------- Lagring (bara i den här webbläsaren) ---------- */
+const KEY='mattespel-taluppfattning-v1';
+let data=load();
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.stars)return Object.assign({grade:1,diag:{}},d);}catch(e){}return{grade:1,stars:{1:{},2:{}},diag:{}};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
+const qp=new URLSearchParams(location.search).get('ak');if(qp==='1'||qp==='2')data.grade=+qp;
+
+/* ---------- Uppläsning ---------- */
+let svVoice=null;
+function loadVoices(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null;}catch(e){}}
+if('speechSynthesis' in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+function speak(text){
+  if(!('speechSynthesis' in window))return toast('Uppläsning fungerar inte i den här webbläsaren.');
+  loadVoices();
+  if(!svVoice&&speechSynthesis.getVoices().length)return toast('Den här datorn har ingen svensk röst för uppläsning.');
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='sv-SE';if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);
+}
+
+/* ---------- Tallinje ---------- */
+function lineSvg(min,max,step,labels,arrow,tap){
+  const x=n=>20+(n-min)*300/(max-min),Y=60;
+  let s=`<svg viewBox="0 0 340 96" class="nlsvg${tap?' tap':''}">`;
+  s+=`<line x1="10" y1="${Y}" x2="330" y2="${Y}" stroke="#1D2B53" stroke-width="3"/>`;
+  for(let n=min;n<=max;n+=step){const L=labels.includes(n);
+    s+=`<line x1="${x(n)}" y1="${Y-(L?12:8)}" x2="${x(n)}" y2="${Y+(L?12:8)}" stroke="#1D2B53" stroke-width="${L?3:2}"/>`;
+    if(L)s+=`<text x="${x(n)}" y="${Y+34}" text-anchor="middle" font-size="17" font-weight="800" fill="#1D2B53">${n}</text>`;}
+  if(arrow!=null)s+=`<line x1="${x(arrow)}" y1="${Y-50}" x2="${x(arrow)}" y2="${Y-30}" stroke="#E5484D" stroke-width="4"/><path d="M${x(arrow)} ${Y-15}L${x(arrow)-9} ${Y-31}H${x(arrow)+9}Z" fill="#E5484D"/>`;
+  s+=`<g class="marks"></g><rect x="0" y="0" width="340" height="96" fill="transparent"/></svg>`;
+  return s;
+}
+function genLine(g){
+  let min=0,max,step,labels,target;
+  if(g===1){max=pickOne([10,20]);step=1;labels=max===10?[0,5,10]:[0,10,20];do{target=rnd(1,max-1);}while(labels.includes(target));}
+  else{if(Math.random()<.5){max=100;step=5;labels=[0,25,50,75,100];}else{min=50;max=100;step=5;labels=[50,60,70,80,90,100];}
+    do{target=min+step*rnd(1,(max-min)/step-1);}while(labels.includes(target));}
+  const near=labels.reduce((b,l)=>Math.abs(l-target)<Math.abs(b-target)?l:b,labels[0]);
+  const stepTxt=step===1?'':` Varje streck är ${step}.`;
+  if(Math.random()<.5)return{kind:'keys',instr:'Vilket tal pekar pilen på?',speak:'Vilket tal pekar pilen på?',
+    html:lineSvg(min,max,step,labels,target)+`<div class="eqrow">${B(0)}</div>`,boxes:[target],
+    hint:()=>`Börja på ${near} och räkna strecken.${stepTxt}`,answer:`Pilen pekar på ${target}.`};
+  return{kind:'tap',instr:`Tryck där talet ${target} ska vara.`,speak:`Tryck där talet ${target} ska vara på tallinjen.`,
+    html:lineSvg(min,max,step,labels,null,true),answer:`${target} på tallinjen.`,
+    mount(el,ctx){
+      const svg=el.querySelector('svg'),marks=svg.querySelector('.marks'),x=n=>20+(n-min)*300/(max-min);let tries=0;
+      const mark=(v,col)=>{marks.innerHTML+=`<circle cx="${x(v)}" cy="60" r="10" fill="${col}"/><text x="${x(v)}" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="${col}">${v}</text>`;};
+      svg.addEventListener('pointerdown',e=>{
+        if(ctx.locked())return;const r=svg.getBoundingClientRect(),vx=(e.clientX-r.left)/r.width*340;
+        let v=min+Math.round((vx-20)/300*(max-min)/step)*step;v=Math.max(min,Math.min(max,v));
+        marks.innerHTML='';
+        if(!ctx.train){mark(v,'#3D5AFE');ctx.finish(v===target,String(v));return;}
+        if(v===target){mark(v,'#1E9E5E');ctx.finish(true);return;}
+        tries++;ctx.miss();mark(v,'#E5484D');
+        if(tries>=2){mark(target,'#1E9E5E');ctx.say(`Så här: ${target} är den gröna pricken. Tryck där.`);}
+        else ctx.say(`Du tryckte på ${v}. ${target} är längre åt ${target>v?'höger':'vänster'}.`);
+      });
+    }};
+}
+
+/* ---------- Storleksordna ---------- */
+function genOrder(){
+  const n=[];while(n.length<5){const x=rnd(1,35);if(!n.includes(x))n.push(x);}
+  const sorted=[...n].sort((a,b)=>a-b);
+  return{kind:'tap',instr:'Tryck på talen i ordning. Börja med det minsta.',speak:`Tryck på talen i ordning. Börja med det minsta talet.`,
+    html:`<div class="slots">${range(0,4).map(i=>`<span class="slot" data-s="${i}">&nbsp;</span>`).join('<span class="lt">&lt;</span>')}</div>
+      <div class="cloud">${n.map(v=>`<button class="num" data-v="${v}">${v}</button>`).join('')}</div>`,
+    answer:sorted.join(' < '),
+    mount(el,ctx){let k=0;const picked=[];
+      el.querySelectorAll('.num').forEach(b=>b.onclick=()=>{
+        if(ctx.locked())return;const v=+b.dataset.v;
+        if(ctx.train&&v!==sorted[k]){ctx.miss();b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');ctx.say(`Det finns ett tal som är mindre än ${v}. Leta igen!`);return;}
+        const s=el.querySelector(`[data-s="${k}"]`);s.textContent=v;s.classList.add('fill');b.classList.add('used');picked.push(v);k++;ctx.say('','');
+        if(k===5)ctx.finish(picked.every((x,i)=>x===sorted[i]),picked.join(' < '));
+      });}};
+}
+
+/* ---------- Likheter ---------- */
+function genLik(g){
+  let tok,v,hint;
+  const sub=g===2&&Math.random()<.5;
+  if(!sub){
+    let a,b,s;if(g===1){a=rnd(1,10);b=rnd(1,10);}else{s=rnd(15,35);a=rnd(5,s-5);b=s-a;}s=a+b;
+    const f=rnd(1,4);
+    if(f===1){tok=[a,'+','X','=',s];v=b;hint=`Räkna uppåt från ${a} till ${s}.`;}
+    else if(f===2){tok=[s,'=',a,'+','X'];v=b;hint=`Räkna uppåt från ${a} till ${s}.`;}
+    else if(f===3){tok=[s,'=','X','+',b];v=a;hint=`Vad ska läggas till ${b} för att det ska bli ${s}?`;}
+    else{tok=['X','+',b,'=',s];v=a;hint=`Vad ska läggas till ${b} för att det ska bli ${s}?`;}
+  }else{
+    const a=rnd(15,35),b=rnd(2,10),r=a-b,f=rnd(1,4);
+    if(f===1){tok=[a,'−','X','=',r];v=b;hint=`Hur långt är det från ${r} upp till ${a}?`;}
+    else if(f===2){tok=[r,'=','X','−',b];v=a;hint=`Tänk plus: ${r} + ${b} = ?`;}
+    else if(f===3){tok=[a,'−',b,'=','X'];v=r;hint=`Räkna ${b} steg bakåt från ${a}.`;}
+    else{tok=['X','−',b,'=',r];v=a;hint=`Tänk plus: ${r} + ${b} = ?`;}
+  }
+  const txt=tok.join(' ').replace('X','?');
+  return{kind:'keys',instr:'Vilket tal saknas?',speak:'Vilket tal saknas? '+say(txt),
+    html:`<div class="eqrow">${tok.map(t=>t==='X'?B(0):`<span>${t}</span>`).join(' ')}</div>`,boxes:[v],
+    hint:()=>`Båda sidor om = ska vara lika mycket. ${hint}`,answer:tok.join(' ').replace('X',v)};
+}
+
+/* ---------- Dela upp ---------- */
+function genSplit(){
+  const top=rnd(4,12),L=rnd(1,top-1),R=top-L,missLeft=Math.random()<.5,given=missLeft?R:L,v=missLeft?L:R;
+  const giv=`<span class="giv">${given}</span>`,bx=`<span>${B(0)}</span>`;
+  return{kind:'keys',instr:'Dela upp talet. Vilket tal saknas?',speak:`${top} delas upp i ${given} och något. Vilket tal saknas?`,
+    html:`<div class="stree"><div class="st-top">${top}</div><svg class="st-legs" viewBox="0 0 170 30" preserveAspectRatio="none"><line x1="85" y1="0" x2="31" y2="30" stroke="#1D2B53" stroke-width="3"/><line x1="85" y1="0" x2="139" y2="30" stroke="#1D2B53" stroke-width="3"/></svg>
+      <div class="st-bot">${missLeft?bx+giv:giv+bx}</div></div>
+      <div class="dots">${'<i></i>'.repeat(given)}${'<i class="e"></i>'.repeat(v)}</div>`,
+    boxes:[v],hint:()=>`${top} prickar. ${given} är blå. Räkna de tomma prickarna.`,answer:`${top} = ${L} + ${R}`,
+    onBox(i,el){el.querySelectorAll('.dots i.e').forEach((d,j)=>{d.className='o';d.style.animationDelay=j*60+'ms';});}};
+}
+
+/* ---------- Talföljder ---------- */
+function genSeq(g){
+  let d,st;
+  if(g===1){d=pickOne([1,-1,2,-2]);st=d>0?rnd(1,5):rnd(12,20);}
+  else{d=pickOne([2,-2,5,-5,10,-10]);st=Math.abs(d)===2?(d>0?rnd(10,50):rnd(60,90)):(d>0?rnd(1,10)*5:rnd(10,20)*5);}
+  const seq=range(0,6).map(i=>st+i*d),lab=(d>0?'+':'−')+Math.abs(d);
+  const items=seq.map((n,i)=>i<4?`<span class="sn">${n}</span>`:B(i-4));
+  return{kind:'keys',instr:'Fortsätt talföljden.',speak:`Fortsätt talföljden. ${seq.slice(0,4).join(', ')}. Vilka tal kommer sedan?`,
+    html:`<div class="seq">${items.map((it,i)=>i?`<span class="arr">→<b>${lab}</b></span>${it}`:it).join('')}</div>`,
+    boxes:seq.slice(4),hint:(i,el)=>{el.querySelector('.seq').classList.add('showd');return`Titta på hoppen. Varje hopp är ${lab}.`;},
+    answer:seq.join(', ')};
+}
+
+/* ---------- Talets grannar ---------- */
+function genNb(){
+  const st=rnd(40,196),seq=[st,st+1,st+2,st+3],gi=rnd(0,3);let bi=0;
+  const cells=seq.map((n,i)=>i===gi?`<span>${n}</span>`:`<span>${B(bi++)}</span>`);
+  const pos=[0,1,2,3].filter(i=>i!==gi);
+  return{kind:'keys',instr:'Skriv talen som saknas. Talen kommer i ordning.',speak:`Skriv talen som saknas. Talen kommer i ordning, ett steg i taget. Ett av talen är ${seq[gi]}.`,
+    html:`<div class="nb">${cells.join('')}</div>`,boxes:pos.map(i=>seq[i]),
+    hint:i=>pos[i]<gi?`Talet till vänster är 1 mindre. Räkna bakåt från ${seq[gi]}.`:`Talet till höger är 1 större. Räkna framåt.`,
+    answer:seq.join(', ')};
+}
+
+/* ---------- Multiplikation ---------- */
+function genMul(){
+  const grp=(n,m)=>`<div class="groups">${range(1,n).map(()=>`<div>${'<i></i>'.repeat(m)}</div>`).join('')}</div>`;
+  if(Math.random()<.2){const v=pickOne([2,3,4,5,10]);
+    return{kind:'keys',instr:'Vilket tal saknas?',speak:`Vilket tal saknas? ${v} plus ${v} plus ${v} är lika med 3 gånger något.`,
+      html:grp(3,v)+`<div class="eqrow sm">${v} + ${v} + ${v} = 3 · ${B(0)}</div>`,boxes:[v],
+      hint:()=>'Det är tre lika stora grupper. Hur många finns i varje grupp?',answer:`${v} + ${v} + ${v} = 3 · ${v}`};}
+  const a=pickOne([2,3,4,5,10]),b=rnd(1,10);
+  return{kind:'keys',instr:'Räkna ut.',speak:`Hur mycket är ${a} gånger ${b}?`,
+    html:grp(a,b)+`<div class="eqrow">${a} · ${b} = ${B(0)}</div>`,boxes:[a*b],
+    hint:()=>`${a} · ${b} är ${a} grupper med ${b}. Räkna hoppvis: ${b}, ${2*b}, …`,answer:`${a} · ${b} = ${a*b}`};
+}
+
+/* ---------- Problemlösning ---------- */
+const TOYS=[['🚗','Bilen'],['📖','Boken'],['🧸','Nallen'],['🧩','Pusslet'],['⚽','Bollen'],['🖍️','Kritorna'],['🎲','Tärningen'],['🧢','Kepsen']];
+function genShop1(){
+  const budg=pickOne([50,100]),left=pickOne([2,3,4,5,10]),tgt=budg-left;let prices;
+  for(;;){const p1=rnd(Math.floor(tgt*.3),Math.floor(tgt*.7));prices=[p1,tgt-p1,rnd(5,budg-5),rnd(5,budg-5),rnd(5,budg-5)];
+    if(new Set(prices).size<5)continue;let c=0;for(let i=0;i<5;i++)for(let j=i+1;j<5;j++)if(prices[i]+prices[j]===tgt)c++;if(c===1)break;}
+  const ans=[prices[0],prices[1]];shuffle(prices);const toys=shuffle(TOYS.slice()).slice(0,5);
+  const txt=`Maja har ${budg} kr. Hon köper två saker och har ${left} kr kvar. Vilka saker köper hon?`;
+  return{kind:'tap',instr:txt,speak:txt,
+    html:`<div class="shop">${prices.map((p,i)=>`<button class="item" data-p="${p}"><span class="em">${toys[i][0]}</span>${p} kr</button>`).join('')}</div>`,
+    answer:`${ans[0]} kr + ${ans[1]} kr = ${tgt} kr`,
+    mount(el,ctx){let tries=0;const items=[...el.querySelectorAll('.item')];
+      items.forEach(b=>b.onclick=()=>{
+        if(ctx.locked())return;b.classList.toggle('sel');items.forEach(x=>x.classList.remove('bad'));
+        const sel=items.filter(x=>x.classList.contains('sel'));if(sel.length<2){ctx.say('','');return;}
+        const sum=sel.reduce((s,x)=>s+ +x.dataset.p,0);
+        if(!ctx.train){ctx.finish(sum===tgt,`${sum} kr`);return;}
+        if(sum===tgt){sel.forEach(x=>{x.classList.remove('sel');x.classList.add('right');});ctx.finish(true);return;}
+        tries++;ctx.miss();sel.forEach(x=>{x.classList.remove('sel');x.classList.add('bad');});
+        if(tries>=2){items.filter(x=>ans.includes(+x.dataset.p)).forEach(x=>x.classList.add('right'));ctx.say(`De gröna kostar ${tgt} kr tillsammans. Tryck på dem.`);}
+        else ctx.say(`Dina saker kostar ${sum} kr. Maja ska betala ${budg} − ${left} = ${tgt} kr.`);
+      });}};
+}
+function genShop2(){
+  const toys=shuffle(TOYS.slice()).slice(0,5).map(t=>({e:t[0],n:t[1],p:rnd(2,9)*5+rnd(0,4)}));
+  const shopHtml=`<div class="shop">${toys.map(t=>`<div class="item"><span class="em">${t.e}</span><small>${t.n}</small>${t.p} kr</div>`).join('')}</div>`;
+  if(Math.random()<.55){
+    const q=toys.slice(0,3),sum=q.reduce((s,t)=>s+t.p,0),pays=sum<100?100:200,names=`${q[0].n.toLowerCase()}, ${q[1].n.toLowerCase()} och ${q[2].n.toLowerCase()}`;
+    const txt=`Anton köper ${names}. Han betalar med en ${pays}-kronorssedel.`;
+    return{kind:'keys',instr:txt,speak:txt+' Hur mycket kostar sakerna, och hur mycket får han tillbaka?',
+      html:shopHtml+`<div class="money">Sakerna kostar: ${B(0)} kr<br>Han får tillbaka: ${B(1)} kr</div>`,boxes:[sum,pays-sum],
+      hint:i=>i===0?`Räkna ihop: ${q[0].p} + ${q[1].p} + ${q[2].p}.`:`${pays} − ${sum} = ?`,answer:`Kostar ${sum} kr, tillbaka ${pays-sum} kr.`};
+  }
+  const kids=pickOne([['Sami, Anna, Filip och Leia',4],['Maja, Hugo och Leo',3],['Nora och Elias',2]]),per=rnd(5,12),tot=kids[1]*per;
+  const txt=`${kids[0]} ska dela lika på ${tot} kronor. Hur mycket får varje barn?`;
+  return{kind:'keys',instr:txt,speak:txt,html:`<div class="money">Varje barn får: ${B(0)} kr</div>`,boxes:[per],
+    hint:()=>`Prova ett tal. Om varje barn får 5 kr blir det ${kids[1]*5} kr tillsammans.`,answer:`${tot} kr delat på ${kids[1]} = ${per} kr.`};
+}
+
+/* ---------- Områden ---------- */
+const AREAS={
+  1:[{id:'tallinje',name:'Tallinjer',ic:'📏',gen:()=>genLine(1)},{id:'ordna',name:'Storleksordna',ic:'🔢',gen:genOrder},
+     {id:'likhet',name:'Likhetstecknet',ic:'⚖️',gen:()=>genLik(1)},{id:'delaupp',name:'Dela upp',ic:'🌳',gen:genSplit},
+     {id:'talfoljd',name:'Talföljder',ic:'👣',gen:()=>genSeq(1)},{id:'affar',name:'Problemlösning',ic:'🛒',gen:genShop1,n:5}],
+  2:[{id:'grannar',name:'Talets grannar',ic:'🏘️',gen:genNb},{id:'talfoljd',name:'Talföljder',ic:'👣',gen:()=>genSeq(2)},
+     {id:'tallinje',name:'Tallinjer',ic:'📏',gen:()=>genLine(2)},{id:'likhet',name:'Likheter',ic:'⚖️',gen:()=>genLik(2)},
+     {id:'multi',name:'Multiplikation',ic:'✖️',gen:genMul},{id:'affar',name:'Problemlösning',ic:'🧸',gen:genShop2,n:5}]
+};
+
+/* ---------- Startsida ---------- */
+let G=null,toastT;
+function show(id){$$('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2800);}
+const starHtml=n=>`<span class="stars">${[1,2,3].map(i=>i<=n?'★':'<span class="off">★</span>').join('')}</span>`;
+function openHome(){
+  G=null;if('speechSynthesis' in window)speechSynthesis.cancel();
+  const g=data.grade;$$('#segGrade button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===g));
+  const dg=data.diag[g];const A=$('#areas');A.innerHTML='';
+  AREAS[g].forEach(a=>{
+    const b=document.createElement('button');b.className='acard';
+    const dm=dg&&dg.areas[a.id]?`<span class="diagmark">${dg.areas[a.id].map(o=>o?'<span class="y">✓</span>':'<span class="n">✗</span>').join('')}</span>`:'<span></span>';
+    b.innerHTML=`<span class="ic">${a.ic}</span><b>${a.name}</b><span class="meta">${starHtml((data.stars[g]||{})[a.id]||0)}${dm}</span>`;
+    b.onclick=()=>startTrain(a);A.appendChild(b);
+  });
+  $('#diagInfo').textContent=dg?`Senaste diagnos: ${dg.ok} av ${dg.n} rätt (${dg.date}). ✓ och ✗ på korten visar resultatet.`:'Två uppgifter från varje område. Svaren rättas i slutet.';
+  show('home');
+}
+$$('#segGrade button').forEach(b=>b.onclick=()=>{data.grade=+b.dataset.v;save();openHome();});
+$('#btnDiag').onclick=startDiag;
+
+/* ---------- Spelet ---------- */
+function startTrain(area){G={mode:'train',area,n:area.n||8,i:-1,right:0};show('game');nextTask();}
+function startDiag(){const list=[];AREAS[data.grade].forEach(a=>{list.push(a,a);});G={mode:'diag',list,n:list.length,i:-1,results:[]};show('game');nextTask();}
+const ctx={
+  get train(){return G&&G.mode==='train';},
+  locked:()=>!G||G.locked,
+  miss(){G.first=false;},
+  say(msg,cls='bad'){$('#feedback').textContent=msg;$('#task').className='task'+(msg&&cls?' '+cls:'');},
+  finish(ok,given){taskDone(ok,given);}
+};
+function nextTask(){
+  if(!G)return;G.i++;if(G.i>=G.n)return finish();
+  const area=G.mode==='diag'?G.list[G.i]:G.area;let t;
+  for(let k=0;k<6;k++){t=area.gen();if(!G.lastAnswer||t.answer!==G.lastAnswer)break;}
+  G.lastAnswer=t.answer;
+  Object.assign(G,{t,area,bi:0,input:'',tries:0,first:true,given:[],allOk:true,locked:false});
+  if('speechSynthesis' in window)speechSynthesis.cancel();
+  $('#info').textContent=`${G.mode==='diag'?'Diagnos: ':''}${G.i+1} av ${G.n}`;$('#prog').style.width=(G.i/G.n*100)+'%';
+  $('#instr').textContent=t.instr;$('#content').innerHTML=t.html;ctx.say('','');
+  $('#pad').hidden=t.kind!=='keys';
+  if(t.kind==='keys')renderBoxes();
+  if(t.mount)t.mount($('#content'),ctx);
+}
+$('#spk').onclick=()=>{if(G&&G.t)speak(G.t.speak);};
+function renderBoxes(){
+  $('#content').querySelectorAll('[data-b]').forEach(el=>{
+    const i=+el.dataset.b,t=G.t;
+    if(i<G.bi){el.className='box '+(G.mode==='diag'?'given':'done');el.textContent=G.mode==='diag'?G.given[i]:t.boxes[i];}
+    else if(i===G.bi&&!G.locked){el.className='box act';el.textContent=G.input||'?';}
+    else{el.className='box';el.textContent='?';}
+  });
+}
+function press(k){
+  if(!G||G.locked||!G.t||G.t.kind!=='keys'||G.busy)return;
+  const want=G.t.boxes[G.bi];
+  if(k==='del')G.input=G.input.slice(0,-1);
+  else if(k==='ok'){if(G.input)submit();return;}
+  else if(G.input.length<3)G.input+=k;
+  renderBoxes();
+  if(G.mode==='train'&&G.input.length>=String(want).length){G.busy=true;setTimeout(()=>{G.busy=false;submit();},120);}
+}
+$$('#pad button').forEach(b=>b.onclick=()=>press(b.dataset.k));
+document.addEventListener('keydown',e=>{
+  if($('#game').hidden||!G)return;
+  if(/^[0-9]$/.test(e.key))press(e.key);
+  else if(e.key==='Backspace'){e.preventDefault();press('del');}
+  else if(e.key==='Enter'){e.preventDefault();press('ok');}
+});
+const PRAISE=['Rätt!','Snyggt!','Bra!','Toppen!','Klockrent!'];
+function submit(){
+  if(!G||G.locked||!G.input)return;
+  const t=G.t,v=+G.input,want=t.boxes[G.bi];
+  if(G.mode==='diag'){
+    G.given.push(v);if(v!==want)G.allOk=false;G.bi++;G.input='';
+    if(G.bi>=t.boxes.length)return taskDone(G.allOk,G.given.join(', '));
+    return renderBoxes();
+  }
+  if(v===want){
+    if(t.onBox)t.onBox(G.bi,$('#content'));G.bi++;G.input='';G.tries=0;
+    if(G.bi>=t.boxes.length){renderBoxes();return taskDone(true);}
+    ctx.say('Rätt!','ok');renderBoxes();return;
+  }
+  G.first=false;G.tries++;
+  ctx.say(G.tries>=2?`Svaret är ${want}. Skriv ${want}.`:t.hint(G.bi,$('#content')));
+  G.locked=true;
+  setTimeout(()=>{if(!G)return;G.locked=false;G.input='';renderBoxes();},650);
+}
+function taskDone(ok,given){
+  G.locked=true;renderBoxes&&G.t.kind==='keys'&&renderBoxes();
+  if(G.mode==='diag'){G.results.push({area:G.area,ok,given,answer:G.t.answer,instr:G.t.instr});ctx.say('Sparat!','ok');setTimeout(nextTask,450);return;}
+  if(G.first)G.right++;
+  ctx.say(G.first?PRAISE[Math.floor(Math.random()*PRAISE.length)]:'Nu blev det rätt!','ok');
+  setTimeout(nextTask,1100);
+}
+$('#quit').onclick=openHome;
+
+/* ---------- Resultat ---------- */
+function finish(){
+  const g=data.grade;let party=false;$('#rDetails').innerHTML='';
+  if(G.mode==='train'){
+    const n=G.n,r=G.right,st=r===n?3:r>=n-2?2:1;
+    data.stars[g]=data.stars[g]||{};if(st>(data.stars[g][G.area.id]||0))data.stars[g][G.area.id]=st;save();
+    $('#rTitle').textContent=st===3?'Alla rätt direkt!':st===2?'Bra jobbat!':'Klart!';
+    $('#rBig').innerHTML=starHtml(st);$('#rSub').textContent=`${r} av ${n} rätt på första försöket.`;party=st===3;
+  }else{
+    const ok=G.results.filter(x=>x.ok).length,areas={};
+    G.results.forEach(x=>{(areas[x.area.id]=areas[x.area.id]||[]).push(x.ok);});
+    const d=new Date(),date=`${d.getDate()}/${d.getMonth()+1}`;
+    data.diag[g]={ok,n:G.n,areas,date};save();
+    $('#rTitle').textContent='Diagnosen är klar!';$('#rBig').textContent=`${ok}/${G.n}`;$('#rSub').textContent='rätt svar';
+    let h='<div class="dlist">'+AREAS[g].map(a=>`<div class="r"><span>${a.ic} ${a.name}</span><span>${(areas[a.id]||[]).map(o=>o?'<span class="y">✓</span>':'<span class="n">✗</span>').join(' ')}</span></div>`).join('')+'</div>';
+    const wrong=G.results.filter(x=>!x.ok);
+    if(wrong.length)h+='<div class="dlist"><h3>Titta på de här tillsammans</h3>'+wrong.map(x=>`<p>${x.area.ic} <b>${x.answer}</b><br><small>Svaret som gavs: ${x.given}</small></p>`).join('')+'</div>';
+    $('#rDetails').innerHTML=h;party=ok===G.n;
+  }
+  $('#prog').style.width='100%';show('result');if(party)confetti();
+}
+$('#rAgain').onclick=()=>{if(!G)return;G.mode==='train'?startTrain(G.area):startDiag();};
+$('#rHome').onclick=openHome;
+
+/* ---------- Konfetti ---------- */
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cols=['#3D8BFD','#FF9F43','#2BB673','#FFC93C','#7B61FF','#FF6B6B'];
+  const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
+  c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,
+    r:Math.random()*7+5,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  const t0=performance.now();
+  (function f(now){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
+    x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(now-t0<2800)requestAnimationFrame(f);else{x.clearRect(0,0,W,H);c.hidden=true;}})(t0);
+}
+
+openHome();
+</script>
+</body>
+</html>
