@@ -1,98 +1,183 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matte-Portalen</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #eef2f5; color: #333;
-            margin: 0; padding: 0; min-height: 100vh;
-        }
-        .portal-header {
-            background-color: #4a90e2; color: white;
-            text-align: center; padding: 1.5rem 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .portal-header h1 { margin: 0; font-size: clamp(1.4rem, 5vw, 2.2rem); }
-        .portal-header p  { margin: 4px 0 0; opacity: .9; font-size: clamp(.85rem, 3vw, 1rem); }
-        .menu-container {
-            max-width: 1000px; margin: 24px auto; padding: 0 16px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-            gap: 18px;
-        }
-        .game-card {
-            background: white; border-radius: 14px; padding: 20px;
-            text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .game-card h3 { margin: 0 0 8px; color: #333; font-size: 1.2rem; }
-        .game-card p  { color: #666; font-size: .95rem; line-height: 1.4; margin-bottom: 16px; }
-        .start-game-btn {
-            display: block; text-align: center; text-decoration: none;
-            color: white; padding: 12px 16px; font-size: 1rem; font-weight: bold;
-            border-radius: 8px; width: 100%;
-        }
-        .start-game-btn:focus-visible { outline: 3px solid #1D2B53; outline-offset: 3px; }
-        .color-1 { background: #4caf50; }
-        .color-2 { background: #2196F3; }
-        .color-3 { background: #f5a623; }
-        .color-5 { background: #22609a; }
-        .color-6 { background: #3c9a50; }
-        .color-7 { background: #5c6bc0; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matte-Portalen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --sun:#FFC93C; --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+/* ---------- Rubrik ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(160deg,#3D5AFE 0%,#3D8BFD 55%,#17AFC4 100%);color:#fff;
+  padding:calc(18px + env(safe-area-inset-top,0px)) 16px 58px}
+.hero::after{content:"";position:absolute;left:-5%;right:-5%;bottom:-1px;height:44px;background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0}
+.floaty{position:absolute;inset:0;pointer-events:none}
+.floaty span{position:absolute;font-weight:800;color:rgba(255,255,255,.16);animation:bob 6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--r))}50%{transform:translateY(-10px) rotate(var(--r))}}
+.hero-in{position:relative;z-index:1;max-width:760px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.title{flex:1;min-width:0}
+.title h1{margin:0;font-weight:800;line-height:.95;font-size:clamp(2.5rem,11vw,4.2rem);letter-spacing:-1px;text-shadow:0 4px 0 rgba(0,0,0,.14)}
+.title h1 .p2{color:var(--sun);display:block}
+.title p{margin:10px 0 0;font-size:clamp(1rem,4vw,1.2rem);font-weight:700;opacity:.95}
+.owlwrap{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;width:clamp(110px,30vw,160px)}
+.bubble{position:relative;background:#fff;color:var(--ink);border-radius:16px;padding:8px 10px;font-weight:700;font-size:.85rem;line-height:1.25;text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.12)}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);border:9px solid transparent;border-top-color:#fff;border-bottom:0}
+.owl{width:100%;height:auto;display:block;animation:tilt 5s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes tilt{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+
+/* ---------- Framsteg ---------- */
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 40px}
+.stats{display:flex;gap:10px;margin:-6px 0 18px;position:relative;z-index:2}
+.stat{flex:1;background:var(--card);border-radius:18px;padding:10px 12px;box-shadow:0 4px 0 var(--line);display:flex;align-items:center;gap:10px;min-width:0}
+.stat .ic{font-size:1.8rem;line-height:1;flex:none}
+.stat b{display:block;font-size:1.4rem;line-height:1}
+.stat small{display:block;color:var(--muted);font-weight:700;font-size:.85rem;line-height:1.2}
+
+/* ---------- Övningar ---------- */
+.cards{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:620px){.cards{grid-template-columns:1fr 1fr}}
+.card{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:20px;padding:12px 14px 12px 12px;text-decoration:none;
+  box-shadow:0 5px 0 var(--line);transition:transform .08s,box-shadow .08s}
+.card:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+@media(hover:hover){.card:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--line)}}
+.tile{flex:none;width:72px;height:72px;border-radius:18px;background:var(--c);color:#fff;display:grid;place-items:center;
+  font-weight:800;font-size:1.9rem;line-height:1;box-shadow:0 4px 0 rgba(29,43,83,.25);transform:rotate(-4deg)}
+.card:nth-child(even) .tile{transform:rotate(4deg)}
+.tile.sm{font-size:1.45rem}
+.card .txt{flex:1;min-width:0}
+.card b{display:block;font-size:1.3rem;line-height:1.15}
+.card small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3;margin-top:2px}
+.badge{display:inline-block;margin-top:6px;background:#FFF4CC;color:#8A5A00;border-radius:999px;padding:1px 10px;font-weight:700;font-size:.85rem}
+.badge[hidden]{display:none}
+.chev{flex:none;color:#B4C0D8;font-size:1.6rem;font-weight:800}
+.more{margin:26px 0 10px;color:var(--muted);font-weight:800;font-size:1rem;text-transform:uppercase;letter-spacing:.06em}
+.foot{margin-top:26px;color:var(--muted);font-size:.85rem;text-align:center}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
 </head>
 <body>
-    <div class="portal-header">
-        <h1>Välkommen till Matte-Portalen</h1>
-        <p>Välj ett spel eller en övning nedan för att börja träna!</p>
+
+<header class="hero">
+  <div class="floaty" aria-hidden="true">
+    <span style="left:4%;top:12%;font-size:3rem;--r:-12deg">+</span>
+    <span style="left:30%;top:62%;font-size:2.4rem;--r:8deg;animation-delay:-2s">×</span>
+    <span style="left:52%;top:8%;font-size:2rem;--r:14deg;animation-delay:-4s">7</span>
+    <span style="left:68%;top:66%;font-size:2.6rem;--r:-6deg;animation-delay:-1s">÷</span>
+    <span style="left:88%;top:14%;font-size:2.2rem;--r:10deg;animation-delay:-3s">=</span>
+    <span style="left:14%;top:70%;font-size:2rem;--r:-10deg;animation-delay:-5s">3</span>
+    <span style="left:44%;top:40%;font-size:1.8rem;--r:4deg;animation-delay:-2.5s">−</span>
+  </div>
+  <div class="hero-in">
+    <div class="title">
+      <h1>Matte-<span class="p2">Portalen</span></h1>
+      <p>Välj en övning och börja träna!</p>
     </div>
-    <div class="menu-container">
-        <div class="game-card">
-            <div>
-                <h3>Lilla plus &amp; minus</h3>
-                <p>Huvudräkning 0–10 med plus och minus. Öva i lugn takt eller kör Racet mot ditt eget rekord!</p>
-            </div>
-            <a class="start-game-btn color-1" href="lillaplus/">Starta Lilla plus/minus</a>
-        </div>
-        <div class="game-card">
-            <div>
-                <h3>Tiotalsövergång</h3>
-                <p>Räkna via tiotalet med tioruta och tallinje. Fyra nivåer, upp till 20 eller 100.</p>
-            </div>
-            <a class="start-game-btn color-2" href="tiotal/">Starta Tiotalsövergång</a>
-        </div>
-        <div class="game-card">
-            <div>
-                <h3>Taluppfattning (Åk 1–2)</h3>
-                <p>Tallinjer, talföljder, dela upp, likheter och problemlösning. Med diagnos som rättar sig själv.</p>
-            </div>
-            <a class="start-game-btn color-3" href="taluppfattning/">Starta Taluppfattning</a>
-        </div>
-        <div class="game-card">
-            <div>
-                <h3>Nationella prov (Åk 3)</h3>
-                <p>Träna på delprov B–G med nya uppgifter varje gång, eller gör riktiga gamla prov som rättar sig själva.</p>
-            </div>
-            <a class="start-game-btn color-5" href="np3/">Träna nationella prov</a>
-        </div>
-        <div class="game-card">
-            <div>
-                <h3>Tiobasmaterial</h3>
-                <p>Hundraplattor, tiostavar och ental. Växla och räkna plus och minus upp till 1000.</p>
-            </div>
-            <a class="start-game-btn color-6" href="tiobas/">Öppna tiobasmaterialet</a>
-        </div>
-        <div class="game-card">
-            <div>
-                <h3>Multiplikation</h3>
-                <p>Träna på tabellerna 1–10 var för sig, blanda dina egna, eller kör Racet mot ditt eget spöke.</p>
-            </div>
-            <a class="start-game-btn color-7" href="multiplikation/">Träna multiplikation</a>
-        </div>
+    <div class="owlwrap">
+      <div class="bubble" id="bubble">Hej!</div>
+      <svg class="owl" viewBox="0 0 120 120" role="img" aria-label="Matteugglan">
+        <ellipse cx="60" cy="112" rx="34" ry="5" fill="rgba(0,0,0,.18)"/>
+        <path d="M24 44 L30 16 L46 34 Z" fill="#6B4E9B"/><path d="M96 44 L90 16 L74 34 Z" fill="#6B4E9B"/>
+        <ellipse cx="60" cy="68" rx="40" ry="42" fill="#8A6BC6"/>
+        <ellipse cx="60" cy="80" rx="26" ry="28" fill="#F3E8FF"/>
+        <path d="M44 74q4 4 8 0M56 82q4 4 8 0M68 74q4 4 8 0M50 92q4 4 8 0M62 92q4 4 8 0" stroke="#C9B3EC" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="42" cy="50" r="17" fill="#fff"/><circle cx="78" cy="50" r="17" fill="#fff"/>
+        <circle cx="42" cy="50" r="17" fill="none" stroke="#FFC93C" stroke-width="4"/><circle cx="78" cy="50" r="17" fill="none" stroke="#FFC93C" stroke-width="4"/>
+        <line x1="59" y1="50" x2="61" y2="50" stroke="#FFC93C" stroke-width="4"/>
+        <circle cx="45" cy="52" r="7" fill="#1D2B53"/><circle cx="75" cy="52" r="7" fill="#1D2B53"/>
+        <circle cx="47.5" cy="49.5" r="2.4" fill="#fff"/><circle cx="77.5" cy="49.5" r="2.4" fill="#fff"/>
+        <path d="M55 62 L65 62 L60 71 Z" fill="#FF9F43"/>
+        <path d="M22 72q-10 10 -2 24q8-6 10-16z" fill="#6B4E9B"/><path d="M98 72q10 10 2 24q-8-6-10-16z" fill="#6B4E9B"/>
+        <path d="M46 108h8M66 108h8" stroke="#FF9F43" stroke-width="5" stroke-linecap="round"/>
+      </svg>
     </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="stats">
+    <div class="stat"><span class="ic">⭐</span><span><b id="sStars">0</b><small>stjärnor och medaljer</small></span></div>
+    <div class="stat"><span class="ic">🔥</span><span><b id="sDays">0</b><small id="sDaysTxt">dagar i rad</small></span></div>
+  </div>
+
+  <nav class="cards" aria-label="Övningar">
+    <a class="card" href="lillaplus/"><span class="tile sm" style="--c:#2BB673">+ −</span><span class="txt"><b>Lilla plus &amp; minus</b><small>Huvudräkning med tal upp till 10.</small><span class="badge" id="bLilla" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="tiotal/"><span class="tile" style="--c:#3D8BFD">10</span><span class="txt"><b>Tiotalsövergång</b><small>Räkna via tiotalet med tioruta och tallinje.</small><span class="badge" id="bTiotal" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="taluppfattning/"><span class="tile sm" style="--c:#FF9F43">123</span><span class="txt"><b>Taluppfattning</b><small>Tallinjer, talföljder, dela upp och problemlösning.</small><span class="badge" id="bTal" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="multiplikation/"><span class="tile" style="--c:#7B61FF">×</span><span class="txt"><b>Multiplikation</b><small>Tabellerna 1–10. Samla medaljer!</small><span class="badge" id="bMulti" hidden></span></span><span class="chev">›</span></a>
+  </nav>
+
+  <p class="more">Mer att träna på</p>
+  <nav class="cards" aria-label="Fler övningar">
+    <a class="card" href="np3/"><span class="tile sm" style="--c:#FF6B6B">NP</span><span class="txt"><b>Nationella prov</b><small>Träna inför proven i åk 3. Nya uppgifter varje gång.</small><span class="badge" id="bNp" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="tiobas/"><span class="tile sm" style="--c:#17AFC4">100</span><span class="txt"><b>Tiobasmaterial</b><small>Hundratal, tiotal och ental. Växla och räkna upp till 1000.</small></span><span class="chev">›</span></a>
+  </nav>
+
+  <p class="foot">Dina stjärnor och rekord sparas i den här webbläsaren.</p>
+</main>
+
+<script>
+const get=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
+const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const show=(id,t)=>{const el=document.getElementById(id);if(t){el.textContent=t;el.hidden=false}};
+const fmt=ms=>(ms/1000).toFixed(1).replace(".",",")+" s";
+const sum=o=>Object.values(o||{}).reduce((s,v)=>s+(typeof v==="number"?v:sum(v)),0);
+let stars=0;
+
+/* Multiplikation: medaljer per tabell (brons 1, silver 2, guld 3) */
+const mu=get("mattespel-multiplikation-v1");
+if(mu&&mu.facts){
+  const h=(a,b)=>mu.facts[Math.min(a,b)+"x"+Math.max(a,b)]||[];
+  const lv=(a,b)=>{const x=h(a,b);if(!x.length)return 0;const l=x.slice(-2);if(l.length===2&&l[0][0]&&l[1][0])return(l[0][1]<3000&&l[1][1]<3000)?3:2;return 1};
+  const md=T=>{const k=[1,2,3,4,5,6,7,8,9,10];if(k.every(n=>lv(n,T)===3))return 3;if(k.every(n=>lv(n,T)>=2))return 2;if(k.every(n=>h(n,T).some(x=>x[0])))return 1;return 0};
+  const m=[1,2,3,4,5,6,7,8,9,10].map(md),n=m.filter(Boolean).length,g=m.filter(x=>x===3).length;
+  stars+=m.reduce((s,x)=>s+x,0);
+  if(n)show("bMulti",`🏅 ${n} ${n===1?"medalj":"medaljer"}${g?` · ${g} guld`:""}`);
+}
+/* Tiotalsövergång och Taluppfattning: stjärnor per nivå/område */
+const ti=get("mattespel-tiotal-v1");if(ti&&ti.stars){const s=sum(ti.stars);stars+=s;if(s)show("bTiotal",`⭐ ${s} stjärnor`)}
+const ta=get("mattespel-taluppfattning-v1");if(ta&&ta.stars){const s=sum(ta.stars);stars+=s;if(s)show("bTal",`⭐ ${s} stjärnor`)}
+/* Lilla plus & minus: bästa rekord */
+const lp=get("mattespel-lillaplus-v1");
+if(lp){const bl=Math.max(0,...Object.values(lp.blitz||{}));const rc=Object.values(lp.race||{}).map(r=>r.time);
+  if(bl)show("bLilla",`⚡ Rekord: ${bl} rätt på 60 s`);else if(rc.length)show("bLilla",`🏁 Rekord: ${fmt(Math.min(...rc))}`);}
+/* Nationella prov: senaste resultat */
+const np=get("np3-resultat");
+if(np){const last=Object.values(np).sort((a,b)=>b.d-a.d)[0];if(last)show("bNp",`Senast: ${last.r} av ${last.t} rätt`)}
+document.getElementById("sStars").textContent=stars;
+
+/* Dagar i rad: en dag räknas när något har tränats (framstegen har ändrats sedan förra besöket) */
+const day=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today=day(new Date()),yest=day(new Date(Date.now()-864e5));
+const snap=["mattespel-multiplikation-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat"].map(k=>localStorage.getItem(k)||"").join("|");
+let fp=0;for(let i=0;i<snap.length;i++)fp=(fp*31+snap.charCodeAt(i))|0;
+const st=get("matteportalen-dagar")||{fp:null,days:[]};
+if(st.fp!==null&&st.fp!==fp&&!st.days.includes(today))st.days.push(today);
+if(st.fp===null&&snap.replace(/\|/g,"")&&!st.days.includes(today))st.days.push(today);
+st.fp=fp;st.days=st.days.slice(-60);put("matteportalen-dagar",st);
+let streak=0;{const set=new Set(st.days);let d=new Date();if(!set.has(today))d=new Date(Date.now()-864e5);while(set.has(day(d))){streak++;d=new Date(d.getTime()-864e5)}}
+document.getElementById("sDays").textContent=streak;
+document.getElementById("sDaysTxt").textContent=streak===0?"dagar i rad. Börja idag!":streak===1?"dag i rad":"dagar i rad";
+
+/* Ugglan hälsar */
+const hr=new Date().getHours();
+const hi=hr<5?"Hej nattuggla!":hr<10?"God morgon!":hr<17?"Hej!":"God kväll!";
+let msg;
+if(streak>=1&&!st.days.includes(today))msg=`Träna idag så blir det ${streak+1} dagar i rad!`;
+else if(streak>=2)msg=`${streak} dagar i rad. Snyggt!`;
+else if(stars>0)msg=`Du har ${stars} ⭐. Vad tränar vi idag?`;
+else msg="Vad vill du träna idag?";
+document.getElementById("bubble").textContent=`${hi} ${msg}`;
+</script>
 </body>
 </html>
