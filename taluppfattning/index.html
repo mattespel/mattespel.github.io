@@ -189,6 +189,7 @@ button.item.right{border-color:var(--good);background:#DDF5E7}
 <div class="toast" id="toast" hidden></div>
 <canvas id="fx" hidden></canvas>
 
+<script src="../ljud.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -424,7 +425,7 @@ const ctx={
   get train(){return G&&G.mode==='train';},
   locked:()=>!G||G.locked,
   miss(){G.first=false;},
-  say(msg,cls='bad'){$('#feedback').textContent=msg;$('#task').className='task'+(msg&&cls?' '+cls:'');},
+  say(msg,cls='bad'){if(msg&&G&&G.mode==='train'&&window.Ljud)cls==='ok'?Ljud.ok():Ljud.bad();$('#feedback').textContent=msg;$('#task').className='task'+(msg&&cls?' '+cls:'');},
   finish(ok,given){taskDone(ok,given);}
 };
 function nextTask(){
@@ -518,7 +519,7 @@ $('#rAgain').onclick=()=>{if(!G)return;G.mode==='train'?startTrain(G.area):start
 $('#rHome').onclick=openHome;
 
 /* ---------- Konfetti ---------- */
-function confetti(){
+function confetti(){window.Ljud&&Ljud.fanfare();
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const cols=['#3D8BFD','#FF9F43','#2BB673','#FFC93C','#7B61FF','#FF6B6B'];
   const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
