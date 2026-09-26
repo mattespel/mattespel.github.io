@@ -271,6 +271,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <div class="count" id="count" hidden></div>
 <div class="toast" id="toast" hidden></div>
 <canvas id="fx" hidden></canvas>
+<script src="../ljud.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -487,13 +488,13 @@ function submit(){
   if(!G.retry){record(f,ok,ms);save();const w=ok?ms:ms+8000,s=G.slow[key];if(!s||w>s.w)G.slow[key]={f,w};if(!ok)G.missed.add(key);}
   G.busy=true;renderQ();
   if(ok){
-    G.correct++;G.streak++;$('#qbox').classList.add('ok');
+    G.correct++;G.streak++;$('#qbox').classList.add('ok');window.Ljud&&Ljud.ok();
     $('#feedback').textContent=G.streak>=5?`${G.streak} rätt i rad!`:PRAISE[Math.floor(Math.random()*PRAISE.length)];
     if(G.mode==='order'){const s=document.createElement('span');s.innerHTML=miniHTML(f);s.style.setProperty('--c',tcolor(f.d));$('#ladder').classList.toggle('dark',f.d===3);$('#ladder').appendChild(s);}
     if(G.mode==='race'){G.times.push(elapsed());setPos($('#carMe'),G.correct/20);updateInfo();if(G.correct>=20){setTimeout(finish,500);return;}}
     setTimeout(nextQ,G.mode==='blitz'?200:450);
   }else{
-    G.streak=0;$('#qbox').classList.add('bad');
+    G.streak=0;$('#qbox').classList.add('bad');window.Ljud&&Ljud.bad();
     if(G.mode==='blitz'){$('#feedback').innerHTML=`Rätt svar: ${ansTxt(f)}`;setTimeout(nextQ,1300);}
     else if(G.mode==='race'){$('#feedback').textContent='Försök igen!';G.retry=true;
       setTimeout(()=>{if(G&&!G.over){G.inputs=['',''];G.slot=0;G.busy=false;$('#qbox').className='qbox';$('#feedback').textContent='';renderQ();}},600);}
@@ -591,7 +592,7 @@ function renderBoard(){
 $('#resetBtn').onclick=()=>{if(confirm('Vill du nollställa alla framsteg och rekord i division i den här webbläsaren?')){data={facts:{},race:{},blitz:{},rest:false};save();renderBoard();toast('Framstegen är nollställda.');}};
 
 /* ---------- Konfetti ---------- */
-function confetti(){
+function confetti(){window.Ljud&&Ljud.fanfare();
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
   c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
