@@ -78,6 +78,15 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 .box{display:inline-block;min-width:1.7em;padding:0 .2em;border-radius:10px;border:3px dashed var(--line);color:#B4C0D8;line-height:1.15}
 .box.act{border:3px solid var(--accent);color:var(--accent);background:#EEF1FF}
 .box.done{border:3px solid transparent;background:#FFE9D2;color:#C96A0C}
+.tree{position:relative;display:inline-block;padding:2px 6px}
+.legs{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.trow{font-size:clamp(1.35rem,6.6vw,2.3rem);font-weight:800;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:.22em;position:relative;z-index:1;line-height:1.3}
+.trow+.trow{margin-top:30px}
+.circ{display:inline-grid;place-items:center;width:1.55em;height:1.55em;border:3px solid var(--blue);border-radius:50%;background:#fff}
+.grp{background:#E4E0F7;border-radius:10px;padding:0 .2em}
+.tree .box{min-width:1.4em}
+.endres{color:#B4C0D8}
+.endres.show{color:var(--ink)}
 .feedback{min-height:1.5em;font-weight:800;font-size:1.1rem;margin-top:4px}
 .qbox.ok .feedback{color:var(--good)}
 .qbox.bad .feedback{color:var(--bad)}
@@ -122,7 +131,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <section id="home" class="screen">
   <a class="back" href="../">← Till huvudmenyn</a>
   <h1>Tiotalsövergång</h1>
-  <p class="lead">Lär dig räkna via tiotalet. Klara en nivå för att låsa upp nästa.</p>
+  <p class="lead">Addera först tiokompisarna, sedan resten. Klara en nivå för att låsa upp nästa.</p>
   <div class="pick"><div class="lbl">Talområde</div>
     <div class="seg" id="segRange"><button data-v="20">Upp till 20</button><button data-v="100">Upp till 100</button></div></div>
   <div class="pick"><div class="lbl">Räknesätt</div>
@@ -207,10 +216,10 @@ const fmt=ms=>(ms/1000).toFixed(1).replace('.',',')+' s';
 const starHtml=n=>`<span class="stars">${[1,2,3].map(i=>i<=n?'★':'<span class="off">★</span>').join('')}</span>`;
 function levelInfo(lv){
   const r=set.range===20,p=set.op==='plus';
-  if(lv===1)return p?['Tiokamrater',r?'Hur mycket fattas till 10?':'Hur mycket fattas till nästa tiotal?']
+  if(lv===1)return p?[r?'Tiokompisar':'Till nästa tiotal',r?'Vilken är talets tiokompis?':'Hur mycket fattas till nästa tiotal?']
                     :['Ner till tiotalet',r?'Hur mycket ska bort för att komma till 10?':'Hur mycket ska bort för att komma till tiotalet?'];
-  if(lv===2)return think()?['Hoppa via 10','Hur långt är det till 10, och sedan vidare?']:['Dela upp',`Dela upp talet så att du landar på ${r?'10':'tiotalet'}.`];
-  if(lv===3)return['Hela strategin',`Räkna via ${r?'10':'tiotalet'}, steg för steg.`];
+  if(lv===2)return think()?['Hoppa via 10','Hur långt är det till 10, och sedan vidare?']:['Dela upp',p?'Dela upp talet i tiokompisen och resten.':`Dela upp talet så att du först landar på ${r?'10':'tiotalet'}.`];
+  if(lv===3)return['Hela strategin',p?'Addera först tiokompisarna, sedan resten.':'Subtrahera först ner till tiotalet, sedan resten.'];
   return['Racet',`${RACE_LEN} uppgifter utan stöd. Kör mot ditt spöke.`];
 }
 function openHome(){
@@ -265,7 +274,7 @@ function plan(t,lv){
     const p2=b-p1,rows=[[a,'+',box('p1'),'=',D],[b,'=',box('p1'),'+',box('p2')]],steps=[{k:'p1',v:p1},{k:'p2',v:p2}];
     if(lv===3){rows.push([a,'+',b,'=',box('res')]);steps.push({k:'res',v:a+b});}
     if(lv===4)return{D,rows:[[a,'+',b,'=',box('res')]],steps:[{k:'res',v:a+b}],main:true};
-    return{D,p1,p2,rows,steps};
+    return{D,p1,p2,rows,steps,tree:true};
   }
   const D=Math.floor(a/10)*10,p1=a-D;
   if(lv===1)return{D,rows:[[a,'−',box('p1'),'=',D]],steps:[{k:'p1',v:p1}]};
@@ -277,29 +286,31 @@ function plan(t,lv){
   }
   const p2=b-p1,rows=[[a,'−',box('p1'),'=',D],[b,'=',box('p1'),'+',box('p2')]],steps=[{k:'p1',v:p1},{k:'p2',v:p2}];
   if(lv===3){rows.push([a,'−',b,'=',box('res')]);steps.push({k:'res',v:a-b});}
-  return{D,p1,p2,rows,steps};
+  return{D,p1,p2,rows,steps,tree:true};
 }
 function promptFor(t,P,k){
   const {a,b}=t;
   if(P.main)return'';
   if(t.op==='plus'){
-    if(k==='p1')return`Hur mycket behöver ${a} för att bli ${P.D}?`;
-    if(k==='p2')return`Dela upp ${b}: ${P.p1} och hur mycket mer?`;
-    return`Vad blir ${a} + ${b}?`;
+    if(!P.tree)return set.range===20?`Vilken är ${a}:ans tiokompis?`:`Hur mycket behöver ${a} för att bli ${P.D}?`;
+    if(k==='p1')return`1. Addera först tiokompisarna. ${a} + ? = ${P.D}`;
+    if(k==='p2')return`2. Addera sedan resten. Hur mycket är kvar av ${b}?`;
+    return`Vad blir ${P.D} + ${P.p2}?`;
   }
   if(think()){
     if(k==='p1')return`Hur långt är det från ${b} till 10?`;
     if(k==='p2')return`Hur långt är det från 10 till ${a}?`;
     return`Lägg ihop hoppen. Vad blir ${a} − ${b}?`;
   }
-  if(k==='p1')return`Hur mycket ska bort för att ${a} ska bli ${P.D}?`;
-  if(k==='p2')return`Dela upp ${b}: ${P.p1} och hur mycket mer?`;
-  return`Vad blir ${a} − ${b}?`;
+  if(!P.tree)return`Hur mycket ska bort för att ${a} ska bli ${P.D}?`;
+  if(k==='p1')return`1. Subtrahera först ner till tiotalet. ${a} − ? = ${P.D}`;
+  if(k==='p2')return`2. Subtrahera sedan resten. Hur mycket är kvar av ${b}?`;
+  return`Vad blir ${P.D} − ${P.p2}?`;
 }
 function hintFor(t,P,k){
   if(t.op==='plus'){
-    if(k==='p1')return'Räkna de tomma rutorna i den första tiorutan.';
-    if(k==='p2')return`${P.p1} + ? = ${t.b}`;
+    if(k==='p1')return'Räkna de tomma rutorna i den första tiorutan. Så många fattas till ett helt tiotal.';
+    if(k==='p2')return`${t.b} delas upp i ${P.p1} och ?. ${P.p1} + ? = ${t.b}`;
     return`Du är på ${P.D}. ${P.D} + ${P.p2} = ?`;
   }
   if(think()){
@@ -308,7 +319,7 @@ function hintFor(t,P,k){
     return`Lägg ihop hoppen: ${P.p1} + ${P.p2} = ?`;
   }
   if(k==='p1')return'Hur många prickar finns i den högra tiorutan?';
-  if(k==='p2')return`${P.p1} + ? = ${t.b}`;
+  if(k==='p2')return`${t.b} delas upp i ${P.p1} och ?. ${P.p1} + ? = ${t.b}`;
   return`Du är på ${P.D}. ${P.D} − ${P.p2} = ?`;
 }
 
@@ -398,8 +409,28 @@ function nextTask(){
   startStep();
 }
 function startStep(){G.input='';G.tries=0;G.busy=false;$('#qbox').className='qbox';$('#feedback').textContent='';renderRows();}
+function boxHtml(k){const idx=G.steps.findIndex(s=>s.k===k),done=idx<G.si,act=idx===G.si;
+  const val=done?G.steps[idx].v:act?(G.input||'?'):'?';return`<span class="box${done?' done':''}${act?' act':''}">${val}</span>`;}
+function renderTree(){
+  const t=G.t,s=sym(t),done=G.si>=G.steps.length;
+  const end=G.lv===3?`<span>=</span>${boxHtml('res')}`:`<span class="endres${done?' show':''}">= ${done?tres(t):'?'}</span>`;
+  $('#rows').innerHTML=`<div class="tree" id="tree"><svg class="legs" id="legs"></svg>
+    <div class="trow"><span>${t.a}</span><span>${s}</span><span class="circ" id="tc">${t.b}</span></div>
+    <div class="trow"><span>=</span><span class="grp" id="tg1">${t.a} ${s} ${boxHtml('p1')}</span><span>${s}</span><span id="tg2">${boxHtml('p2')}</span>${end}</div></div>`;
+  requestAnimationFrame(drawLegs);
+}
+function drawLegs(){
+  const tr=$('#tree');if(!tr||!$('#tg1 .box'))return;
+  const R=tr.getBoundingClientRect(),c=$('#tc').getBoundingClientRect();
+  const cx=c.left+c.width/2-R.left,cy=c.bottom-R.top;
+  const leg=(el,col)=>{const b=el.getBoundingClientRect();return`<line x1="${cx}" y1="${cy}" x2="${b.left+b.width/2-R.left}" y2="${b.top-R.top-2}" stroke="${col}" stroke-width="3.5" stroke-linecap="round"/>`;};
+  const L=$('#legs');L.setAttribute('width',R.width);L.setAttribute('height',R.height);
+  L.innerHTML=leg($('#tg1 .box'),'#3D8BFD')+leg($('#tg2 .box'),'#FF9F43');
+}
+window.addEventListener('resize',()=>{if(G&&G.P&&G.P.tree)drawLegs();});
 function renderRows(){
   const step=G.steps[G.si];
+  if(G.P.tree){$('#prompt').hidden=false;$('#prompt').textContent=step?promptFor(G.t,G.P,step.k):'';renderTree();return;}
   $('#prompt').textContent=step?promptFor(G.t,G.P,step.k):'';
   $('#prompt').hidden=!!G.P.main;
   $('#rows').innerHTML=G.P.rows.map(r=>`<div class="erow${G.P.main?' main':''}">`+r.map(p=>{
@@ -425,10 +456,12 @@ function submit(){
   if(ok){
     G.si++;$('#qbox').classList.add('ok');renderRows();
     if(!G.race)renderVisual();
-    if(G.si<G.steps.length){$('#feedback').textContent=PRAISE[Math.floor(Math.random()*PRAISE.length)];setTimeout(startStep,650);return;}
+    const tenMsg=G.steps[G.si-1].k==='p1'&&!G.race&&!(G.t.op==='minus'&&think()&&G.lv>1)?(G.t.op==='plus'?'Ett helt tiotal!':'Nu är du på tiotalet!'):null;
+    if(G.si<G.steps.length){$('#feedback').textContent=tenMsg||PRAISE[Math.floor(Math.random()*PRAISE.length)];setTimeout(startStep,750);return;}
+    if(tenMsg&&G.lv===1){$('#feedback').textContent=tenMsg;}
     // uppgiften klar
     G.correct++;const ms=performance.now()-G.tStart+(G.taskMissed?6000:0);G.slow[tkey(G.t)]={t:G.t,w:ms};
-    $('#feedback').textContent=G.taskMissed?'Nu blev det rätt!':PRAISE[Math.floor(Math.random()*PRAISE.length)];
+    if(!(tenMsg&&G.lv===1))$('#feedback').textContent=G.taskMissed?'Nu blev det rätt!':PRAISE[Math.floor(Math.random()*PRAISE.length)];
     if(G.race){G.times.push(elapsed());setPos($('#carMe'),G.correct/RACE_LEN);$('#info').textContent=`${G.correct} / ${G.total}`;}
     setTimeout(nextTask,G.race?300:(G.lv===1?700:1100));
   }else{
