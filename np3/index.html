@@ -653,15 +653,28 @@ function fStones(f){
 }
 
 // ======================= DELPROV G =======================
+const SYM_WORDS=["ROS","SOL","MUS","VAS","TAK","BIL","HUS","ARM","KO","IS","OS"];
+const SYM_ALPHA="ABDEFGHIKLMNOPRSTUVY".split("");
 function gSymbols(f){
-  const[p,q]=people(2);const codes=shuf(["✕✕✕","✕✕△","✕△✕","✕△△","△✕✕","△✕△","△△✕","△△△"]).slice(0,5);
-  const letters=shuf("AEILMNORSTU".split("")).slice(0,5);const sp=c=>c.split("").join(" ");
-  const ask=shuf([0,1,2,3,4]).slice(0,3),bIdx=R(0,4);
-  const opts=shuf([0,1,2,3,4]).slice(0,4);if(!opts.includes(bIdx))opts[0]=bIdx;const o2=shuf(opts);
-  return{html:`${p.n} och ${q.n} har hittat på ett hemligt språk med symboler i stället för bokstäver.<div class="box">${codes.map((c,i)=>`<div><span class="sym">${sp(c)}</span> betyder <b>${letters[i]}</b></div>`).join("")}</div>
-    ${sub(0,"Skriv rätt bokstav efter symbolerna.")}${ask.map(i=>`<div class="sub" style="padding-left:2em"><span class="sym">${sp(codes[i])}</span> ${f(T(letters[i],2))}</div>`).join("")}
-    ${sub(1,`Vilka symboler betyder <b>${letters[bIdx]}</b>? ${it("Ringa in.")}`)}<div style="padding-left:2em">${f(MC(o2.map(i=>sp(codes[i])),o2.indexOf(bIdx)))}</div>`,
-    facit:`a) ${ask.map(i=>letters[i]).join(", ")}&nbsp;&nbsp; b) ${sp(codes[bIdx])}`};
+  const[p,q]=people(2);const sp=c=>c.split("").join(" ");
+  const CODES8=["✕✕✕","✕✕△","✕△✕","✕△△","△✕✕","△✕△","△△✕","△△△"];
+  const word=P(SYM_WORDS),wl=word.split("");
+  const fillers=shuf(SYM_ALPHA.filter(c=>!wl.includes(c))).slice(0,5-wl.length);
+  const letters=shuf([...wl,...fillers]);
+  const codes=shuf(CODES8).slice(0,5);
+  const hideIdx=until(()=>R(0,4),i=>!wl.includes(letters[i]));
+  const allShown=shuf(letters);
+  const box=codes.map((c,i)=>`<div><span class="sym">${sp(c)}</span> betyder <b>${i===hideIdx?"?":letters[i]}</b></div>`).join("");
+  const wordCodes=wl.map(L=>sp(codes[letters.indexOf(L)])).map(c=>`<span class="sym">${c}</span>`).join("");
+  const encL=P(wl),corr=letters.indexOf(encL);
+  const distIdx=shuf([0,1,2,3,4].filter(i=>i!==corr&&i!==hideIdx)).slice(0,3);
+  const o2=shuf([corr,...distIdx]);
+  return{html:`${p.n} och ${q.n} har hittat på ett hemligt språk med symboler i stället för bokstäver. En av bokstäverna är bortsuddad.<div class="box">${box}</div>
+    De fem bokstäverna som används är, i blandad ordning: <b>${allShown.join(", ")}</b>.
+    ${sub(0,`Vilken bokstav är bortsuddad? ${it("Titta på vilka bokstäver som redan är använda.")}`)}<div style="padding-left:2em">${f(T(letters[hideIdx],2))}</div>
+    ${sub(1,`Vilket ord blir koderna nedan?`)}<div style="padding-left:2em">${wordCodes} ${f(T(word,word.length+2))}</div>
+    ${sub(2,`Vilken kod betyder bokstaven <b>${encL}</b>? ${it("Ringa in.")}`)}<div style="padding-left:2em">${f(MC(o2.map(i=>sp(codes[i])),o2.indexOf(corr)))}</div>`,
+    facit:`a) ${letters[hideIdx]}&nbsp;&nbsp; b) ${word}&nbsp;&nbsp; c) ${sp(codes[corr])}`};
 }
 const EMO=[["🐟","🐭","🐱"],["🍎","🥕","🍌"],["🐸","🐞","🐢"],["🐰","🦜","🐶"],["⭐","🌙","🍄"]];
 function gPics(f){
@@ -768,7 +781,13 @@ function colWidget(x,y,op,attrs){
   const res=Array.from({length:w},(_,i)=>`<td class="dg"><input class="cin" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Svarssiffra, kolumn ${i+1}"></td>`).join("");
   return `<div class="colpad" ${attrs}><table class="calcgrid live"><tr class="mkrow"><td class="opcell"></td>${mk}</tr><tr><td class="opcell"></td>${top}</tr><tr class="opline"><td class="opcell">${op==="+"?"+":"−"}</td>${bot}</tr><tr class="resrow"><td class="opcell">=</td>${res}</tr></table></div>`;
 }
-const PAD=`<details class="padwrap"><summary>Räkna med uppställning</summary><div class="padform"><input class="pa" inputmode="numeric" aria-label="Första talet" placeholder="tal"><select class="pop" aria-label="Räknesätt"><option value="+">+</option><option value="-">−</option></select><input class="pb" inputmode="numeric" aria-label="Andra talet" placeholder="tal"><button type="button" class="sm padgo">Ställ upp</button></div><div class="padarea"></div></details>`;
+function mulWidget(a,b,attrs){
+  return `<div class="colpad mulpad" ${attrs}><div class="eq"><span>${a} · ${b} =</span> <input class="monoans" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="Svar" style="width:4.2em"></div></div>`;
+}
+function divWidget(a,b,attrs){
+  return `<div class="colpad divpad" ${attrs}><div class="eq" style="display:inline-flex;align-items:center;gap:.5em">${frac(a,b)}<span>=</span><input class="monoans" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="Svar" style="width:4.2em"></div></div>`;
+}
+const PAD=`<details class="padwrap"><summary>Räkna med uppställning</summary><div class="padform"><input class="pa" inputmode="numeric" aria-label="Första talet" placeholder="tal"><select class="pop" aria-label="Räknesätt"><option value="+">+</option><option value="-">−</option><option value="×">×</option><option value="÷">÷</option></select><input class="pb" inputmode="numeric" aria-label="Andra talet" placeholder="tal"><button type="button" class="sm padgo">Ställ upp</button></div><div class="padarea"></div></details>`;
 function wantPad(q,key){
   if(q.pad)return true;
   if(/Gör en beräkning|Visa hur du löser/.test(q.html))return q.fields.some(fd=>fd.k==="num");
@@ -861,21 +880,39 @@ app.addEventListener("input",e=>{
     t.value=t.value.replace(/[^0-9]/g,"");const cp=t.closest(".colpad");if(cp){cp.classList.remove("ok","bad");cp.querySelectorAll(".cin").forEach(c=>c.classList.remove("dok","dbad"))}
     if(t.classList.contains("cin")&&t.value){const row=[...t.closest("tr").querySelectorAll(".cin")],i=row.indexOf(t);if(i>0)row[i-1].focus()}
   }
+  if(t.classList.contains("monoans")){t.value=t.value.replace(/[^0-9]/g,"");t.classList.remove("dok","dbad");const cp=t.closest(".colpad");if(cp)cp.classList.remove("ok","bad")}
 });
 function makePad(w){
   const a=parseInt(w.querySelector(".pa").value),b=parseInt(w.querySelector(".pb").value),op=w.querySelector(".pop").value,area=w.querySelector(".padarea");
   if(isNaN(a)||isNaN(b)||a<0||b<0||a>9999||b>9999){area.innerHTML=`<p class="padmsg bad">Skriv två tal först.</p>`;return}
   if(op==="-"&&b>a){area.innerHTML=`<p class="padmsg bad">Vid minus ska det första talet vara störst.</p>`;return}
-  area.innerHTML=colWidget(a,b,op,`data-pa="${a}" data-pb="${b}" data-pop="${op}"`)+`<div><button type="button" class="sm padchk">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
+  if(op==="÷"&&b===0){area.innerHTML=`<p class="padmsg bad">Det går inte att dela med 0.</p>`;return}
+  const attrs=`data-pa="${a}" data-pb="${b}" data-pop="${op}"`;
+  if(op==="×"){area.innerHTML=mulWidget(a,b,attrs)+`<div><button type="button" class="sm padchk">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
+    area.querySelector(".monoans").focus();return}
+  if(op==="÷"){area.innerHTML=divWidget(a,b,attrs)+`<div><button type="button" class="sm padchk">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
+    area.querySelector(".monoans").focus();return}
+  area.innerHTML=colWidget(a,b,op,attrs)+`<div><button type="button" class="sm padchk">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
   const c=area.querySelectorAll(".cin");if(c.length)c[c.length-1].focus();
 }
 function checkPad(w){
   const cp=w.querySelector(".colpad");if(!cp)return;
-  const a=+cp.dataset.pa,b=+cp.dataset.pb,r=cp.dataset.pop==="+"?a+b:a-b,cins=[...cp.querySelectorAll(".cin")];
+  const a=+cp.dataset.pa,b=+cp.dataset.pb,op=cp.dataset.pop;
+  if(op==="×"||op==="÷"){
+    const inp=cp.querySelector(".monoans");inp.classList.remove("dok","dbad");
+    const got=parseInt(inp.value,10);
+    if(op==="×"){const r=a*b,ok=got===r;inp.classList.add(ok?"dok":"dbad");
+      const m=w.querySelector(".padmsg");m.textContent=ok?`Rätt räknat! ${a} · ${b} = ${r}. Skriv svaret på svarsraden.`:"Titta en gång till. Räkna hoppvis eller rita grupper om det är svårt.";m.className="padmsg "+(ok?"good":"bad");return}
+    const q=Math.floor(a/b),rest=a-q*b,ok=got===q;inp.classList.add(ok?"dok":"dbad");
+    const m=w.querySelector(".padmsg");
+    m.textContent=ok?(rest?`Rätt räknat! ${a} ÷ ${b} = ${q} rest ${rest}. Skriv svaret på svarsraden.`:`Rätt räknat! ${a} ÷ ${b} = ${q}. Skriv svaret på svarsraden.`):"Titta en gång till. Hur många gånger får talet nedanför plats i talet ovanför?";
+    m.className="padmsg "+(ok?"good":"bad");return
+  }
+  const r=op==="+"?a+b:a-b,cins=[...cp.querySelectorAll(".cin")];
   const exp=String(r).padStart(cins.length," ").split("");let ok=true;
   cins.forEach((c,i)=>{c.classList.remove("dok","dbad");const want=exp[i]===" "?"":exp[i],got=c.value.trim();
     if(want===""&&got==="")return;if(got===want)c.classList.add("dok");else{c.classList.add("dbad");ok=false}});
-  const m=w.querySelector(".padmsg");m.textContent=ok?`Rätt räknat! ${a} ${cp.dataset.pop==="+"?"+":"−"} ${b} = ${r}. Skriv svaret på svarsraden.`:"Titta på de röda rutorna och räkna en gång till.";m.className="padmsg "+(ok?"good":"bad");
+  const m=w.querySelector(".padmsg");m.textContent=ok?`Rätt räknat! ${a} ${op==="+"?"+":"−"} ${b} = ${r}. Skriv svaret på svarsraden.`:"Titta på de röda rutorna och räkna en gång till.";m.className="padmsg "+(ok?"good":"bad");
 }
 app.addEventListener("change",e=>{if(e.target.classList.contains("sel"))e.target.classList.remove("ok","bad")});
 app.addEventListener("keydown",e=>{
