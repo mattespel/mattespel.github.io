@@ -260,6 +260,7 @@ select.sel{font:inherit;font-size:1.2rem;min-width:2.8em;height:2.1em;border:2px
   <button class="btn" id="bPrint">Skriv ut</button>
 </div></div>
 
+<script src="../ljud.js"></script>
 <script>
 // ===================== LOGIC START =====================
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
@@ -876,7 +877,7 @@ function grade(){
     app.querySelector(`#q${qi} .facit`).hidden=allOk&&!hasSelf&&!cur.facit;
   });
   if(total===0){res.textContent="Här finns inget som rättas automatiskt. Jämför med facit.";return}
-  res.textContent=right===total?`Alla ${total} rätt! Bra jobbat.`:`Du har ${right} av ${total} rätt. Titta på de röda och försök igen.`;
+  if(window.Ljud)right===total?Ljud.fanfare():Ljud.bad();res.textContent=right===total?`Alla ${total} rätt! Bra jobbat.`:`Du har ${right} av ${total} rätt. Titta på de röda och försök igen.`;
   saveRes(cur.exam?cur.key:"ova-"+cur.key,right,total);
   if(right<total){const bad=app.querySelector(".bad");if(bad){const r=bad.getBoundingClientRect();if(r.top<60||r.bottom>innerHeight-130)bad.scrollIntoView({block:"center",behavior:"smooth"})}}
 }
