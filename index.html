@@ -69,7 +69,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .tool{flex:1;display:flex;align-items:center;gap:10px;background:var(--card);border:0;border-radius:18px;padding:10px 12px;box-shadow:0 4px 0 var(--line);font:inherit;color:inherit;text-align:left;cursor:pointer;min-width:0}
 .tool:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
 .tool .ic{font-size:1.7rem;line-height:1;flex:none}
-.tool b{display:block;font-size:1.05rem;line-height:1.15}
+.tool b{display:block;font-size:1rem;line-height:1.15;overflow-wrap:anywhere}
 .tool small{display:block;color:var(--muted);font-weight:700;font-size:.8rem}
 .new{display:inline-block;background:#FF5FA2;color:#fff;border-radius:999px;padding:0 7px;font-size:.72rem;font-weight:800;margin-left:4px;vertical-align:middle}
 .new[hidden]{display:none}
@@ -106,6 +106,34 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .newlist .stk{width:120px}
 .gobtn{display:block;width:100%;margin-top:12px;border:0;border-radius:16px;padding:12px;background:#1E9E5E;color:#fff;font:inherit;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 #157548;cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+.whoami{display:flex;justify-content:flex-end;margin:-10px 0 8px;position:relative;z-index:3}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:0;border-radius:999px;padding:4px 12px 4px 4px;box-shadow:0 3px 0 var(--line);font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
+.chip .mini{width:30px;height:34px;display:inline-block}
+.chip .mini svg{width:100%;height:100%}
+.who{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-top:10px}
+.who button{border:0;border-radius:18px;background:var(--bg);padding:8px 6px 10px;font:inherit;font-weight:800;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--line)}
+.who button svg{width:80px;height:auto;display:block;margin:0 auto}
+.who button.add{border:3px dashed var(--line);background:#fff;box-shadow:none;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:130px;font-size:1rem}
+.who button.add span{font-size:2.4rem;line-height:1}
+.pnote{color:var(--muted);font-size:.9rem;text-align:center;margin:10px 0 0}
+.dots4{display:flex;justify-content:center;gap:14px;margin:10px 0 4px}
+.dots4 i{width:20px;height:20px;border-radius:50%;border:3px solid var(--ink);display:block}
+.dots4 i.on{background:var(--ink)}
+.dots4.shake{animation:shk .35s}
+@keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.pinmsg{min-height:1.3em;color:#E5484D;font-weight:800;text-align:center;margin:4px 0}
+.pinmsg.ok{color:#1E9E5E}
+.pinpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+.pinpad button{height:60px;border-radius:16px;border:0;background:var(--bg);font:inherit;font-size:1.8rem;font-weight:800;color:var(--ink);box-shadow:0 3px 0 var(--line);cursor:pointer}
+.linkbtn{border:0;background:none;color:var(--muted);text-decoration:underline;font:inherit;font-size:.95rem;margin-top:10px;cursor:pointer}
+.plabel{display:block;font-weight:800;margin:6px 0 4px}
+.pinput{flex:1;min-width:0;font:inherit;font-size:1.2rem;border:3px solid var(--line);border-radius:14px;padding:8px 12px;color:var(--ink)}
+.pinput:focus{outline:none;border-color:#3D5AFE}
+.dice{border:0;border-radius:14px;background:var(--bg);font-size:1.6rem;width:54px;cursor:pointer;box-shadow:0 3px 0 var(--line)}
+.plist{display:grid;gap:10px;margin-top:6px}
+.qrbox{display:grid;place-items:center;min-height:40px}
+.qrbox img,.qrbox canvas{border:8px solid #fff;border-radius:8px;box-shadow:0 3px 0 var(--line)}
+.pcode{width:100%;min-height:80px;font:inherit;font-size:.8rem;border:3px solid var(--line);border-radius:12px;padding:8px;word-break:break-all;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -133,6 +161,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 </header>
 
 <main class="wrap">
+  <div class="whoami"><button class="chip" id="whoChip"></button></div>
   <div class="stats">
     <div class="stat"><span class="ic">⭐</span><span><b id="sStars">0</b><small>stjärnor och medaljer</small></span></div>
     <div class="stat"><span class="ic">🔥</span><span><b id="sDays">0</b><small id="sDaysTxt">dagar i rad</small></span></div>
@@ -162,6 +191,62 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 
   <p class="foot">Dina stjärnor och rekord sparas i den här webbläsaren.<br><button class="soundbtn" id="soundBtn"></button></p>
 </main>
+
+
+<div class="modal" id="mWho" hidden><div class="sheet" role="dialog" aria-label="Vem tränar?">
+  <h2 style="text-align:center">Vem tränar idag?</h2>
+  <div class="who" id="whoGrid"></div>
+  <p class="pnote">Profilerna finns bara på den här enheten.</p>
+  <button class="soundbtn" id="guestBtn" style="display:block;margin:10px auto 0">Fortsätt som gäst</button>
+</div></div>
+
+<div class="modal" id="mPin" hidden><div class="sheet" role="dialog" aria-label="Kod" style="text-align:center;max-width:380px">
+  <div class="top"><h2 id="pinTitle">Skriv din kod</h2><button class="close" id="pinClose" aria-label="Stäng">✕</button></div>
+  <div id="pinOwl" style="width:90px;margin:0 auto"></div>
+  <div class="dots4" id="pinDots"><i></i><i></i><i></i><i></i></div>
+  <p class="pinmsg" id="pinMsg"></p>
+  <div class="pinpad" id="pinPad"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button><button>7</button><button>8</button><button>9</button><button data-k="del" aria-label="Sudda">⌫</button><button>0</button><button data-k="x" aria-hidden="true" tabindex="-1" style="visibility:hidden"></button></div>
+  <button class="linkbtn" id="pinForgot">Glömt koden?</button>
+</div></div>
+
+<div class="modal" id="mNewProf" hidden><div class="sheet" role="dialog" aria-label="Ny profil" style="max-width:420px">
+  <div class="top"><h2>Ny profil</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <label class="plabel" for="npName">Ditt namn i Matte-Portalen</label>
+  <div style="display:flex;gap:8px"><input id="npName" class="pinput" maxlength="16" autocomplete="off" placeholder="Till exempel Glada Ugglan"><button class="dice" id="npDice" aria-label="Hitta på ett namn">🎲</button></div>
+  <p class="pnote" style="text-align:left">Tips: använd gärna ett påhittat namn. Tryck på 🎲 för ett förslag.</p>
+  <p class="pinmsg" id="npMsg"></p>
+  <button class="gobtn" id="npNext">Välj en kod med 4 siffror</button>
+</div></div>
+
+<div class="modal" id="mProf" hidden><div class="sheet" role="dialog" aria-label="Min profil" style="max-width:420px">
+  <div class="top"><h2 id="profName"></h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <div class="plist">
+    <button class="tool" id="pSwitch"><span class="ic">👥</span><span><b>Byt profil</b><small>Låt någon annan träna</small></span></button>
+    <button class="tool" id="pMove"><span class="ic">📲</span><span><b>Flytta mina framsteg</b><small>Till en annan dator eller surfplatta</small></span></button>
+    <button class="tool" id="pImport"><span class="ic">📥</span><span><b>Hämta framsteg</b><small>Har du en flyttkod? Lägg in den här</small></span></button>
+    <button class="tool" id="pPin"><span class="ic">🔑</span><span><b>Byt kod</b><small>Välj en ny kod med 4 siffror</small></span></button>
+    <button class="tool" id="pDel"><span class="ic">🗑️</span><span><b>Ta bort profilen</b><small>Allt för den här profilen raderas</small></span></button>
+  </div>
+</div></div>
+
+<div class="modal" id="mMove" hidden><div class="sheet" role="dialog" aria-label="Flytta framsteg" style="max-width:440px;text-align:center">
+  <div class="top"><h2>Flytta framsteg</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 8px">Skanna koden med kameran på den andra enheten. Då öppnas Matte-Portalen och dina framsteg läggs in.</p>
+  <div id="qrBox" class="qrbox"></div>
+  <p class="pnote" id="qrNote"></p>
+  <p style="margin:12px 0 4px;font-weight:800">Eller använd flyttkoden:</p>
+  <textarea id="moveCode" class="pcode" readonly></textarea>
+  <div style="display:flex;gap:8px;margin-top:8px"><button class="gobtn" id="moveCopy" style="margin:0">Kopiera koden</button><button class="gobtn" id="moveFile" style="margin:0;background:#3D5AFE;box-shadow:0 5px 0 #2A3FB8">Spara som fil</button></div>
+</div></div>
+
+<div class="modal" id="mImp" hidden><div class="sheet" role="dialog" aria-label="Hämta framsteg" style="max-width:440px">
+  <div class="top"><h2>Hämta framsteg</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0 0 6px">Klistra in din flyttkod, eller öppna filen med dina framsteg.</p>
+  <textarea id="impCode" class="pcode" placeholder="Klistra in koden här"></textarea>
+  <label class="gobtn" style="text-align:center;background:#3D5AFE;box-shadow:0 5px 0 #2A3FB8">Öppna fil<input type="file" id="impFile" accept=".txt,.json,text/plain" hidden></label>
+  <p class="pinmsg" id="impMsg"></p>
+  <button class="gobtn" id="impGo">Lägg in framstegen</button>
+</div></div>
 
 <div class="modal" id="mWard" hidden><div class="sheet" role="dialog" aria-label="Ugglans garderob">
   <div class="top"><h2>Ugglans garderob</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
@@ -398,8 +483,8 @@ if(fresh.length){
 }
 
 /* ---------- Stäng rutor ---------- */
-document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m||e.target.closest("[data-close]"))m.hidden=true;}));
-document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal").forEach(m=>m.hidden=true);});
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(m.id==="mWho"||m.id==="mPin")return;if(e.target===m||e.target.closest("[data-close]"))m.hidden=true;}));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal").forEach(m=>{if(m.id!=="mWho")m.hidden=true;});});
 
 /* ---------- Ljud ---------- */
 function soundLabel(){$("soundBtn").textContent=window.Ljud&&Ljud.on?"🔊 Ljud: på":"🔇 Ljud: av";}
@@ -418,5 +503,162 @@ else if(S.stars>0)msg=`Du har ${S.stars} ⭐. Vad tränar vi idag?`;
 else msg="Vad vill du träna idag?";
 $("bubble").textContent=`${hi} ${msg}`;
 </script>
+<script>
+/* ============ Elevprofiler (allt sparas bara på den här enheten) ============ */
+(function(){
+const PKEYS=["mattespel-multiplikation-v1","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1",
+  "mattespel-spel-v1","mattespel-geometri-v1","mattespel-brak-v1","np3-resultat","matteportalen-uggla","matteportalen-klister","matteportalen-dagar"];
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},lsDel=k=>{try{localStorage.removeItem(k)}catch(e){}};
+const jGet=k=>{try{return JSON.parse(lsGet(k)||"null")}catch(e){return null}},jSet=(k,v)=>lsSet(k,JSON.stringify(v));
+const ssGet=k=>{try{return sessionStorage.getItem(k)}catch(e){return null}},ssSet=(k,v)=>{try{sessionStorage.setItem(k,v)}catch(e){}};
+const list=()=>jGet("mp-profiles")||[],saveList=l=>jSet("mp-profiles",l);
+const owner=()=>lsGet("mp-owner"),setOwner=id=>id?lsSet("mp-owner",id):lsDel("mp-owner");
+const active=()=>ssGet("mp-active");
+const byId=id=>list().find(p=>p.id===id);
+const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return(h>>>0).toString(36);};
+const snapLive=()=>{const o={};PKEYS.forEach(k=>{const v=lsGet(k);if(v!=null)o[k]=v;});return o;};
+const clearLive=()=>PKEYS.forEach(lsDel);
+const loadLive=o=>{clearLive();Object.entries(o||{}).forEach(([k,v])=>lsSet(k,v));};
+const stash=()=>{const ow=owner();if(ow)jSet("mp-bundle-"+ow,snapLive());};
+function switchTo(id){
+  if(owner()!==id){stash();loadLive(jGet("mp-bundle-"+id)||{});setOwner(id);}
+  ssSet("mp-active",id);history.replaceState(null,"",location.pathname);location.reload();
+}
+const owlOf=id=>{const b=id===owner()?snapLive():(jGet("mp-bundle-"+id)||{});let c={};try{c=JSON.parse(b["matteportalen-uggla"]||"{}")}catch(e){}
+  return owlSVG(Object.assign({color:"lila",glasses:"runda",hat:"ingen",neck:"ingen"},c));};
+const openM=id=>{document.querySelectorAll(".modal").forEach(m=>m.hidden=m.id!==id);};
+const closeAll=()=>document.querySelectorAll(".modal").forEach(m=>m.hidden=true);
+
+/* ---------- Kod med fyra siffror ---------- */
+let pinCb=null,pinVal="";
+function askPin(title,owlHTML,cb,opts={}){
+  pinCb=cb;pinVal="";$("pinTitle").textContent=title;$("pinOwl").innerHTML=owlHTML||"";$("pinMsg").textContent=opts.msg||"";$("pinMsg").className="pinmsg"+(opts.ok?" ok":"");
+  $("pinForgot").hidden=!opts.forgot;$("pinForgot").onclick=opts.forgot||null;$("pinClose").onclick=opts.cancel||closeAll;drawDots();openM("mPin");
+}
+function drawDots(){[...$("pinDots").children].forEach((d,i)=>d.classList.toggle("on",i<pinVal.length));}
+function pinKey(k){
+  if(k==="del"){pinVal=pinVal.slice(0,-1);drawDots();return;}
+  if(!/^\d$/.test(k)||pinVal.length>=4)return;pinVal+=k;drawDots();
+  if(pinVal.length===4){const v=pinVal;setTimeout(()=>{const ok=pinCb&&pinCb(v);if(ok===false){$("pinDots").classList.remove("shake");void $("pinDots").offsetWidth;$("pinDots").classList.add("shake");window.Ljud&&Ljud.bad();pinVal="";drawDots();}},120);}
+}
+$("pinPad").onclick=e=>{const b=e.target.closest("button");if(!b||b.dataset.k==="x")return;pinKey(b.dataset.k||b.textContent);};
+document.addEventListener("keydown",e=>{if($("mPin").hidden)return;if(/^\d$/.test(e.key))pinKey(e.key);else if(e.key==="Backspace")pinKey("del");});
+
+/* ---------- Välja profil ---------- */
+function openWho(){
+  const ps=list();
+  $("whoGrid").innerHTML=ps.map(p=>`<button data-id="${p.id}">${owlOf(p.id)}${esc(p.name)}</button>`).join("")+`<button class="add" id="whoAdd"><span>＋</span>Ny profil</button>`;
+  $("guestBtn").hidden=false;openM("mWho");
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("whoGrid").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.id==="whoAdd")return openNew();
+  const p=byId(b.dataset.id);askPin(`Hej ${p.name}! Skriv din kod.`,owlOf(p.id),v=>{if(hash(v+p.salt)!==p.pinH){$("pinMsg").textContent="Fel kod. Försök igen.";return false;}switchTo(p.id);return true;},
+    {cancel:openWho,forgot:()=>adultReset(p)});};
+$("guestBtn").onclick=()=>switchTo("gast");
+
+/* ---------- Ny profil ---------- */
+const ADJ=["Glada","Snabba","Modiga","Kloka","Busiga","Lugna","Starka","Pigga","Nyfikna","Coola"],DJUR=["Ugglan","Räven","Björnen","Haren","Lodjuret","Ekorren","Igelkotten","Delfinen","Pandan","Tigern"];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+$("npDice").onclick=()=>{$("npName").value=`${pick(ADJ)} ${pick(DJUR)} ${1+Math.floor(Math.random()*99)}`;};
+function openNew(){$("npName").value="";$("npMsg").textContent="";openM("mNewProf");setTimeout(()=>$("npName").focus(),50);}
+$("npNext").onclick=()=>{
+  const name=$("npName").value.trim().replace(/\s+/g," ");
+  if(!name){$("npMsg").textContent="Skriv ett namn först, eller tryck på 🎲.";return;}
+  if(list().some(p=>p.name.toLowerCase()===name.toLowerCase())){$("npMsg").textContent="Det namnet finns redan. Välj ett annat.";return;}
+  choosePin(name,"");
+};
+function choosePin(name,msg){
+  askPin("Välj en kod med 4 siffror","",v1=>{askPin("Skriv samma kod en gång till","",v2=>{
+      if(v2!==v1){choosePin(name,"Koderna var olika. Börja om.");return true;}
+      createProfile(name,v1);return true;},{cancel:()=>openM("mNewProf"),msg:"Kom ihåg koden!",ok:true});return true;},{cancel:()=>openM("mNewProf"),msg});
+}
+function createProfile(name,pin){
+  const id="p"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),salt=id;
+  const ps=list(),first=!ps.length&&(!owner()||owner()==="gast");
+  ps.push({id,name,salt,pinH:hash(pin+salt),created:Date.now()});saveList(ps);
+  if(first&&!owner()){setOwner(id);}          // första profilen får det som redan finns på enheten
+  else{stash();clearLive();setOwner(id);}
+  ssSet("mp-active",id);location.reload();
+}
+
+/* ---------- Glömt koden: en vuxen hjälper till ---------- */
+function adultReset(p){
+  const a=12+Math.floor(Math.random()*18),b=12+Math.floor(Math.random()*18);
+  const ans=prompt(`Glömt koden? Be en vuxen om hjälp.\n\nVuxen: skriv svaret på ${a} · ${b} för att välja en ny kod åt ${p.name}.`);
+  if(ans===null)return;
+  if(parseInt(ans,10)!==a*b){alert("Det var inte rätt svar.");return;}
+  askPin(`Ny kod för ${p.name}`,owlOf(p.id),v=>{const ps=list(),q=ps.find(x=>x.id===p.id);q.pinH=hash(v+q.salt);saveList(ps);switchTo(p.id);return true;},{msg:"Välj en ny kod med 4 siffror.",ok:true});
+}
+
+/* ---------- Min profil ---------- */
+const act=active(),me=act&&act!=="gast"?byId(act):null;
+function chip(){
+  const w=$("whoChip");
+  if(me)w.innerHTML=`<span class="mini">${owlOf(me.id)}</span>${esc(me.name)} ▾`;
+  else if(act==="gast")w.innerHTML=`👤 Gäst ▾`;
+  else w.innerHTML=list().length?"👥 Välj profil":"＋ Skapa profil";
+}
+$("whoChip").onclick=()=>{if(me){$("profName").textContent=me.name;["pMove","pPin","pDel"].forEach(i=>$(i).hidden=false);openM("mProf");}
+  else if(act==="gast"){$("profName").textContent="Gäst";["pMove","pPin","pDel"].forEach(i=>$(i).hidden=true);openM("mProf");}
+  else if(list().length)openWho();else openNew();};
+$("pSwitch").onclick=()=>{stash();try{sessionStorage.removeItem("mp-active")}catch(e){}openWho();};
+$("pPin").onclick=()=>askPin("Skriv din nuvarande kod",owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
+  askPin("Välj en ny kod",owlOf(me.id),n=>{const ps=list(),q=ps.find(x=>x.id===me.id);q.pinH=hash(n+q.salt);saveList(ps);closeAll();alert("Klart! Din nya kod är sparad.");return true;});return true;});
+$("pDel").onclick=()=>askPin(`Skriv koden för att ta bort ${me.name}`,owlOf(me.id),v=>{if(hash(v+me.salt)!==me.pinH){$("pinMsg").textContent="Fel kod.";return false;}
+  if(!confirm(`Vill du verkligen ta bort ${me.name}? Alla stjärnor och klistermärken för profilen försvinner.`)){closeAll();return true;}
+  saveList(list().filter(p=>p.id!==me.id));lsDel("mp-bundle-"+me.id);if(owner()===me.id){clearLive();setOwner(null);}
+  try{sessionStorage.removeItem("mp-active")}catch(e){}location.reload();return true;});
+
+/* ---------- Flyttkod ---------- */
+const b64u=bytes=>{let s="";bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");};
+const unb64u=s=>{s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";const bin=atob(s);return Uint8Array.from(bin,c=>c.charCodeAt(0));};
+async function pack(obj){
+  const bytes=new TextEncoder().encode(JSON.stringify(obj));
+  if("CompressionStream" in window){try{const buf=await new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream("deflate-raw"))).arrayBuffer();return"Z"+b64u(new Uint8Array(buf));}catch(e){}}
+  return"J"+b64u(bytes);
+}
+async function unpack(code){
+  code=code.trim().replace(/^.*#flytta=/,"").replace(/\s+/g,"");const kind=code[0],bytes=unb64u(code.slice(1));
+  let txt;if(kind==="Z"){const buf=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer();txt=new TextDecoder().decode(buf);}
+  else txt=new TextDecoder().decode(bytes);
+  const o=JSON.parse(txt);if(!o||o.v!==1||!o.n||!o.d)throw new Error("fel");return o;
+}
+function trimmed(){ // håll koden kort: bara de senaste försöken per uppgift behövs
+  const d=snapLive();Object.keys(d).forEach(k=>{try{const o=JSON.parse(d[k]);
+    if(o&&o.facts)Object.keys(o.facts).forEach(f=>{if(Array.isArray(o.facts[f]))o.facts[f]=o.facts[f].slice(-3);});
+    if(o&&Array.isArray(o.days))o.days=o.days.slice(-40);
+    d[k]=JSON.stringify(o);}catch(e){}});return d;}
+$("pMove").onclick=async()=>{
+  stash();const code=await pack({v:1,n:me.name,h:me.pinH,s:me.salt,d:trimmed()});
+  const url=location.origin+location.pathname+"#flytta="+code;
+  $("moveCode").value=code;$("qrBox").innerHTML="";$("qrNote").textContent="";openM("mMove");
+  if(url.length>2300){$("qrNote").textContent="Du har samlat så mycket att koden blev för lång för en QR-kod. Använd flyttkoden eller filen i stället.";return;}
+  const draw=()=>{try{new QRCode($("qrBox"),{text:url,width:220,height:220,correctLevel:QRCode.CorrectLevel.L});$("qrNote").textContent="Koden innehåller bara ditt namn i Matte-Portalen och dina framsteg. Du loggar in med samma kod som vanligt.";}catch(e){$("qrNote").textContent="QR-koden kunde inte visas. Använd flyttkoden i stället.";}};
+  if(window.QRCode)draw();else{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";s.onload=draw;s.onerror=()=>{$("qrNote").textContent="QR-koden kräver internet. Använd flyttkoden i stället.";};document.head.appendChild(s);}
+};
+$("moveCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("moveCode").value);$("moveCopy").textContent="Kopierad! ✓";}catch(e){$("moveCode").select();document.execCommand("copy");$("moveCopy").textContent="Kopierad! ✓";}};
+$("moveFile").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([$("moveCode").value],{type:"text/plain"}));a.download=`matteportalen-${me.name.replace(/[^\wåäöÅÄÖ-]+/g,"_")}.txt`;document.body.appendChild(a);a.click();a.remove();};
+$("pImport").onclick=()=>{$("impCode").value="";$("impMsg").textContent="";openM("mImp");};
+$("impFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$("impCode").value=String(r.result).trim();};r.readAsText(f);};
+$("impGo").onclick=async()=>{let o;try{o=await unpack($("impCode").value);}catch(e){$("impMsg").textContent="Koden fungerade inte. Kontrollera att hela koden är med.";return;}importBundle(o);};
+function importBundle(o){
+  if(!confirm(`Lägga in framstegen för ${o.n} på den här enheten?`))return;
+  const ps=list();let p=ps.find(x=>x.salt===o.s);
+  if(p){if(!confirm(`${p.name} finns redan här. Vill du ersätta framstegen med de nya?`))return;p.name=o.n;p.pinH=o.h;}
+  else{let name=o.n;while(ps.some(x=>x.name.toLowerCase()===name.toLowerCase()))name+=" 2";p={id:"p"+Date.now().toString(36),name,salt:o.s,pinH:o.h,created:Date.now()};ps.push(p);}
+  saveList(ps);
+  if(owner()===p.id){loadLive(o.d);}else{jSet("mp-bundle-"+p.id,o.d);}
+  alert(`Klart! ${p.name} finns nu på den här enheten. Logga in med samma kod som förut.`);
+  history.replaceState(null,"",location.pathname);try{sessionStorage.removeItem("mp-active")}catch(e){}location.reload();
+}
+
+/* ---------- Start ---------- */
+chip();
+if(location.hash.startsWith("#flytta=")){unpack(location.hash).then(importBundle).catch(()=>{alert("Flyttkoden fungerade inte.");history.replaceState(null,"",location.pathname);});}
+else if(list().length&&!act)openWho();
+else if(act&&act!==owner()){switchTo(act);}  // en annan flik har bytt profil
+})();
+</script>
+
 </body>
 </html>
