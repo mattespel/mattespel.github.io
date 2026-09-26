@@ -64,73 +64,6 @@
             font-size: .95rem; font-weight: bold; margin-top: 16px;
         }
 
-        /* ── SPEL 2 ── */
-        .game2-wrapper { display: flex; justify-content: center; padding: 24px 12px; }
-        .game2-container {
-            background: white; padding: clamp(14px, 4vw, 28px); border-radius: 14px;
-            box-shadow: 0 8px 22px rgba(0,0,0,0.1); max-width: 620px; width: 100%; text-align: center;
-        }
-        .game2-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #eee;
-            flex-wrap: wrap; gap: 8px;
-        }
-        .game2-mode-selector { display: flex; gap: 8px; flex-wrap: wrap; }
-        .game2-mode-btn {
-            padding: 7px 12px; border: 2px solid var(--tioruta-primary);
-            background: white; color: var(--tioruta-primary);
-            border-radius: 20px; cursor: pointer; font-weight: bold; font-size: .9rem;
-        }
-        .game2-mode-btn.active { background: var(--tioruta-primary); color: white; }
-        .game2-score-board { font-size: 1.1rem; font-weight: bold; color: var(--secondary); display: flex; align-items: center; gap: 8px; }
-        .game2-progress-bar { width: 80px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
-        .game2-progress-fill { height: 100%; background: var(--success); width: 0%; transition: width .5s; }
-        .game2-ten-frames { display: flex; justify-content: center; gap: clamp(8px,3vw,20px); margin-bottom: 20px; flex-wrap: wrap; }
-        .game2-frame {
-            display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr);
-            gap: 4px; border: 2px solid #555; padding: 4px; background: white;
-        }
-        .game2-dot {
-            width: clamp(20px,5vw,30px); height: clamp(20px,5vw,30px);
-            border-radius: 50%; background: transparent; border: 2px dashed #ccc; transition: all .3s;
-        }
-        .game2-dot.filled  { background: var(--dot-base); border-color: var(--dot-base); }
-        .game2-dot.action  { background: var(--dot-action); border-color: var(--dot-action); transform: scale(1.1); }
-        .game2-dot.removed { background: #e0e0e0; opacity: .3; border-color: #ccc; }
-        .game2-math-problem {
-            font-size: clamp(1.6rem, 7vw, 2.6rem); margin-bottom: 10px;
-            display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
-        }
-        .game2-split-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
-        .game2-subtrahend-circle {
-            width: 54px; height: 54px; border: 3px solid var(--tioruta-primary);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 1.5rem; font-weight: bold; background: white;
-        }
-        .game2-branches {
-            display: flex; justify-content: center; gap: 50px; margin-top: 8px;
-            width: 130px; border-top: 3px solid #ccc; position: relative;
-        }
-        .game2-branches::before { content:''; position:absolute; top:-10px; left:50%; height:10px; width:3px; background:#ccc; }
-        .game2-split-inputs { display: flex; justify-content: center; gap: 30px; margin-top: 8px; }
-        .game2-step-input, .game2-main-result {
-            text-align: center; border: 2px solid #ccc; border-radius: 8px;
-            font-size: 1.3rem; font-family: inherit;
-        }
-        .game2-step-input  { width: 50px; height: 50px; }
-        .game2-main-result { width: 64px; height: 56px; font-size: 1.6rem; border-width: 3px; }
-        .game2-step-input.correct { border-color: var(--success); background: #e8f5e9; }
-        .game2-step-input.wrong   { border-color: var(--error);   background: #ffebee; }
-        .game2-equation-row {
-            font-size: clamp(1rem, 4vw, 1.5rem); margin-top: 10px;
-            display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap;
-        }
-        .game2-btn-check {
-            padding: 12px 28px; font-size: 1.1rem; cursor: pointer; border: none;
-            border-radius: 8px; font-weight: bold; background: var(--tioruta-primary); color: white; margin-top: 16px;
-        }
-        .game2-feedback { margin-top: 12px; font-weight: bold; font-size: 1rem; min-height: 22px; }
-
         /* ── MATTESTUDION (Gemensam) ── */
         .game3-wrapper { display: flex; flex-direction: column; align-items: center; padding: 12px 10px 40px; }
 
@@ -309,11 +242,6 @@
         }
         .prob-answer-row .game3-quiz-input { width: 72px; font-size: 1.2rem; height: 44px; }
 
-        @media (max-width: 480px) {
-            .game2-dot { width: 18px; height: 18px; }
-            .game2-step-input { width: 44px; height: 44px; }
-            .game2-main-result { width: 56px; height: 50px; font-size: 1.3rem; }
-        }
     </style>
 </head>
 <body>
@@ -335,9 +263,9 @@
         <div class="game-card">
             <div>
                 <h3>Tiotalsövergång</h3>
-                <p>Lär dig strategin med hjälp av interaktiva tiorutor.</p>
+                <p>Räkna via tiotalet med tioruta och tallinje. Fyra nivåer, upp till 20 eller 100.</p>
             </div>
-            <button class="start-game-btn color-2" onclick="showView('portal-game2'); document.body.style.backgroundColor='#f0f4f8'; game2_initGame();">Starta Tiotalsövergång</button>
+            <a class="start-game-btn color-2" href="tiotal/">Starta Tiotalsövergång</a>
         </div>
         <div class="game-card">
             <div>
@@ -373,48 +301,6 @@
                 <p>Träna på tabellerna 1–10 var för sig, blanda dina egna, eller kör Racet mot ditt eget spöke.</p>
             </div>
             <a class="start-game-btn color-7" href="multiplikation/">Träna multiplikation</a>
-        </div>
-    </div>
-</div>
-
-<!-- ══ SPEL 2 ══ -->
-<div id="portal-game2" class="hidden">
-    <div class="game2-wrapper">
-        <div class="game2-container">
-            <div class="game2-header">
-                <div class="game2-mode-selector">
-                    <button class="game2-mode-btn active" id="game2-btnAdd" onclick="game2_setMode('add')">Addition (+)</button>
-                    <button class="game2-mode-btn" id="game2-btnSub" onclick="game2_setMode('sub')">Subtraktion (-)</button>
-                </div>
-                <div class="game2-score-board">
-                    <span>Poäng: <span id="game2-scoreText">0</span>/20</span>
-                    <div class="game2-progress-bar"><div class="game2-progress-fill" id="game2-progressFill"></div></div>
-                </div>
-            </div>
-            <h2 id="game2-instructionText" style="font-size:1rem;">Addera först till 10, addera sedan resten.</h2>
-            <div class="game2-ten-frames" id="game2-tenFrames"></div>
-            <div class="game2-math-problem">
-                <span id="game2-numA"></span>
-                <span id="game2-mainOp">+</span>
-                <div class="game2-split-container">
-                    <div class="game2-subtrahend-circle" id="game2-numB"></div>
-                    <div class="game2-branches"></div>
-                    <div class="game2-split-inputs">
-                        <input type="number" class="game2-step-input" id="game2-inputPart1">
-                        <input type="number" class="game2-step-input" id="game2-inputPart2">
-                    </div>
-                </div>
-            </div>
-            <div class="game2-equation-row">
-                = <span id="game2-eqA"></span>
-                <span id="game2-eqOp1">+</span><span id="game2-eqPart1">__</span>
-                <span id="game2-eqOp2">+</span><span id="game2-eqPart2">__</span>=
-                <input type="number" class="game2-main-result" id="game2-inputResult">
-            </div>
-            <div class="game2-feedback" id="game2-feedback"></div>
-            <button class="game2-btn-check" onclick="game2_checkAnswer()">Kontrollera</button>
-            <br>
-            <button class="portal-back-btn" onclick="returnToPortal()">← Till huvudmenyn</button>
         </div>
     </div>
 </div>
@@ -554,7 +440,7 @@ function launchConfetti(duration) {
 }
 
 function showView(id){
-    ['portal-menu-view','portal-game2','portal-game3','portal-game4']
+    ['portal-menu-view','portal-game3','portal-game4']
         .forEach(v=>document.getElementById(v).classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
 }
@@ -563,17 +449,6 @@ function returnToPortal(){
     showView('portal-menu-view');
 }
 function getRandomInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
-
-// ══ SPEL 2 ══
-let game2_mode='add',game2_score=0,game2_A,game2_B,game2_p1,game2_p2,game2_res,game2_lastA=0,game2_lastB=0;
-['game2-inputPart1','game2-inputPart2'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',game2_updateVisuals);});
-document.getElementById('game2-inputPart1').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('game2-inputPart2').focus();}});
-document.getElementById('game2-inputPart2').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('game2-inputResult').focus();}});
-document.getElementById('game2-inputResult').addEventListener('keydown',function(e){if(e.key==='Enter'&&!this.disabled){e.preventDefault();game2_checkAnswer();}});
-function game2_setMode(m){ if(game2_mode!==m){game2_score=0;document.getElementById('game2-scoreText').innerText=0;document.getElementById('game2-progressFill').style.width='0%';} game2_mode=m; document.getElementById('game2-btnAdd').className=m==='add'?'game2-mode-btn active':'game2-mode-btn'; document.getElementById('game2-btnSub').className=m==='sub'?'game2-mode-btn active':'game2-mode-btn'; document.getElementById('game2-mainOp').innerText=m==='add'?'+':'-'; document.getElementById('game2-eqOp1').innerText=m==='add'?'+':'-'; document.getElementById('game2-eqOp2').innerText=m==='add'?'+':'-'; document.getElementById('game2-instructionText').innerText=m==='add'?'Addera först till 10, addera sedan resten.':'Subtrahera först till 10, subtrahera sedan resten.'; game2_initGame(); }
-function game2_initGame(){ let att=0; do{ if(game2_mode==='add'){game2_A=getRandomInt(2,9);game2_B=getRandomInt(11-game2_A,9);game2_p1=10-game2_A;game2_p2=game2_B-game2_p1;game2_res=game2_A+game2_B;}else{game2_A=getRandomInt(11,18);game2_B=getRandomInt(game2_A-9,9);game2_p1=game2_A-10;game2_p2=game2_B-game2_p1;game2_res=game2_A-game2_B;} att++; }while(game2_A===game2_lastA&&game2_B===game2_lastB&&att<10); game2_lastA=game2_A;game2_lastB=game2_B; document.getElementById('game2-numA').innerText=game2_A; document.getElementById('game2-numB').innerText=game2_B; document.getElementById('game2-eqA').innerText=game2_A; ['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(id=>{const el=document.getElementById(id);el.value='';el.className=id==='game2-inputResult'?'game2-main-result':'game2-step-input';el.disabled=false;el.style.borderColor='#ccc';}); document.getElementById('game2-eqPart1').innerText='__'; document.getElementById('game2-eqPart2').innerText='__'; document.getElementById('game2-feedback').innerText=''; game2_updateVisuals(); document.getElementById('game2-inputPart1').focus(); }
-function game2_updateVisuals(){ const v1=parseInt(document.getElementById('game2-inputPart1').value)||0,v2=parseInt(document.getElementById('game2-inputPart2').value)||0; document.getElementById('game2-eqPart1').innerText=v1||'__'; document.getElementById('game2-eqPart2').innerText=v2||'__'; const cont=document.getElementById('game2-tenFrames'); cont.innerHTML=''; const f1=document.createElement('div');f1.className='game2-frame';const f2=document.createElement('div');f2.className='game2-frame';const dts=[]; for(let i=0;i<20;i++){const d=document.createElement('div');d.className='game2-dot';dts.push(d);if(i<10)f1.appendChild(d);else f2.appendChild(d);} if(game2_mode==='add'){for(let i=0;i<game2_A;i++)dts[i].classList.add('filled');for(let i=0;i<Math.min(v1,10-game2_A);i++){if(game2_A+i<20)dts[game2_A+i].classList.add('action');}for(let i=0;i<v2;i++){if(10+i<20)dts[10+i].classList.add('action');}}else{for(let i=0;i<game2_A;i++)dts[i].classList.add('filled');let rm=0;for(let i=0;i<v1;i++){let idx=game2_A-1-rm;if(idx>=0&&idx>=10){dts[idx].className='game2-dot removed';rm++;}}for(let i=0;i<v2;i++){let idx=game2_A-1-rm;if(idx>=0&&idx<10){dts[idx].className='game2-dot removed';rm++;}}} cont.appendChild(f1);cont.appendChild(f2); }
-function game2_checkAnswer(){ const v1=parseInt(document.getElementById('game2-inputPart1').value),v2=parseInt(document.getElementById('game2-inputPart2').value),res=parseInt(document.getElementById('game2-inputResult').value); let ok=true; if(v1!==game2_p1){document.getElementById('game2-inputPart1').className='game2-step-input wrong';ok=false;}else document.getElementById('game2-inputPart1').className='game2-step-input correct'; if(v2!==game2_p2){document.getElementById('game2-inputPart2').className='game2-step-input wrong';ok=false;}else document.getElementById('game2-inputPart2').className='game2-step-input correct'; if(res!==game2_res){document.getElementById('game2-inputResult').style.borderColor='#f44336';ok=false;}else document.getElementById('game2-inputResult').style.borderColor='#4CAF50'; const fb=document.getElementById('game2-feedback'); if(ok){fb.innerText='Rätt svar! Snyggt jobbat!';fb.style.color='#4CAF50';['game2-inputPart1','game2-inputPart2','game2-inputResult'].forEach(id=>document.getElementById(id).disabled=true);game2_score++;document.getElementById('game2-scoreText').innerText=game2_score;document.getElementById('game2-progressFill').style.width=(game2_score/20*100)+'%';if(game2_score>=20){fb.innerText='GRATTIS! Du klarade 20 poäng!';launchConfetti(5000);game2_score=0;setTimeout(()=>{document.getElementById('game2-scoreText').innerText=0;document.getElementById('game2-progressFill').style.width='0%';game2_initGame();},6000);}else setTimeout(game2_initGame,2000);}else{fb.innerText='Något blev fel, titta på prickarna och försök igen.';fb.style.color='#f44336';} }
 
 // ══ SPEL 3 (ÅK 1) ══
 let ans3_tallinjer=[],ans3_storleksordna=[],ans3_likheter=[],ans3_delaupp=[],ans3_talfoljd=[],ans3_problem=[];
