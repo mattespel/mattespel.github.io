@@ -166,6 +166,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <div class="toast" id="toast" hidden></div>
 <canvas id="fx" hidden></canvas>
 
+<script src="../ljud.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -294,12 +295,12 @@ function answer(v){
   if(!G.retry){record(f,ok,ms);save();const w=ok?ms:ms+6000;if(!G.slow[k]||w>G.slow[k].w)G.slow[k]={f,w};if(!ok){G.missed.add(k);G.missCount=(G.missCount||0)+1;}}
   G.busy=true;$('#answer').textContent=v;
   if(ok){
-    G.correct++;G.streak++;$('#qbox').classList.add('ok');
+    G.correct++;G.streak++;$('#qbox').classList.add('ok');window.Ljud&&Ljud.ok();
     $('#feedback').textContent=G.streak>=5?`${G.streak} rätt i rad!`:PRAISE[Math.floor(Math.random()*PRAISE.length)];
     if(G.mode==='race'){G.times.push(elapsed());setPos($('#carMe'),G.correct/RACE_LEN);updateInfo();if(G.correct>=RACE_LEN){setTimeout(finish,500);return;}}
     setTimeout(nextQ,G.mode==='blitz'?200:380);
   }else{
-    G.streak=0;$('#qbox').classList.add('bad');
+    G.streak=0;$('#qbox').classList.add('bad');window.Ljud&&Ljud.bad();
     if(G.mode==='blitz'){$('#feedback').textContent=`${ftext(f)} = ${right}`;setTimeout(nextQ,1300);}
     else if(G.mode==='race'){$('#feedback').textContent='Försök igen!';G.retry=true;setTimeout(()=>{if(G&&!G.over){$('#answer').textContent='?';$('#qbox').className='qbox';$('#feedback').textContent='';G.busy=false;}},550);}
     else showHelp(f,v);
@@ -311,14 +312,14 @@ function tipFor(f){
   const {a,b}=f;
   if(f.s==='+'){
     if(a===0||b===0)return 'Plus 0 ändrar inte talet.';
-    if(a+b===10)return `Tiokamrater: ${a} och ${b} blir tillsammans 10.`;
+    if(a+b===10)return `Tiokompisar: ${a} och ${b} blir tillsammans 10.`;
     if(a===b)return `Dubbelt: ${a} + ${a} = ${a*2}.`;
     const big=Math.max(a,b),small=Math.min(a,b);
     return `Börja på det största talet, ${big}, och räkna ${small} steg uppåt: ${range(big+1,big+small).join(', ')}.`;
   }
   if(b===0)return 'Minus 0 ändrar inte talet.';
   if(a===b)return 'Ett tal minus samma tal blir 0.';
-  if(a===10)return `Tiokamrater: ${b} och ${10-b} blir 10. Därför är 10 − ${b} = ${10-b}.`;
+  if(a===10)return `Tiokompisar: ${b} och ${10-b} blir 10. Därför är 10 − ${b} = ${10-b}.`;
   if(b<=3)return `Börja på ${a} och räkna ${b} steg bakåt: ${range(a-b,a-1).reverse().join(', ')}.`;
   return `Tänk plus: ${b} + ? = ${a}. Svaret är ${a-b}.`;
 }
@@ -387,7 +388,7 @@ $('#rHome').onclick=openHome;
 $('#rTrainSlow').onclick=()=>startGame('practice',G.slowFacts);
 
 /* ---------- Konfetti ---------- */
-function confetti(){
+function confetti(){window.Ljud&&Ljud.fanfare();
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const cols=['#2BB673','#FF6B6B','#7B61FF','#FFC93C','#3D8BFD','#FF9F43'];
   const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
