@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Klockan – Matte-Portalen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --sun:#FFC93C; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:560px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none !important}
+.back{display:inline-block;color:var(--muted);font-weight:700;text-decoration:none;padding:6px 0;font-size:1rem}
+h1{font-size:2.7rem;line-height:1;margin:14px 0 4px;font-weight:800;letter-spacing:-.5px}
+h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
+.lead{margin:0 0 16px;color:var(--muted);font-size:1.1rem}
+.stars{color:var(--gold);font-size:1.1rem;letter-spacing:1px}
+.stars .off{color:#D5DDEC}
+
+/* Nivåer */
+.levels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lcard{background:var(--card);border-radius:18px;padding:10px 10px 8px;box-shadow:0 4px 0 var(--line);display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;transition:transform .08s,box-shadow .08s}
+.lcard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.lcard .ico{width:74px;height:74px;display:grid;place-items:center}
+.lcard .ico svg{width:74px;height:74px}
+.lcard .dig{font-weight:800;font-size:1.55rem;background:var(--ink);color:#7CF0B1;border-radius:12px;padding:4px 10px;letter-spacing:1px;font-variant-numeric:tabular-nums}
+.lcard b{font-size:1.1rem;line-height:1.15}
+.lcard small{color:var(--muted);font-size:.85rem;line-height:1.2}
+.lcard .rec{font-size:.8rem;color:var(--muted);font-weight:700}
+.lcard.mix{grid-column:1/-1;flex-direction:row;justify-content:center;gap:12px;text-align:left}
+.big{display:flex;align-items:center;gap:14px;width:100%;padding:12px 16px;border-radius:18px;background:var(--card);
+  box-shadow:0 4px 0 var(--line);text-align:left;transition:transform .08s,box-shadow .08s}
+.big:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.big .ic{font-size:1.7rem;width:2.2rem;text-align:center;flex:none}
+.big b{display:block;font-size:1.3rem;line-height:1.2}
+.big small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3}
+.big .best{margin-left:auto;text-align:right;font-weight:700;font-size:.95rem;color:var(--muted);flex:none;white-space:pre-line}
+.modes{display:grid;gap:12px}
+.note{color:var(--muted);font-size:.95rem;margin-top:18px}
+
+/* Uppgift */
+.gtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.info{font-weight:800;font-size:1.2rem}
+.task{background:var(--card);border-radius:22px;padding:12px 14px 10px;box-shadow:0 5px 0 var(--line);margin:12px 0;transition:background .15s}
+.task.ok{background:#DDF5E7}
+.task.bad{background:#FDE4E4}
+.instr{display:flex;gap:10px;align-items:center;font-weight:700;font-size:1.15rem;line-height:1.3}
+.spk{flex:none;width:46px;height:46px;border-radius:50%;background:var(--bg);font-size:1.4rem;box-shadow:0 3px 0 var(--line)}
+.content{margin-top:8px;text-align:center}
+.feedback{min-height:1.5em;font-weight:800;font-size:1.1rem;margin-top:6px;text-align:center}
+.task.ok .feedback{color:var(--good)}
+.task.bad .feedback{color:var(--bad)}
+.clock{width:min(78vw,300px);height:auto;display:block;margin:0 auto;touch-action:none;user-select:none}
+.clock text{font-family:var(--font)}
+.clock.small{width:min(40vw,170px)}
+.clocks{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.clocks figure{margin:0;text-align:center}
+.clocks figcaption{font-weight:800;color:var(--muted)}
+.digital{display:inline-block;font-weight:800;font-size:clamp(2.6rem,13vw,3.8rem);background:var(--ink);color:#7CF0B1;border-radius:16px;padding:4px 18px;letter-spacing:2px;font-variant-numeric:tabular-nums;margin:6px 0}
+.pod{display:block;font-weight:800;color:var(--muted);font-size:1.05rem}
+.story{font-size:1.15rem;font-weight:700;text-align:left;margin:4px 0 8px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.opts button{background:var(--bg);border-radius:14px;padding:10px 6px;font-weight:800;font-size:1.15rem;line-height:1.2;box-shadow:0 3px 0 var(--line);min-height:58px}
+.opts button.bad{background:#FDE4E4;color:var(--bad);box-shadow:0 3px 0 #F3B5B7}
+.opts button.right{background:#DDF5E7;color:var(--good-dark);box-shadow:0 3px 0 #9FE0BC}
+.opts button:disabled{cursor:default}
+.adj{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.adj button{background:var(--bg);border-radius:12px;padding:8px 2px;font-weight:800;font-size:1rem;box-shadow:0 3px 0 var(--line)}
+.go{display:block;width:100%;margin-top:12px;padding:14px;border-radius:18px;background:var(--good);color:#fff;font-size:1.35rem;font-weight:800;box-shadow:0 5px 0 var(--good-dark)}
+.hint{font-size:.9rem;color:var(--muted);margin:4px 0 0}
+.tbox{display:flex;justify-content:center;align-items:center;gap:6px;font-size:clamp(2.2rem,11vw,3.2rem);font-weight:800;margin:6px 0}
+.tbox .ans{display:inline-block;min-width:1.6em;border-radius:12px;border:3px dashed var(--line);color:#B4C0D8;text-align:center;line-height:1.15;cursor:pointer}
+.tbox .ans.act{border:3px solid var(--accent);color:var(--accent);background:#EEF1FF}
+.tbox .ans.filled{color:var(--accent)}
+.tbox small{font-size:.35em;color:var(--muted);display:block;text-align:center;font-weight:700}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pad button{height:56px;border-radius:16px;background:var(--card);font-size:1.8rem;font-weight:800;box-shadow:0 4px 0 var(--line)}
+.pad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.pad .okbtn{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.4rem}
+
+.help{background:var(--card);border-radius:22px;padding:12px 14px 16px;box-shadow:0 5px 0 var(--line);text-align:center}
+.help .said{color:var(--muted);margin:0}
+.help .fact{font-size:1.7rem;font-weight:800;line-height:1.15;margin:2px 0 8px}
+.help .tip{background:#FFF4CC;border-radius:12px;padding:8px 12px;margin:8px 0 0;font-size:1rem;text-align:left}
+.hops{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;margin:8px 0;font-weight:800}
+.hops .t{background:var(--ink);color:#7CF0B1;border-radius:10px;padding:2px 10px;font-size:1.2rem}
+.hops .j{color:#C96A0C;font-size:.95rem}
+
+.track{background:var(--card);border-radius:18px;padding:4px 12px;margin-top:12px;box-shadow:0 4px 0 var(--line)}
+.lane{position:relative;height:46px;margin-right:34px}
+.lane+.lane{border-top:2px dashed var(--line)}
+.lane .who{position:absolute;left:0;top:1px;font-size:.75rem;font-weight:700;color:var(--muted)}
+.lane .flag{position:absolute;right:-32px;top:50%;transform:translateY(-50%);font-size:1.4rem}
+.car{position:absolute;bottom:4px;left:0;width:46px;transition:left .3s ease-out}
+.car.ghost{transition:none;opacity:.45}
+.racestatus{text-align:center;font-weight:700;color:var(--muted);font-size:1rem;min-height:1.4em;margin-top:6px}
+.tbar{height:14px;border-radius:7px;background:var(--card);overflow:hidden;margin-top:12px;box-shadow:inset 0 0 0 2px var(--line)}
+.tbar i{display:block;height:100%;background:var(--sun);width:100%}
+
+.result{text-align:center;padding-top:20px}
+.rbig{font-size:clamp(3.2rem,16vw,4.6rem);font-weight:800;line-height:1;margin:6px 0}
+.rbig .stars{font-size:inherit}
+.rsub{color:var(--muted);font-size:1.15rem;margin:0 0 14px}
+.result .big{justify-content:center;text-align:center;font-weight:800;font-size:1.2rem;margin-top:12px}
+.count{position:fixed;inset:0;display:grid;place-items:center;background:rgba(234,243,255,.85);font-size:6rem;font-weight:800;z-index:5}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:10px 18px;border-radius:14px;font-weight:700;z-index:6;max-width:90vw;text-align:center}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="home" class="screen">
+  <a class="back" href="../">← Till huvudmenyn</a>
+  <h1>Klockan</h1>
+  <p class="lead">Välj vad du vill träna på.</p>
+  <div class="levels" id="levels"></div>
+  <p class="note">Tre stjärnor får du om alla uppgifter blir rätt direkt.</p>
+</section>
+
+<section id="modes" class="screen" hidden>
+  <button class="back" data-home>← Tillbaka</button>
+  <h2 id="modesTitle"></h2>
+  <p class="lead" id="modesDesc"></p>
+  <div class="modes">
+    <button class="big" data-mode="practice"><span class="ic">✏️</span><span><b>Öva</b><small>Läs klockan och ställ klockan. Hjälp om det blir fel.</small></span></button>
+    <button class="big" data-mode="race"><span class="ic">🏁</span><span><b>Racet</b><small>15 uppgifter. Kör mot ditt spöke.</small></span><span class="best" id="bestRace"></span></button>
+    <button class="big" data-mode="blitz"><span class="ic">⚡</span><span><b>Blixtrunda</b><small>Så många rätt du hinner på 60 sekunder.</small></span><span class="best" id="bestBlitz"></span></button>
+  </div>
+</section>
+
+<section id="game" class="screen" hidden>
+  <div class="gtop"><button class="back" id="quit">← Avsluta</button><span class="info" id="info"></span></div>
+  <div id="raceBox" hidden>
+    <div class="track">
+      <div class="lane"><span class="who">Du</span><span class="flag">🏁</span><div class="car" id="carMe"></div></div>
+      <div class="lane"><span class="who" id="ghostWho">Spöket</span><div class="car ghost" id="carGhost"></div></div>
+    </div>
+    <div class="racestatus" id="raceStatus"></div>
+  </div>
+  <div class="tbar" id="blitzBar" hidden><i id="blitzFill"></i></div>
+  <div class="task" id="task">
+    <div class="instr"><button class="spk" id="spk" aria-label="Läs upp">🔊</button><span id="instr"></span></div>
+    <div class="content" id="content"></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+  </div>
+  <div class="pad" id="pad" hidden>
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okbtn" id="okBtn">OK</button>
+  </div>
+  <div class="help" id="help" hidden>
+    <p class="said" id="helpSaid"></p>
+    <div class="fact" id="helpFact"></div>
+    <div id="helpVis"></div>
+    <p class="tip" id="helpTip"></p>
+    <button class="go" id="helpGo">Fortsätt</button>
+  </div>
+</section>
+
+<section id="result" class="screen result" hidden>
+  <h2 id="rTitle"></h2>
+  <div class="rbig" id="rBig"></div>
+  <p class="rsub" id="rSub"></p>
+  <button class="big" id="rAgain">Spela igen</button>
+  <button class="big" id="rModes">Välj något annat</button>
+</section>
+
+</div>
+<div class="count" id="count" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<canvas id="fx" hidden></canvas>
+
+<script src="../ljud.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickOne=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const carSvg=c=>`<svg viewBox="0 0 48 28" width="46" height="27" aria-hidden="true"><path d="M3 19Q3 13 9 12.5L15 12L21 5H33L39.5 12Q46 13 46 19V21H3Z" fill="${c}"/><path d="M23 7H32L36.5 12H23Z" fill="#fff" opacity=".85"/><circle cx="12" cy="21" r="5" fill="#1D2B53"/><circle cx="37" cy="21" r="5" fill="#1D2B53"/><circle cx="12" cy="21" r="2" fill="#fff"/><circle cx="37" cy="21" r="2" fill="#fff"/></svg>`;
+
+/* ---------- Lagring ---------- */
+const KEY='mattespel-klockan-v1';
+let data=load();
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.stars)return Object.assign({race:{},blitz:{}},d);}catch(e){}return{stars:{},race:{},blitz:{}};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
+
+/* ---------- Tid på svenska ---------- */
+const HN=['tolv','ett','två','tre','fyra','fem','sex','sju','åtta','nio','tio','elva','tolv'];
+const hn=h=>HN[((h%12)+12)%12||12];
+function phrase(h,m){           // h = timme 0–23, m = minuter (multipel av 5)
+  const a=hn(h),b=hn(h+1);
+  return({0:`klockan ${a}`,5:`fem över ${a}`,10:`tio över ${a}`,15:`kvart över ${a}`,20:`tio i halv ${b}`,25:`fem i halv ${b}`,
+    30:`halv ${b}`,35:`fem över halv ${b}`,40:`tio över halv ${b}`,45:`kvart i ${b}`,50:`tio i ${b}`,55:`fem i ${b}`})[m];
+}
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const two=n=>String(n).padStart(2,'0');
+const dig=(h,m)=>`${two(h)}.${two(m)}`;
+function partOfDay(h){return h<5?'på natten':h<10?'på morgonen':h<12?'på förmiddagen':h<18?'på eftermiddagen':'på kvällen';}
+function fmtDur(min){const h=Math.floor(min/60),m=min%60;const hs=h?`${h} ${h===1?'timme':'timmar'}`:'',ms=m?`${m} minuter`:'';return hs&&ms?`${hs} och ${ms}`:hs||ms;}
+
+/* ---------- Klockan (SVG) ---------- */
+function clockSVG(h,m,o={}){
+  const ah=((h%12)+m/60)*30,am=m*6;
+  let s=`<svg class="clock${o.small?' small':''}" viewBox="-22 -22 244 244" role="img" aria-label="Analog klocka">`;
+  s+=`<circle cx="100" cy="100" r="96" fill="#fff" stroke="#1D2B53" stroke-width="6"/>`;
+  if(o.halves){
+    s+=`<path d="M100 100L100 7A93 93 0 0 1 100 193Z" fill="#DDF5E7"/><path d="M100 100L100 193A93 93 0 0 1 100 7Z" fill="#FFE9D2"/>`;
+    s+=`<text x="136" y="106" text-anchor="middle" font-size="15" font-weight="800" fill="#157548" stroke="#fff" stroke-width="4" paint-order="stroke">över</text><text x="64" y="106" text-anchor="middle" font-size="17" font-weight="800" fill="#C96A0C" stroke="#fff" stroke-width="4" paint-order="stroke">i</text>`;
+  }
+  if(o.wedge){const[m1,dm]=o.wedge;if(dm>=60)s+=`<circle cx="100" cy="100" r="92" fill="rgba(255,159,67,.28)"/>`;
+    const rest=dm%60;if(rest){const a1=m1*6*Math.PI/180,a2=(m1+rest)*6*Math.PI/180,R=92,large=rest>30?1:0;
+      s+=`<path d="M100 100L${100+R*Math.sin(a1)} ${100-R*Math.cos(a1)}A${R} ${R} 0 ${large} 1 ${100+R*Math.sin(a2)} ${100-R*Math.cos(a2)}Z" fill="rgba(255,159,67,.45)"/>`;}}
+  for(let i=0;i<60;i++){const a=i*6*Math.PI/180,maj=i%5===0,r1=maj?80:86,r2=92;
+    s+=`<line x1="${100+r1*Math.sin(a)}" y1="${100-r1*Math.cos(a)}" x2="${100+r2*Math.sin(a)}" y2="${100-r2*Math.cos(a)}" stroke="#1D2B53" stroke-width="${maj?3:1.3}" stroke-linecap="round"/>`;}
+  for(let i=1;i<=12;i++){const a=i*30*Math.PI/180;s+=`<text x="${100+66*Math.sin(a)}" y="${100-66*Math.cos(a)+7}" text-anchor="middle" font-size="21" font-weight="800" fill="#1D2B53">${i}</text>`;}
+  if(o.ring){for(let i=0;i<12;i++){const a=i*30*Math.PI/180;
+    s+=`<text x="${100+110*Math.sin(a)}" y="${100-110*Math.cos(a)+5}" text-anchor="middle" font-size="13" font-weight="800" fill="#3D5AFE">${two(i*5)}</text>`;}}
+  s+=`<g class="hh" transform="rotate(${ah} 100 100)"><line x1="100" y1="112" x2="100" y2="50" stroke="#1D2B53" stroke-width="9" stroke-linecap="round"/></g>`;
+  s+=`<g class="mh" transform="rotate(${am} 100 100)"><line x1="100" y1="114" x2="100" y2="22" stroke="#3D5AFE" stroke-width="5.5" stroke-linecap="round"/></g>`;
+  s+=`<circle cx="100" cy="100" r="7" fill="#FFC93C" stroke="#1D2B53" stroke-width="2"/></svg>`;
+  return s;
+}
+
+/* ---------- Nivåer ---------- */
+const LEVELS=[
+  {id:'hel',name:'Hel timme',desc:'Klockan tre, klockan sju …',mins:[0],ex:[3,0]},
+  {id:'halv',name:'Halv',desc:'Halv fyra, halv åtta …',mins:[30],ex:[3,30]},
+  {id:'kvart',name:'Kvart',desc:'Kvart över och kvart i.',mins:[15,45],ex:[3,15]},
+  {id:'fem',name:'Fem och tio',desc:'Fem över, tio i …',mins:[5,10,50,55],ex:[3,10]},
+  {id:'runthalv',name:'Runt halv',desc:'Fem i halv, fem över halv …',mins:[20,25,35,40],ex:[2,25]},
+  {id:'dig',name:'Digital tid',desc:'24-timmarsklockan, t.ex. 15.45.',digital:true},
+  {id:'mata',name:'Mäta tid',desc:'Hur lång tid tar det?',measure:true},
+  {id:'mix',name:'Blanda allt',desc:'Alla sorters klockslag.',mins:[0,5,10,15,20,25,30,35,40,45,50,55],ex:[8,40],mix:true}
+];
+const EARLIER=lv=>LEVELS.slice(0,LEVELS.indexOf(lv)).filter(l=>l.mins&&!l.mix).flatMap(l=>l.mins);
+
+/* ---------- Uppgifter ---------- */
+function analogDistractors(h,m,pool){
+  const cands=new Map();
+  const add=(hh,mm,score)=>{const p=phrase(hh,mm);if(p&&p!==phrase(h,m)&&!cands.has(p))cands.set(p,score+Math.random());};
+  add(h+1,m,3);add(h-1,m,2);add(h,(60-m)%60,3);add(h+1,(60-m)%60,2);
+  if(m>=20&&m<=40){add(h,(m+30)%60,2);add(h+1,m===30?0:m,1);}
+  pool.forEach(mm=>add(h,mm,1));[0,15,30,45].forEach(mm=>add(h,mm,.5));
+  return[...cands.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]);
+}
+function optsTask(correct,distr){return shuffle([correct,...distr]);}
+function genAnalog(lv,forRace){
+  const pool=lv.mins,early=EARLIER(lv);
+  const m=early.length&&!lv.mix&&Math.random()<.2?pickOne(early):pickOne(pool),h=rnd(1,12);
+  const p=phrase(h,m);
+  if(!forRace&&Math.random()<.4)return{kind:'set',instr:`Ställ klockan på ${p}.`,speak:`Ställ klockan på ${p}.`,target:(h%12)*60+m,h,m,help:helpAnalog(h,m)};
+  return{kind:'opts',instr:'Vad är klockan?',speak:'Vad är klockan?',vis:clockSVG(h,m),options:optsTask(cap(p),analogDistractors(h,m,pool).map(cap)),answer:cap(p),help:helpAnalog(h,m)};
+}
+function explain(h,m){
+  const a=hn(h),b=hn(h+1);
+  if(m===0)return`Den långa visaren pekar rakt upp på 12. Då är klockan hel. Den korta visaren pekar på ${h%12||12}. Klockan är ${a}.`;
+  if(m===30)return`Den långa visaren pekar rakt ner på 6. Då är det halv. Den korta visaren står mitt emellan ${h%12||12} och ${(h%12)+1}. Halv betyder halvvägs till ${b}.`;
+  if(m<30){if(m>=20)return`Den långa visaren är nästan nere vid 6, men inte riktigt. Det fattas ${30-m} minuter till halv. Alltså ${30-m===5?'fem':'tio'} i halv ${b}.`;
+    return`Den långa visaren är på högra sidan, där står det "över". Den har gått ${m} minuter efter hel. Den korta visaren har precis gått förbi ${h%12||12}. Alltså ${phrase(h,m)}.`;}
+  if(m<=40)return`Den långa visaren har gått förbi 6, alltså förbi halv. Den har gått ${m-30} minuter till. Alltså ${phrase(h,m)}.`;
+  return`Den långa visaren är på vänstra sidan, där står det "i". Det fattas ${60-m} minuter tills klockan blir ${b}. Alltså ${phrase(h,m)}.`;
+}
+const helpAnalog=(h,m)=>()=>({fact:cap(phrase(h,m)),vis:clockSVG(h,m,{halves:true,ring:true}),tip:explain(h,m)});
+
+function genDigital(forRace){
+  const H=rnd(6,22),m=rnd(0,11)*5,p=phrase(H,m),pod=partOfDay(H),t=Math.random();
+  const helpD=()=>({fact:`${cap(p)} ${pod} = ${dig(H,m)}`,vis:clockSVG(H,m,{halves:true,ring:true}),
+    tip:H>=13?`På eftermiddagen och kvällen lägger vi till 12 på timmarna: ${H-12} + 12 = ${H}. Minuterna läser du på ringen runt klockan: ${two(m)}.`:`Före klockan 12 är timmen samma som på klockan: ${two(H)}. Minuterna läser du på ringen runt klockan: ${two(m)}.`});
+  if(forRace||t<.4)return{kind:'opts',instr:'Vad är klockan?',speak:'Vad är klockan?',vis:`<div class="digital">${dig(H,m)}</div>`,
+    options:optsTask(cap(p),analogDistractors(H,m,[0,15,30,45]).map(cap)),answer:cap(p),help:helpD};
+  if(t<.7)return{kind:'keys',instr:`Skriv tiden digitalt. Det är ${pod}.`,speak:`Skriv tiden digitalt. Det är ${pod}.`,
+    vis:clockSVG(H,m)+`<span class="pod">${cap(pod)}</span>`,boxes:[H,m],answer:dig(H,m),help:helpD};
+  return{kind:'set',instr:`Ställ klockan på ${dig(H,m)}.`,speak:`Ställ klockan på ${H} och ${m}.`,topVis:`<div class="digital">${dig(H,m)}</div>`,target:(H%12)*60+m,h:H,m,help:helpD};
+}
+const STORIES=[
+  ['Filmen börjar {s} och är {d} lång.','När slutar filmen?'],
+  ['Fotbollsträningen börjar {s} och håller på i {d}.','När slutar träningen?'],
+  ['Bussen går {s}. Resan tar {d}.','När kommer bussen fram?'],
+  ['Kalaset börjar {s} och håller på i {d}.','När slutar kalaset?']
+];
+function hopsHTML(s,d){
+  let t=s,h=`<span class="t">${dig(Math.floor(t/60)%24,t%60)}</span>`;
+  const H=Math.floor(d/60),M=d%60;
+  if(H){t+=H*60;h+=`<span class="j">+${H} tim →</span><span class="t">${dig(Math.floor(t/60)%24,t%60)}</span>`;}
+  if(M){t+=M;h+=`<span class="j">+${M} min →</span><span class="t">${dig(Math.floor(t/60)%24,t%60)}</span>`;}
+  return`<div class="hops">${h}</div>`;
+}
+function genMeasure(forRace){
+  const easy=Math.random()<.6;
+  const d=easy?pickOne([15,30,45,60,90,120]):pickOne([5,10,20,25,35,40,50,55,65,70,80,100]);
+  const s0=easy?rnd(8*4,15*4)*15:rnd(8*12,15*12)*5,e=s0+d;
+  const sh=Math.floor(s0/60),sm=s0%60,eh=Math.floor(e/60),em=e%60;
+  const help=()=>({fact:`Det tar ${fmtDur(d)}.`,
+    vis:clockSVG(eh,em,{wedge:[sm,d],small:false})+hopsHTML(s0,d),
+    tip:d>=60?`Ett helt varv med den långa visaren är 1 timme. Räkna först hela varv, sedan minuterna som är kvar. Det orange visar hur långt minutvisaren har gått.`
+             :`Det orange visar hur långt den långa visaren har gått: från ${two(sm)} till ${two(em)}. Varje litet streck är en minut, och varje siffra är 5 minuter.`});
+  const r=Math.random();
+  // Två analoga klockor utan digital text
+  if(forRace||r<.45){
+    const opts=new Set([d]);[d-5,d+5,d-15,d+15,d+60,d-60,d+30].filter(x=>x>0).sort(()=>Math.random()-.5).forEach(x=>{if(opts.size<4)opts.add(x);});
+    return{kind:'opts',instr:'Hur lång tid har gått?',speak:'Titta på klockorna. Hur lång tid har gått från start till slut?',
+      vis:`<div class="clocks"><figure>${clockSVG(sh,sm,{small:true})}<figcaption>Start</figcaption></figure><figure>${clockSVG(eh,em,{small:true})}<figcaption>Slut</figcaption></figure></div>`,
+      options:shuffle([...opts].map(fmtDur)),answer:fmtDur(d),help};
+  }
+  // Ställ slutklockan
+  if(r<.75){
+    const ev=pickOne([['Rasten','är'],['Lektionen','är'],['Filmen','är'],['Promenaden','tar']]);
+    const txt=`${ev[0]} börjar när klockan är som på den lilla klockan. ${ev[0]} ${ev[1]} ${fmtDur(d)}. Ställ den stora klockan på när ${ev[0].toLowerCase()} slutar.`;
+    return{kind:'set',instr:`${ev[0]} ${ev[1]} ${fmtDur(d)}. När slutar ${ev[0].toLowerCase()}?`,speak:txt,
+      topVis:`<div class="clocks"><figure>${clockSVG(sh,sm,{small:true})}<figcaption>Start</figcaption></figure></div><p class="hint">Den stora klockan står på starttiden. Flytta den till sluttiden.</p>`,
+      target:(eh%12)*60+em,startT:(sh%12)*60+sm,h:eh,m:em,answer:cap(phrase(eh,em)),help};
+  }
+  // Berättelse med digital tid
+  const st=pickOne(STORIES),txt=st[0].replace('{s}',dig(sh,sm)).replace('{d}',fmtDur(d));
+  return{kind:'keys',instr:st[1],speak:`${txt} ${st[1]}`,vis:`<p class="story">${txt}</p>`,boxes:[eh,em],answer:dig(eh,em),help};
+}
+function genTask(lv,forRace){if(lv.digital)return genDigital(forRace);if(lv.measure)return genMeasure(forRace);return genAnalog(lv,forRace);}
+
+/* ---------- Uppläsning ---------- */
+let svVoice=null;
+function loadVoices(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null;}catch(e){}}
+if('speechSynthesis' in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+function speak(text){
+  if(!('speechSynthesis' in window))return toast('Uppläsning fungerar inte i den här webbläsaren.');
+  loadVoices();if(!svVoice&&speechSynthesis.getVoices().length)return toast('Den här datorn har ingen svensk röst för uppläsning.');
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='sv-SE';if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);
+}
+
+/* ---------- Startsida och lägen ---------- */
+let G=null,cur=null,toastT;
+function show(id){$$('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600);}
+const starHtml=n=>`<span class="stars">${[1,2,3].map(i=>i<=n?'★':'<span class="off">★</span>').join('')}</span>`;
+const fmt=ms=>(ms/1000).toFixed(1).replace('.',',')+' s';
+$$('[data-home]').forEach(b=>b.onclick=openHome);
+function openHome(){
+  G=null;if('speechSynthesis' in window)speechSynthesis.cancel();
+  const L=$('#levels');L.innerHTML='';
+  LEVELS.forEach(lv=>{
+    const b=document.createElement('button');b.className='lcard'+(lv.mix?' mix':'');
+    const ico=lv.digital?'<span class="dig">15.45</span>':lv.measure?'<span style="font-size:3rem">⏱️</span>':clockSVG(lv.ex[0],lv.ex[1],{small:true});
+    b.innerHTML=`<span class="ico">${ico}</span><span><b>${lv.name}</b><br><small>${lv.desc}</small><br>${starHtml(data.stars[lv.id]||0)}</span>`;
+    b.onclick=()=>{cur=lv;openModes();};L.appendChild(b);
+  });
+  show('home');
+}
+function openModes(){
+  G=null;$('#modesTitle').textContent=cur.name;$('#modesDesc').textContent=cur.desc;
+  $('#bestRace').textContent=data.race[cur.id]?'Rekord\n'+fmt(data.race[cur.id].time):'';
+  $('#bestBlitz').textContent=data.blitz[cur.id]?'Rekord\n'+data.blitz[cur.id]+' rätt':'';
+  show('modes');
+}
+$$('[data-mode]').forEach(b=>b.onclick=()=>startGame(b.dataset.mode));
+
+/* ---------- Spelet ---------- */
+const RACE_LEN=15,ROUND=10;
+function startGame(mode){
+  G={mode,lv:cur,n:mode==='race'?RACE_LEN:ROUND,i:-1,correct:0,missed:0,times:[],paused:0,pauseStart:0,start:performance.now(),over:false,raf:0,last:null};
+  G.best=mode==='race'?data.race[cur.id]:null;
+  $('#raceBox').hidden=mode!=='race';$('#blitzBar').hidden=mode!=='blitz';$('#help').hidden=true;$('#task').hidden=false;
+  if(mode==='race'){$('#carMe').innerHTML=carSvg('#3D5AFE');$('#carGhost').innerHTML=carSvg('#8E9AB5');setPos($('#carMe'),0);setPos($('#carGhost'),0);
+    $('#carGhost').hidden=!G.best;$('#ghostWho').textContent=G.best?'Spöket (ditt rekord)':'Inget spöke än. Nu sätter du rekordet!';$('#raceStatus').textContent='';}
+  if(mode==='blitz')$('#blitzFill').style.width='100%';
+  $('#content').innerHTML='';$('#instr').textContent='';$('#feedback').textContent='';$('#pad').hidden=true;$('#info').textContent='';
+  show('game');
+  if(mode==='practice')nextTask();else countdown(()=>{G.start=performance.now();nextTask();loop();});
+}
+function countdown(done){
+  const c=$('#count');const steps=['3','2','1','Kör!'];let i=0;c.hidden=false;
+  (function tick(){if(!G||G.over){c.hidden=true;return;}if(i<steps.length){c.textContent=steps[i++];setTimeout(tick,650);}else{c.hidden=true;done();}})();
+}
+const elapsed=()=>performance.now()-G.start-G.paused-(G.pauseStart?performance.now()-G.pauseStart:0);
+function setPos(el,p){p=Math.max(0,Math.min(1,p));el.style.left=`calc(${p*100}% - ${p*46}px)`;}
+function ghostPos(pace,t){let i=0;while(i<pace.length&&pace[i]<=t)i++;if(i>=pace.length)return pace.length;const prev=i?pace[i-1]:0;return i+(t-prev)/(pace[i]-prev);}
+function loop(){
+  if(!G||G.over)return;const t=elapsed();
+  if(G.mode==='race'&&G.best){const gp=ghostPos(G.best.pace,t);setPos($('#carGhost'),gp/RACE_LEN);
+    const d=G.correct-gp,s=d>0.4?'Du leder!':d<-0.4?'Spöket leder. Kom igen!':'Jämnt lopp!';if($('#raceStatus').textContent!==s)$('#raceStatus').textContent=s;}
+  if(G.mode==='blitz'){const left=Math.max(0,60000-t);$('#blitzFill').style.width=(left/600)+'%';
+    $('#info').textContent=`Rätt: ${G.correct}  ·  ${Math.ceil(left/1000)} s`;if(left<=0){finish();return;}}
+  G.raf=requestAnimationFrame(loop);
+}
+function nextTask(){
+  if(!G||G.over)return;
+  if(G.mode!=='blitz'){G.i++;if(G.i>=G.n)return finish();}
+  let t=null;
+  if(G.mode==='practice'&&G.pending&&G.pending.length&&G.pending[0].at<=G.i)t=G.pending.shift().t;
+  if(!t)for(let k=0;k<8;k++){t=genTask(G.lv,G.mode!=='practice');if(t.answer!==G.last&&t.instr!==G.lastInstr)break;}
+  G.last=t.answer;G.lastInstr=t.instr;
+  G.t=t;G.first=true;G.busy=false;
+  if('speechSynthesis' in window)speechSynthesis.cancel();
+  if(G.mode==='practice')$('#info').textContent=`${Math.min(G.i+1,G.n)} av ${G.n}`;
+  if(G.mode==='race')$('#info').textContent=`${G.correct} / ${RACE_LEN}`;
+  $('#instr').textContent=t.instr;$('#task').className='task';$('#feedback').textContent='';
+  render();
+}
+function render(){
+  const t=G.t,c=$('#content');$('#pad').hidden=t.kind!=='keys';
+  if(t.kind==='opts'){
+    c.innerHTML=t.vis+`<div class="opts">${t.options.map(o=>`<button data-o="${o}">${o}</button>`).join('')}</div>`;
+    c.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>answerOpt(b));
+  }else if(t.kind==='keys'){
+    G.inputs=['',''];G.slot=0;
+    c.innerHTML=t.vis+`<div class="tbox" id="tbox"></div>`;renderBoxes();
+  }else{
+    G.T=t.startT!=null?t.startT%720:0;
+    c.innerHTML=(t.topVis||'')+clockSVG(0,0)+`<div class="adj"><button data-d="-60">−1 tim</button><button data-d="-5">−5 min</button><button data-d="5">+5 min</button><button data-d="60">+1 tim</button></div><p class="hint">Dra i visarna eller använd knapparna.</p><button class="go" id="setDone">Klar</button>`;
+    mountSet(c);
+  }
+}
+/* Svar med knappar */
+function answerOpt(b){
+  if(G.busy||G.over)return;const t=G.t,ok=b.dataset.o===t.answer;
+  if(ok){b.classList.add('right');return correct();}
+  b.classList.add('bad');b.disabled=true;
+  if(G.mode==='blitz')$('#content').querySelectorAll('.opts button').forEach(x=>{if(x.dataset.o===t.answer)x.classList.add('right');});
+  wrong(b.dataset.o,()=>{});
+}
+/* Digital tid med sifferknappar */
+function renderBoxes(){
+  const box=i=>{const v=G.inputs[i];return`<span><span class="ans${G.slot===i&&!G.busy?' act':''}${v?' filled':''}" data-slot="${i}">${v||'?'}</span><small>${i?'minuter':'timmar'}</small></span>`;};
+  $('#tbox').innerHTML=box(0)+'<span>.</span>'+box(1);
+  $('#okBtn').textContent=G.slot===0?'Nästa':'OK';
+  $('#tbox').querySelectorAll('.ans').forEach(a=>a.onclick=()=>{if(!G.busy){G.slot=+a.dataset.slot;renderBoxes();}});
+}
+function press(k){
+  if(!G||G.busy||G.over||G.t.kind!=='keys')return;
+  if(k==='del'){if(!G.inputs[G.slot]&&G.slot===1)G.slot=0;else G.inputs[G.slot]=G.inputs[G.slot].slice(0,-1);}
+  else if(k==='ok'){if(G.slot===0){if(G.inputs[0]!=='')G.slot=1;}else if(G.inputs[0]!==''&&G.inputs[1]!=='')return submitKeys();}
+  else if(G.inputs[G.slot].length<2){G.inputs[G.slot]+=k;if(G.slot===0&&G.inputs[0].length===2)G.slot=1;}
+  renderBoxes();
+}
+$$('#pad button').forEach(b=>b.onclick=()=>press(b.dataset.k));
+function submitKeys(){
+  const t=G.t,h=+G.inputs[0],m=+G.inputs[1],ok=h===t.boxes[0]&&m===t.boxes[1];
+  if(ok)return correct();
+  wrong(`${two(h)}.${two(m)}`,()=>{G.inputs=['',''];G.slot=0;renderBoxes();});
+}
+/* Ställ klockan */
+function mountSet(c){
+  const svg=c.querySelector('svg'),hh=svg.querySelector('.hh'),mh=svg.querySelector('.mh');
+  const draw=()=>{const h=Math.floor(G.T/60),m=G.T%60;hh.setAttribute('transform',`rotate(${(h+m/60)*30} 100 100)`);mh.setAttribute('transform',`rotate(${m*6} 100 100)`);};
+  const pt=e=>{const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*244-22,y=(e.clientY-r.top)/r.height*244-22;
+    const dx=x-100,dy=y-100;return{a:(Math.atan2(dx,-dy)*180/Math.PI+360)%360,r:Math.hypot(dx,dy)};};
+  let hand=null;
+  const moveTo=p=>{const m=G.T%60,h=Math.floor(G.T/60);
+    if(hand==='m'){const nm=Math.round(p.a/30)*5%60;let d=((nm-m)%60+90)%60-30;G.T=((G.T+d)%720+720)%720;}
+    else{const nh=((Math.round((p.a-m/2)/30))%12+12)%12;G.T=nh*60+m;}
+    draw();$('#task').className='task';$('#feedback').textContent='';};
+  svg.addEventListener('pointerdown',e=>{if(G.busy)return;const p=pt(e);hand=p.r>=58?'m':'h';svg.setPointerCapture(e.pointerId);moveTo(p);});
+  svg.addEventListener('pointermove',e=>{if(hand)moveTo(pt(e));});
+  const end=()=>{hand=null;};svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
+  c.querySelectorAll('.adj button').forEach(b=>b.onclick=()=>{if(G.busy)return;G.T=((G.T+ +b.dataset.d)%720+720)%720;draw();$('#task').className='task';$('#feedback').textContent='';});
+  $('#setDone').onclick=()=>{if(G.busy)return;
+    if(G.T===G.t.target)return correct();
+    const h=Math.floor(G.T/60),m=G.T%60;
+    wrong(cap(phrase(h||12,m)),()=>{});
+  };
+  draw();
+}
+/* Rätt och fel */
+const PRAISE=['Rätt!','Snyggt!','Bra!','Toppen!','Klockrent!'];
+function correct(){window.Ljud&&Ljud.ok();
+  G.busy=true;G.correct++;
+  $('#task').className='task ok';$('#feedback').textContent=G.first?pickOne(PRAISE):'Nu blev det rätt!';
+  if(G.mode==='race'){G.times.push(elapsed());setPos($('#carMe'),G.correct/RACE_LEN);$('#info').textContent=`${G.correct} / ${RACE_LEN}`;
+    if(G.correct>=RACE_LEN){setTimeout(finish,500);return;}}
+  setTimeout(nextTask,G.mode==='blitz'?250:900);
+}
+function wrong(given,reset){window.Ljud&&Ljud.bad();
+  if(G.first&&G.mode==='practice')G.missed++;
+  G.first=false;
+  if(G.mode==='blitz'){G.busy=true;$('#task').className='task bad';$('#feedback').textContent=`Rätt svar: ${G.t.answer||cap(phrase(G.t.h,G.t.m))}`;setTimeout(nextTask,1300);return;}
+  if(G.mode==='race'){$('#task').className='task bad';$('#feedback').textContent='Försök igen!';reset();return;}
+  showHelp(given);reset();
+}
+function showHelp(given){
+  const hp=G.t.help();$('#task').hidden=true;$('#pad').hidden=true;
+  $('#helpSaid').textContent=`Du svarade: ${given}. Så här blir det:`;
+  $('#helpFact').textContent=hp.fact;$('#helpVis').innerHTML=hp.vis;$('#helpTip').textContent='Tips: '+hp.tip;
+  $('#help').hidden=false;$('#helpGo').focus({preventScroll:true});
+}
+$('#helpGo').onclick=()=>{
+  $('#help').hidden=true;$('#task').hidden=false;
+  // samma uppgift kommer tillbaka två uppgifter senare
+  (G.pending=G.pending||[]).push({t:G.t,at:G.i+3});G.n++;nextTask();
+};
+document.addEventListener('keydown',e=>{
+  if($('#game').hidden||!G||G.over)return;
+  if(!$('#help').hidden){if(e.key==='Enter'){e.preventDefault();$('#helpGo').click();}return;}
+  if(G.t&&G.t.kind==='keys'){if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter'||e.key==='.'){e.preventDefault();press('ok');}}
+});
+$('#spk').onclick=()=>{if(G&&G.t)speak(G.t.speak);};
+$('#quit').onclick=()=>{if(G){G.over=true;cancelAnimationFrame(G.raf);}$('#count').hidden=true;openModes();};
+
+/* ---------- Resultat ---------- */
+function finish(){
+  if(!G||G.over)return;G.over=true;cancelAnimationFrame(G.raf);
+  const t=elapsed(),id=G.lv.id;let party=false;
+  if(G.mode==='practice'){
+    const right=Math.max(0,ROUND-G.missed),st=right===ROUND?3:right>=ROUND-2?2:1; // G.missed räknar varje uppgift högst en gång
+    if(st>(data.stars[id]||0)){data.stars[id]=st;save();}
+    $('#rTitle').textContent=st===3?'Alla rätt direkt!':st===2?'Bra jobbat!':'Klart!';
+    $('#rBig').innerHTML=starHtml(st);$('#rSub').textContent=`${right} av ${ROUND} rätt på första försöket.`;party=st===3;
+  }else if(G.mode==='race'){
+    const best=G.best,rec=!best||t<best.time;
+    if(rec){data.race[id]={time:Math.round(t),pace:G.times.map(Math.round)};save();}
+    $('#rTitle').textContent=rec?(best?'Nytt rekord!':'Första racet klart!'):'I mål!';$('#rBig').textContent=fmt(t);
+    $('#rSub').textContent=rec&&best?`Du slog ditt gamla rekord med ${fmt(best.time-t)}.`:rec?'Nästa gång kör du mot ditt spöke.':`Ditt rekord är ${fmt(best.time)}. Bara ${fmt(t-best.time)} ifrån!`;party=rec;
+  }else{
+    const best=data.blitz[id]||0,rec=G.correct>best;if(rec){data.blitz[id]=G.correct;save();}
+    $('#rTitle').textContent=rec?'Nytt rekord!':'Tiden är slut!';$('#rBig').textContent=G.correct;
+    $('#rSub').textContent='rätt på 60 sekunder.'+(rec&&best?` Förra rekordet var ${best}.`:!rec&&best?` Ditt rekord är ${best}.`:'');party=rec;
+  }
+  show('result');if(party)confetti();
+}
+$('#rAgain').onclick=()=>startGame(G.mode);
+$('#rModes').onclick=openModes;
+
+function confetti(){window.Ljud&&Ljud.fanfare();
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cols=['#3D8BFD','#FF9F43','#2BB673','#FFC93C','#7B61FF','#FF6B6B'];
+  const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
+  c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  const t0=performance.now();
+  (function f(now){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(now-t0<2800)requestAnimationFrame(f);else{x.clearRect(0,0,W,H);c.hidden=true;}})(t0);
+}
+openHome();
+</script>
+</body>
+</html>
