@@ -243,6 +243,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <div class="toast" id="toast" hidden></div>
 <canvas id="fx" hidden></canvas>
 
+<script src="../ljud.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -433,13 +434,13 @@ function submit(){
   if(!G.retry){record(a,b,ok,ms);save();const w=ok?ms:ms+8000,s=G.slow[key];if(!s||w>s.w)G.slow[key]={a,b,w};if(!ok)G.missed.add(key);}
   G.busy=true;
   if(ok){
-    G.correct++;G.streak++;$('#qbox').classList.add('ok');
+    G.correct++;G.streak++;$('#qbox').classList.add('ok');window.Ljud&&Ljud.ok();
     $('#feedback').textContent=G.streak>=3&&G.streak%1===0&&G.streak>=5?`${G.streak} rätt i rad!`:PRAISE[Math.floor(Math.random()*PRAISE.length)];
     if(G.mode==='order')addLadder(a,b);
     if(G.mode==='race'){G.times.push(elapsed());setPos($('#carMe'),G.correct/20);updateInfo();if(G.correct>=20){setTimeout(finish,500);return;}}
     setTimeout(nextQ,G.mode==='blitz'?200:450);
   }else{
-    G.streak=0;$('#qbox').classList.add('bad');
+    G.streak=0;$('#qbox').classList.add('bad');window.Ljud&&Ljud.bad();
     if(G.mode==='blitz'){$('#feedback').textContent=`${a} · ${b} = ${ans}`;setTimeout(nextQ,1300);}
     else showHelp(a,b,val);
   }
@@ -540,7 +541,7 @@ function renderBoard(){
 $('#resetBtn').onclick=()=>{if(confirm('Vill du nollställa alla framsteg och rekord i den här webbläsaren?')){data={facts:{},race:{},blitz:{}};save();renderBoard();toast('Framstegen är nollställda.');}};
 
 /* ---------- Konfetti ---------- */
-function confetti(){
+function confetti(){window.Ljud&&Ljud.fanfare();
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
   c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
