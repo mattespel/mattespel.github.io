@@ -187,6 +187,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <div class="toast" id="toast" hidden></div>
 <canvas id="fx" hidden></canvas>
 
+<script src="../ljud.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -454,7 +455,7 @@ function submit(){
   if(!G||G.busy||G.over||!G.input)return;
   const step=G.steps[G.si],ok=+G.input===step.v;G.busy=true;
   if(ok){
-    G.si++;$('#qbox').classList.add('ok');renderRows();
+    G.si++;$('#qbox').classList.add('ok');window.Ljud&&Ljud.ok();renderRows();
     if(!G.race)renderVisual();
     const tenMsg=G.steps[G.si-1].k==='p1'&&!G.race&&!(G.t.op==='minus'&&think()&&G.lv>1)?(G.t.op==='plus'?'Ett helt tiotal!':'Nu är du på tiotalet!'):null;
     if(G.si<G.steps.length){$('#feedback').textContent=tenMsg||PRAISE[Math.floor(Math.random()*PRAISE.length)];setTimeout(startStep,750);return;}
@@ -466,7 +467,7 @@ function submit(){
     setTimeout(nextTask,G.race?300:(G.lv===1?700:1100));
   }else{
     if(!G.taskMissed){G.taskMissed=true;G.missed++;}
-    G.tries++;$('#qbox').classList.add('bad');
+    G.tries++;$('#qbox').classList.add('bad');window.Ljud&&Ljud.bad();
     $('#feedback').textContent=G.race?'Försök igen!':G.tries>=2?`Svaret är ${step.v}. Skriv ${step.v}.`:hintFor(G.t,G.P,step.k);
     setTimeout(()=>{if(!G||G.over)return;G.input='';G.busy=false;renderRows();$('#qbox').className='qbox bad';},G.race?450:700);
   }
@@ -512,7 +513,7 @@ $('#rNext').onclick=()=>startGame(G.lv+1);
 $('#rTrainSlow').onclick=()=>startGame(3,G.slowTasks);
 
 /* ---------- Konfetti ---------- */
-function confetti(){
+function confetti(){window.Ljud&&Ljud.fanfare();
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const cols=['#3D8BFD','#FF9F43','#2BB673','#FFC93C','#7B61FF','#FF6B6B'];
   const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
