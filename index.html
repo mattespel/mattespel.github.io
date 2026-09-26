@@ -64,39 +64,6 @@
             font-size: .95rem; font-weight: bold; margin-top: 16px;
         }
 
-        /* ── SPEL 1 ── */
-        .game1-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 16px; }
-        .game1-container {
-            background: white; padding: 1.5rem; border-radius: 18px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12); text-align: center;
-            max-width: 480px; width: 100%;
-        }
-        .game1-menu-btn {
-            display: block; width: 100%; padding: 16px; margin: 12px 0;
-            font-size: 1.3rem; border: none; border-radius: 12px;
-            cursor: pointer; color: white; font-weight: bold;
-        }
-        .game1-btn-plus  { background: #4caf50; box-shadow: 0 4px #2e7d32; }
-        .game1-btn-minus { background: #f44336; box-shadow: 0 4px #c62828; }
-        .game1-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 16px; background: #eceff1; padding: 10px;
-            border-radius: 10px; font-weight: bold; color: #455a64;
-            font-size: clamp(.8rem, 3vw, 1rem);
-        }
-        .game1-timer { font-family: monospace; font-size: 1.3rem; color: #d84315; }
-        .game1-question-box {
-            font-size: clamp(2.2rem, 10vw, 4rem); font-weight: bold; color: #37474f;
-            margin: 16px 0; padding: 16px; border: 3px dashed #b0bec5;
-            border-radius: 14px; background: #fafafa;
-        }
-        .game1-options-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        button.game1-num-btn {
-            background: #0288d1; color: white; border: none;
-            padding: 14px 0; font-size: 1.3rem; border-radius: 8px; cursor: pointer; font-weight: bold;
-        }
-        .game1-result-time { font-size: 2.5rem; color: #d84315; font-weight: bold; margin: 16px 0; }
-
         /* ── SPEL 2 ── */
         .game2-wrapper { display: flex; justify-content: center; padding: 24px 12px; }
         .game2-container {
@@ -361,9 +328,9 @@
         <div class="game-card">
             <div>
                 <h3>Lilla plus &amp; minus</h3>
-                <p>Träna på snabbhet i huvudräkning 0–10. 30 uppgifter på tid!</p>
+                <p>Huvudräkning 0–10 med plus och minus. Öva i lugn takt eller kör Racet mot ditt eget rekord!</p>
             </div>
-            <button class="start-game-btn color-1" onclick="showView('portal-game1'); game1_showMenu();">Starta Lilla plus/minus</button>
+            <a class="start-game-btn color-1" href="lillaplus/">Starta Lilla plus/minus</a>
         </div>
         <div class="game-card">
             <div>
@@ -406,38 +373,6 @@
                 <p>Träna på tabellerna 1–10 var för sig, blanda dina egna, eller kör Racet mot ditt eget spöke.</p>
             </div>
             <a class="start-game-btn color-7" href="multiplikation/">Träna multiplikation</a>
-        </div>
-    </div>
-</div>
-
-<!-- ══ SPEL 1 ══ -->
-<div id="portal-game1" class="hidden">
-    <div class="game1-wrapper">
-        <div class="game1-container">
-            <div id="game1-menu-view">
-                <h2>Välj Spel</h2>
-                <button class="game1-menu-btn game1-btn-plus"  onclick="game1_startGame('plus')">Lilla Plus (+)</button>
-                <button class="game1-menu-btn game1-btn-minus" onclick="game1_startGame('minus')">Lilla Minus (-)</button>
-                <br>
-                <button class="portal-back-btn" onclick="returnToPortal()">← Till huvudmenyn</button>
-            </div>
-            <div id="game1-active-view" class="hidden">
-                <div class="game1-header">
-                    <span id="game1-title">Spel</span>
-                    <span id="game1-progress">0 / 30</span>
-                    <span class="game1-timer" id="game1-timer">00:00</span>
-                </div>
-                <div class="game1-question-box" id="game1-question">?</div>
-                <div class="game1-options-grid" id="game1-options"></div>
-                <button class="portal-back-btn" onclick="game1_showMenu()">Avbryt / Tillbaka</button>
-            </div>
-            <div id="game1-end-view" class="hidden">
-                <h2>Bra jobbat!</h2>
-                <p>Din tid blev:</p>
-                <div class="game1-result-time" id="game1-final-time">00:00</div>
-                <button class="game1-menu-btn game1-btn-plus" onclick="game1_startGame(game1_currentMode)">Spela igen</button>
-                <button class="portal-back-btn" onclick="game1_showMenu()">Tillbaka till spelmeny</button>
-            </div>
         </div>
     </div>
 </div>
@@ -619,33 +554,15 @@ function launchConfetti(duration) {
 }
 
 function showView(id){
-    ['portal-menu-view','portal-game1','portal-game2','portal-game3','portal-game4']
+    ['portal-menu-view','portal-game2','portal-game3','portal-game4']
         .forEach(v=>document.getElementById(v).classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
 }
 function returnToPortal(){
-    if(typeof game1_stopTimer==='function') game1_stopTimer();
     document.body.style.backgroundColor='#eef2f5';
     showView('portal-menu-view');
 }
 function getRandomInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
-
-// ══ SPEL 1 ══
-let game1_currentMode='',game1_correctAnswer,game1_count=0,game1_startTime,game1_timerInterval;
-const game1_maxCount=30;
-const game1_grid=document.getElementById('game1-options');
-for(let i=0;i<=10;i++){
-    const btn=document.createElement('button'); btn.className='game1-num-btn'; btn.innerText=i;
-    btn.onclick=()=>game1_checkAnswer(i); game1_grid.appendChild(btn);
-}
-function game1_showMenu(){ game1_stopTimer(); ['game1-menu-view'].forEach(id=>document.getElementById(id).classList.remove('hidden')); ['game1-active-view','game1-end-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.body.style.backgroundColor='#e0f7fa'; }
-function game1_startGame(mode){ game1_currentMode=mode; game1_count=0; document.getElementById('game1-menu-view').classList.add('hidden'); document.getElementById('game1-end-view').classList.add('hidden'); document.getElementById('game1-active-view').classList.remove('hidden'); document.getElementById('game1-title').innerText=mode==='plus'?'Lilla Plus':'Lilla Minus'; document.body.style.backgroundColor=mode==='plus'?'#e8f5e9':'#ffebee'; game1_updateProgress(); game1_startTime=Date.now(); game1_timerInterval=setInterval(game1_updateTimer,100); game1_generateQuestion(); }
-function game1_generateQuestion(){ let n1,n2,ans; if(game1_currentMode==='plus'){n1=getRandomInt(0,10);n2=getRandomInt(0,10-n1);ans=n1+n2;document.getElementById('game1-question').innerText=`${n1} + ${n2} = ?`;}else{n1=getRandomInt(0,10);n2=getRandomInt(0,n1);ans=n1-n2;document.getElementById('game1-question').innerText=`${n1} - ${n2} = ?`;} game1_correctAnswer=ans; }
-function game1_checkAnswer(g){ const box=document.getElementById('game1-question'); if(g===game1_correctAnswer){game1_count++;game1_updateProgress();box.style.borderColor='#4caf50';box.style.color='#4caf50';setTimeout(()=>{box.style.borderColor='#b0bec5';box.style.color='#37474f';},200);if(game1_count>=game1_maxCount)game1_endGame();else game1_generateQuestion();}else{box.style.borderColor='#f44336';box.style.color='#f44336';setTimeout(()=>{box.style.borderColor='#b0bec5';box.style.color='#37474f';},300);} }
-function game1_updateProgress(){ document.getElementById('game1-progress').innerText=`${game1_count} / ${game1_maxCount}`; }
-function game1_updateTimer(){ const diff=Date.now()-game1_startTime,m=Math.floor(diff/60000),s=Math.floor((diff%60000)/1000); document.getElementById('game1-timer').innerText=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
-function game1_stopTimer(){ clearInterval(game1_timerInterval); }
-function game1_endGame(){ game1_stopTimer(); document.getElementById('game1-active-view').classList.add('hidden'); document.getElementById('game1-end-view').classList.remove('hidden'); const diff=Date.now()-game1_startTime,m=Math.floor(diff/60000),s=Math.floor((diff%60000)/1000),cs=Math.floor((diff%1000)/10); document.getElementById('game1-final-time').innerText=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(cs).padStart(2,'0')}`; launchConfetti(3000); }
 
 // ══ SPEL 2 ══
 let game2_mode='add',game2_score=0,game2_A,game2_B,game2_p1,game2_p2,game2_res,game2_lastA=0,game2_lastB=0;
