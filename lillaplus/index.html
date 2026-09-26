@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lilla plus & minus – Matte-Portalen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --sun:#FFC93C; --accent:#3D5AFE;
+  --blue:#3D8BFD; --orange:#FF9F43;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:560px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none !important}
+.back{display:inline-block;color:var(--muted);font-weight:700;text-decoration:none;padding:6px 0;font-size:1rem}
+h1{font-size:2.5rem;line-height:1;margin:14px 0 4px;font-weight:800;letter-spacing:-.5px}
+h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
+.lead{margin:0 0 18px;color:var(--muted);font-size:1.1rem}
+
+/* Räknesätt */
+.ops{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.op{aspect-ratio:1/.9;border-radius:20px;background:var(--c);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 5px 0 rgba(29,43,83,.28);opacity:.42;transition:opacity .15s,transform .08s}
+.op[aria-pressed="true"]{opacity:1;outline:4px solid var(--ink);outline-offset:3px}
+.op:active{transform:translateY(3px)}
+.op .sym{font-size:clamp(2.6rem,12vw,3.6rem);font-weight:800;line-height:.9}
+.op .lbl{font-weight:800;font-size:1.1rem}
+
+.modes{display:grid;gap:12px}
+.big{display:flex;align-items:center;gap:14px;width:100%;padding:12px 16px;border-radius:18px;background:var(--card);
+  box-shadow:0 4px 0 var(--line);text-align:left;transition:transform .08s,box-shadow .08s}
+.big:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.big .ic{font-size:1.7rem;width:2.2rem;text-align:center;flex:none}
+.big b{display:block;font-size:1.3rem;line-height:1.2}
+.big small{display:block;color:var(--muted);font-size:.95rem;line-height:1.3}
+.big .best{margin-left:auto;text-align:right;font-weight:700;font-size:.95rem;color:var(--muted);flex:none;white-space:pre-line}
+
+/* Spel */
+.gtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.info{font-weight:800;font-size:1.25rem}
+.qbox{background:var(--card);border-radius:24px;padding:14px 16px 10px;text-align:center;box-shadow:0 5px 0 var(--line);margin:12px 0 14px;transition:background .15s}
+.qbox.ok{background:#DDF5E7}
+.qbox.bad{background:#FDE4E4}
+.question{font-size:clamp(2.8rem,14vw,4.4rem);font-weight:800;line-height:1.05;white-space:nowrap}
+.question .ans{display:inline-block;min-width:1.6ch;color:var(--accent);border-bottom:4px dashed var(--line);margin-left:.15em}
+.feedback{min-height:1.6em;font-weight:800;font-size:1.25rem;margin-top:4px}
+.qbox.ok .feedback{color:var(--good)}
+.qbox.bad .feedback{color:var(--bad)}
+.answers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.answers button{height:64px;border-radius:16px;background:var(--card);font-size:2rem;font-weight:800;box-shadow:0 4px 0 var(--line);transition:transform .06s,box-shadow .06s}
+.answers button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.answers .ten{grid-column:span 2}
+
+.track{background:var(--card);border-radius:18px;padding:4px 12px;margin-top:12px;box-shadow:0 4px 0 var(--line)}
+.lane{position:relative;height:46px;margin-right:34px}
+.lane+.lane{border-top:2px dashed var(--line)}
+.lane .who{position:absolute;left:0;top:1px;font-size:.75rem;font-weight:700;color:var(--muted)}
+.lane .flag{position:absolute;right:-32px;top:50%;transform:translateY(-50%);font-size:1.4rem}
+.car{position:absolute;bottom:4px;left:0;width:46px;transition:left .3s ease-out}
+.car.ghost{transition:none;opacity:.45}
+.racestatus{text-align:center;font-weight:700;color:var(--muted);font-size:1rem;min-height:1.4em;margin-top:6px}
+.tbar{height:14px;border-radius:7px;background:var(--card);overflow:hidden;margin-top:12px;box-shadow:inset 0 0 0 2px var(--line)}
+.tbar i{display:block;height:100%;background:var(--sun);width:100%}
+
+/* Hjälp med tioruta */
+.help{background:var(--card);border-radius:24px;padding:14px 16px 16px;box-shadow:0 5px 0 var(--line);text-align:center}
+.help .said{color:var(--muted);margin:0}
+.help .fact{font-size:2.4rem;font-weight:800;line-height:1.1;margin:2px 0 12px}
+.frame{display:inline-grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:8px;border:3px solid var(--ink);border-radius:10px;margin-bottom:8px}
+.frame i{width:clamp(30px,10vw,42px);aspect-ratio:1;border-radius:50%;border:2px dashed #C9D3E6;position:relative}
+.frame i.b{background:var(--blue);border-color:var(--blue)}
+.frame i.o{background:var(--orange);border-color:var(--orange)}
+.frame i.x{background:#E3E8F2;border-color:#C9D3E6}
+.frame i.x::after{content:"×";position:absolute;inset:0;display:grid;place-items:center;color:var(--bad);font-weight:800;font-size:1.5rem;line-height:1}
+.help .cap{color:var(--muted);font-size:1rem;margin:0 0 8px}
+.help .tip{background:#FFF4CC;border-radius:12px;padding:8px 12px;margin:0 0 12px;font-size:1rem;text-align:left}
+.go{display:block;width:100%;padding:14px;border-radius:18px;background:var(--good);color:#fff;font-size:1.4rem;font-weight:800;box-shadow:0 5px 0 var(--good-dark)}
+
+/* Resultat */
+.result{text-align:center;padding-top:20px}
+.rbig{font-size:clamp(3.4rem,17vw,5rem);font-weight:800;line-height:1;margin:6px 0}
+.rsub{color:var(--muted);font-size:1.15rem;margin:0 0 16px}
+.slow{background:var(--card);border-radius:18px;padding:12px;box-shadow:0 4px 0 var(--line);margin:8px 0 6px}
+.slow p{margin:0 0 8px;font-weight:700}
+.slow .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.slow .row span{background:var(--bg);border-radius:10px;padding:2px 12px;font-weight:800;font-size:1.2rem}
+.result .big{justify-content:center;text-align:center;font-weight:800;font-size:1.2rem;margin-top:12px}
+
+.count{position:fixed;inset:0;display:grid;place-items:center;background:rgba(234,243,255,.85);font-size:6rem;font-weight:800;z-index:5}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:10px 18px;border-radius:14px;font-weight:700;z-index:6;max-width:90vw;text-align:center}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Start -->
+<section id="home" class="screen">
+  <a class="back" href="../">← Till huvudmenyn</a>
+  <h1>Lilla plus &amp; minus</h1>
+  <p class="lead">Huvudräkning med tal upp till 10. Välj räknesätt och sedan hur du vill träna.</p>
+  <div class="ops" id="ops">
+    <button class="op" data-op="plus" style="--c:#2BB673"><span class="sym">+</span><span class="lbl">Plus</span></button>
+    <button class="op" data-op="minus" style="--c:#FF6B6B"><span class="sym">−</span><span class="lbl">Minus</span></button>
+    <button class="op" data-op="mix" style="--c:#7B61FF"><span class="sym">±</span><span class="lbl">Blandat</span></button>
+  </div>
+  <div class="modes">
+    <button class="big" data-mode="practice"><span class="ic">✏️</span><span><b>Öva</b><small>Ingen tid. Tiorutan hjälper dig om det blir fel.</small></span></button>
+    <button class="big" data-mode="race"><span class="ic">🏁</span><span><b>Racet</b><small>30 uppgifter. Kör mot ditt spöke.</small></span><span class="best" id="bestRace"></span></button>
+    <button class="big" data-mode="blitz"><span class="ic">⚡</span><span><b>Blixtrunda</b><small>Så många rätt du hinner på 60 sekunder.</small></span><span class="best" id="bestBlitz"></span></button>
+    <button class="big" data-mode="hard"><span class="ic">🎯</span><span><b>Mina svåra</b><small>Tränar de uppgifter du oftast svarar fel på.</small></span></button>
+  </div>
+</section>
+
+<!-- Spel -->
+<section id="game" class="screen" hidden>
+  <div class="gtop"><button class="back" id="quit">← Avsluta</button><span class="info" id="info"></span></div>
+  <div id="raceBox" hidden>
+    <div class="track">
+      <div class="lane"><span class="who">Du</span><span class="flag">🏁</span><div class="car" id="carMe"></div></div>
+      <div class="lane"><span class="who" id="ghostWho">Spöket</span><div class="car ghost" id="carGhost"></div></div>
+    </div>
+    <div class="racestatus" id="raceStatus"></div>
+  </div>
+  <div class="tbar" id="blitzBar" hidden><i id="blitzFill"></i></div>
+  <div class="qbox" id="qbox">
+    <div class="question"><span id="question"></span><span class="ans" id="answer">?</span></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+  </div>
+  <div class="answers" id="answers"></div>
+  <div class="help" id="help" hidden>
+    <p class="said" id="helpSaid"></p>
+    <div class="fact" id="helpFact"></div>
+    <div class="frame" id="frame"></div>
+    <p class="cap" id="helpCap"></p>
+    <p class="tip" id="helpTip"></p>
+    <button class="go" id="helpGo">Försök igen</button>
+  </div>
+</section>
+
+<!-- Resultat -->
+<section id="result" class="screen result" hidden>
+  <h2 id="rTitle"></h2>
+  <div class="rbig" id="rBig"></div>
+  <p class="rsub" id="rSub"></p>
+  <div class="slow" id="rSlow" hidden><p>Dina långsammaste</p><div class="row" id="rSlowList"></div>
+    <button class="go" id="rTrainSlow">Träna på dessa</button></div>
+  <button class="big" id="rAgain">Spela igen</button>
+  <button class="big" id="rHome">Välj ett annat läge</button>
+</section>
+
+</div>
+<div class="count" id="count" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<canvas id="fx" hidden></canvas>
+
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const range=(a,b)=>Array.from({length:Math.max(0,b-a+1)},(_,i)=>a+i);
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const OPCOL={plus:'#2BB673',minus:'#FF6B6B',mix:'#7B61FF'};
+const OPNAME={plus:'Plus',minus:'Minus',mix:'Blandat'};
+const RACE_LEN=30;
+const carSvg=c=>`<svg viewBox="0 0 48 28" width="46" height="27" aria-hidden="true"><path d="M3 19Q3 13 9 12.5L15 12L21 5H33L39.5 12Q46 13 46 19V21H3Z" fill="${c}"/><path d="M23 7H32L36.5 12H23Z" fill="#fff" opacity=".85"/><circle cx="12" cy="21" r="5" fill="#1D2B53"/><circle cx="37" cy="21" r="5" fill="#1D2B53"/><circle cx="12" cy="21" r="2" fill="#fff"/><circle cx="37" cy="21" r="2" fill="#fff"/></svg>`;
+
+/* ---------- Lagring (bara i den här webbläsaren) ---------- */
+const KEY='mattespel-lillaplus-v1';
+let data=load();
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.facts)return Object.assign({race:{},blitz:{},op:'plus'},d);}catch(e){}return{facts:{},race:{},blitz:{},op:'plus'};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
+
+/* ---------- Uppgifter ---------- */
+const fkey=f=>f.a+f.s+f.b;
+const ans=f=>f.s==='+'?f.a+f.b:f.a-f.b;
+const ftext=f=>`${f.a} ${f.s} ${f.b}`;
+function allFacts(o){
+  const out=[];
+  if(o!=='minus')for(let a=0;a<=10;a++)for(let b=0;a+b<=10;b++)out.push({a,b,s:'+'});
+  if(o!=='plus')for(let a=0;a<=10;a++)for(let b=0;b<=a;b++)out.push({a,b,s:'−'});
+  return out;
+}
+const hist=f=>data.facts[fkey(f)]||[];
+function record(f,ok,ms){const k=fkey(f);const h=data.facts[k]||(data.facts[k]=[]);h.push([ok?1:0,Math.round(ms)]);while(h.length>6)h.shift();}
+function level(f){const h=hist(f);if(!h.length)return 0;const l=h.slice(-2);
+  if(l.length===2&&l[0][0]&&l[1][0])return(l[0][1]<3000&&l[1][1]<3000)?3:2;return 1;}
+/* Nollor och "tal minus sig självt" kommer mer sällan. Svaga uppgifter kommer oftare. */
+function weight(f){let w=1;if(f.a===0||f.b===0)w=.2;if(f.s==='−'&&f.a===f.b)w*=.5;const lv=level(f);if(lv===1)w*=1.8;if(lv===3)w*=.6;return w;}
+function pick(pool,recent){
+  const cand=pool.filter(f=>!recent.includes(fkey(f)));const list=cand.length?cand:pool;
+  let r=Math.random()*list.reduce((s,f)=>s+weight(f),0);
+  for(const f of list){r-=weight(f);if(r<=0)return f;}return list[list.length-1];
+}
+function buildQueue(pool,n){const q=[],recent=[];for(let i=0;i<n;i++){const f=pick(pool,recent);q.push(f);recent.push(fkey(f));if(recent.length>4)recent.shift();}return q;}
+
+/* ---------- Startsida ---------- */
+let op=data.op||'plus';
+let G=null;
+function show(id){$$('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);}
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600);}
+const fmt=ms=>(ms/1000).toFixed(1).replace('.',',')+' s';
+function openHome(){
+  G=null;
+  $$('.op').forEach(b=>b.setAttribute('aria-pressed',b.dataset.op===op));
+  $('#bestRace').textContent=data.race[op]?'Rekord\n'+fmt(data.race[op].time):'';
+  $('#bestBlitz').textContent=data.blitz[op]?'Rekord\n'+data.blitz[op]+' rätt':'';
+  show('home');
+}
+$$('.op').forEach(b=>b.onclick=()=>{op=b.dataset.op;data.op=op;save();openHome();});
+$$('[data-mode]').forEach(b=>b.onclick=()=>{
+  if(b.dataset.mode!=='hard')return startGame(b.dataset.mode);
+  const tried=allFacts(op).filter(f=>hist(f).length);
+  if(!tried.length)return toast('Spela några rundor först, så hittar jag dina svåra uppgifter.');
+  const weak=tried.filter(f=>level(f)<3).map(f=>{const h=hist(f);return{f,s:(3-level(f))*30+h.filter(x=>!x[0]).length*15+h.reduce((s,x)=>s+x[1],0)/h.length/200};})
+    .sort((x,y)=>y.s-x.s).slice(0,8).map(x=>x.f);
+  if(!weak.length)return toast('Allt du har övat sitter redan snabbt. Snyggt!');
+  startGame('practice',weak);
+});
+
+/* ---------- Svarsknappar 0–10 ---------- */
+const ansBox=$('#answers');
+range(0,10).forEach(n=>{const b=document.createElement('button');b.textContent=n;if(n===10)b.className='ten';b.onclick=()=>answer(n);ansBox.appendChild(b);});
+
+/* ---------- Spelet ---------- */
+function startGame(mode,custom){
+  custom=custom||null;
+  const pool=custom||allFacts(op);
+  G={mode,custom,pool,queue:[],cur:null,correct:0,streak:0,missed:new Set(),slow:{},times:[],recent:[],
+     paused:0,pauseStart:0,start:performance.now(),busy:true,over:false,retry:false,raf:0};
+  if(mode==='practice'){G.queue=custom?shuffle([...custom,...custom]):buildQueue(pool,15);G.total=G.queue.length;}
+  if(mode==='race'){G.queue=buildQueue(pool,RACE_LEN);G.total=RACE_LEN;G.best=custom?null:data.race[op];}
+  $('#raceBox').hidden=mode!=='race';$('#blitzBar').hidden=mode!=='blitz';
+  $('#help').hidden=true;$('#answers').hidden=false;$('#qbox').hidden=false;
+  if(mode==='race'){
+    $('#carMe').innerHTML=carSvg(OPCOL[op]);$('#carGhost').innerHTML=carSvg('#8E9AB5');
+    setPos($('#carMe'),0);setPos($('#carGhost'),0);$('#carGhost').hidden=!G.best;
+    $('#ghostWho').textContent=G.best?'Spöket (ditt rekord)':'Inget spöke än. Nu sätter du rekordet!';
+    $('#raceStatus').textContent='';
+  }
+  if(mode==='blitz')$('#blitzFill').style.width='100%';
+  $('#question').textContent='';$('#answer').textContent='?';$('#feedback').textContent='';$('#qbox').className='qbox';$('#info').textContent='';
+  if(document.activeElement)document.activeElement.blur();
+  show('game');
+  if(mode==='race'||mode==='blitz')countdown(()=>{G.start=performance.now();nextQ();loop();});
+  else nextQ();
+}
+function countdown(done){
+  const c=$('#count');const steps=['3','2','1','Kör!'];let i=0;c.hidden=false;
+  (function tick(){if(!G||G.over){c.hidden=true;return;}if(i<steps.length){c.textContent=steps[i++];setTimeout(tick,650);}else{c.hidden=true;done();}})();
+}
+const elapsed=()=>performance.now()-G.start-G.paused-(G.pauseStart?performance.now()-G.pauseStart:0);
+function setPos(el,p){p=Math.max(0,Math.min(1,p));el.style.left=`calc(${p*100}% - ${p*46}px)`;}
+function ghostPos(pace,t){let i=0;while(i<pace.length&&pace[i]<=t)i++;if(i>=pace.length)return pace.length;const prev=i?pace[i-1]:0;return i+(t-prev)/(pace[i]-prev);}
+function loop(){
+  if(!G||G.over)return;const t=elapsed();
+  if(G.mode==='race'&&G.best){const gp=ghostPos(G.best.pace,t);setPos($('#carGhost'),gp/RACE_LEN);
+    const d=G.correct-gp,s=d>0.4?'Du leder!':d<-0.4?'Spöket leder. Kom igen!':'Jämnt lopp!';
+    if($('#raceStatus').textContent!==s)$('#raceStatus').textContent=s;}
+  if(G.mode==='blitz'){const left=Math.max(0,60000-t);$('#blitzFill').style.width=(left/600)+'%';
+    $('#info').textContent=`Rätt: ${G.correct}  ·  ${Math.ceil(left/1000)} s`;if(left<=0){finish();return;}}
+  G.raf=requestAnimationFrame(loop);
+}
+function updateInfo(){
+  if(G.mode==='practice')$('#info').textContent=`${Math.min(G.correct+1,G.total)} av ${G.total}`;
+  if(G.mode==='race')$('#info').textContent=`${G.correct} / ${RACE_LEN}`;
+}
+function nextQ(){
+  if(!G||G.over)return;G.retry=false;
+  if(G.mode==='blitz'){G.cur=pick(G.pool,G.recent);G.recent.push(fkey(G.cur));if(G.recent.length>4)G.recent.shift();}
+  else{if(!G.queue.length)return finish();G.cur=G.queue.shift();}
+  G.qStart=performance.now();showQ();
+}
+function showQ(){
+  $('#question').textContent=ftext(G.cur)+' =';$('#answer').textContent='?';
+  $('#feedback').textContent='';$('#qbox').className='qbox';G.busy=false;updateInfo();
+}
+const PRAISE=['Rätt!','Snyggt!','Bra!','Toppen!','Rätt igen!','Klockrent!'];
+function answer(v){
+  if(!G||G.busy||G.over)return;
+  const f=G.cur,right=ans(f),ok=v===right,ms=performance.now()-G.qStart,k=fkey(f);
+  if(!G.retry){record(f,ok,ms);save();const w=ok?ms:ms+6000;if(!G.slow[k]||w>G.slow[k].w)G.slow[k]={f,w};if(!ok){G.missed.add(k);G.missCount=(G.missCount||0)+1;}}
+  G.busy=true;$('#answer').textContent=v;
+  if(ok){
+    G.correct++;G.streak++;$('#qbox').classList.add('ok');
+    $('#feedback').textContent=G.streak>=5?`${G.streak} rätt i rad!`:PRAISE[Math.floor(Math.random()*PRAISE.length)];
+    if(G.mode==='race'){G.times.push(elapsed());setPos($('#carMe'),G.correct/RACE_LEN);updateInfo();if(G.correct>=RACE_LEN){setTimeout(finish,500);return;}}
+    setTimeout(nextQ,G.mode==='blitz'?200:380);
+  }else{
+    G.streak=0;$('#qbox').classList.add('bad');
+    if(G.mode==='blitz'){$('#feedback').textContent=`${ftext(f)} = ${right}`;setTimeout(nextQ,1300);}
+    else if(G.mode==='race'){$('#feedback').textContent='Försök igen!';G.retry=true;setTimeout(()=>{if(G&&!G.over){$('#answer').textContent='?';$('#qbox').className='qbox';$('#feedback').textContent='';G.busy=false;}},550);}
+    else showHelp(f,v);
+  }
+}
+
+/* ---------- Hjälp vid fel svar (bara i Öva) ---------- */
+function tipFor(f){
+  const {a,b}=f;
+  if(f.s==='+'){
+    if(a===0||b===0)return 'Plus 0 ändrar inte talet.';
+    if(a+b===10)return `Tiokamrater: ${a} och ${b} blir tillsammans 10.`;
+    if(a===b)return `Dubbelt: ${a} + ${a} = ${a*2}.`;
+    const big=Math.max(a,b),small=Math.min(a,b);
+    return `Börja på det största talet, ${big}, och räkna ${small} steg uppåt: ${range(big+1,big+small).join(', ')}.`;
+  }
+  if(b===0)return 'Minus 0 ändrar inte talet.';
+  if(a===b)return 'Ett tal minus samma tal blir 0.';
+  if(a===10)return `Tiokamrater: ${b} och ${10-b} blir 10. Därför är 10 − ${b} = ${10-b}.`;
+  if(b<=3)return `Börja på ${a} och räkna ${b} steg bakåt: ${range(a-b,a-1).reverse().join(', ')}.`;
+  return `Tänk plus: ${b} + ? = ${a}. Svaret är ${a-b}.`;
+}
+function showHelp(f,v){
+  $('#answers').hidden=true;$('#qbox').hidden=true;
+  $('#helpSaid').textContent=`Du svarade ${v}. Så här blir det:`;
+  $('#helpFact').textContent=`${ftext(f)} = ${ans(f)}`;
+  const fr=$('#frame');fr.innerHTML='';
+  for(let i=0;i<10;i++){const d=document.createElement('i');
+    if(f.s==='+'){if(i<f.a)d.className='b';else if(i<f.a+f.b)d.className='o';}
+    else{if(i<f.a-f.b)d.className='b';else if(i<f.a)d.className='x';}
+    fr.appendChild(d);}
+  $('#helpCap').textContent=f.s==='+'
+    ?`${f.a} blå och ${f.b} orange blir ${f.a+f.b} prickar.`
+    :`${f.a} prickar. Ta bort ${f.b}, då är ${f.a-f.b} kvar.`;
+  $('#helpTip').textContent='Tips: '+tipFor(f);
+  $('#help').hidden=false;$('#helpGo').focus({preventScroll:true});
+}
+function contHelp(){
+  if($('#help').hidden||!G||G.over)return;
+  $('#help').hidden=true;$('#answers').hidden=false;$('#qbox').hidden=false;$('#helpGo').blur();
+  G.retry=true;showQ();   // samma uppgift en gång till
+}
+$('#helpGo').onclick=contHelp;
+
+/* Tangentbord: siffror, och 1 följt av 0 blir 10 */
+let kbuf=false,kt=0;
+document.addEventListener('keydown',e=>{
+  if($('#game').hidden||!G||G.over)return;
+  if(!$('#help').hidden){if(e.key==='Enter'||e.key===' '){e.preventDefault();contHelp();}return;}
+  if(!/^[0-9]$/.test(e.key))return;
+  if(kbuf){clearTimeout(kt);kbuf=false;if(e.key==='0')return answer(10);answer(1);return;}
+  if(e.key==='1'){kbuf=true;kt=setTimeout(()=>{kbuf=false;answer(1);},450);return;}
+  answer(+e.key);
+});
+$('#quit').onclick=()=>{if(G){G.over=true;cancelAnimationFrame(G.raf);}$('#count').hidden=true;openHome();};
+
+/* ---------- Resultat ---------- */
+function finish(){
+  if(!G||G.over)return;G.over=true;cancelAnimationFrame(G.raf);
+  const t=elapsed(),ranked=!G.custom;let title,big,sub='',party=false;
+  if(G.mode==='race'){
+    const best=G.best,rec=ranked&&(!best||t<best.time);
+    if(rec){data.race[op]={time:Math.round(t),pace:G.times.map(Math.round)};save();}
+    title=rec?(best?'Nytt rekord!':'Första racet klart!'):'I mål!';big=fmt(t);
+    if(ranked)sub=rec&&best?`Du slog ditt gamla rekord med ${fmt(best.time-t)}.`:rec?'Nästa gång kör du mot ditt spöke.':`Ditt rekord är ${fmt(best.time)}. Bara ${fmt(t-best.time)} ifrån!`;
+    party=rec;
+  }else if(G.mode==='blitz'){
+    const best=data.blitz[op]||0,rec=G.correct>best;
+    if(rec){data.blitz[op]=G.correct;save();}
+    title=rec?'Nytt rekord!':'Tiden är slut!';big=G.correct;
+    sub='rätt på 60 sekunder.'+(rec&&best?` Förra rekordet var ${best}.`:!rec&&best?` Ditt rekord är ${best}.`:'');party=rec;
+  }else{
+    const right=G.total-(G.missCount||0);
+    title=right===G.total?'Alla rätt direkt!':'Klart!';big=`${right}/${G.total}`;sub='rätt på första försöket.';party=right===G.total;
+  }
+  $('#rTitle').textContent=title;$('#rBig').textContent=big;$('#rSub').textContent=sub;
+  const slow=Object.values(G.slow).sort((x,y)=>y.w-x.w).slice(0,3);
+  G.slowFacts=slow.map(s=>s.f);
+  $('#rSlow').hidden=slow.length<2||!!G.custom;
+  $('#rSlowList').innerHTML=slow.map(s=>`<span>${ftext(s.f)} = ${ans(s.f)}</span>`).join('');
+  show('result');if(party)confetti();
+}
+$('#rAgain').onclick=()=>startGame(G.mode,G.custom);
+$('#rHome').onclick=openHome;
+$('#rTrainSlow').onclick=()=>startGame('practice',G.slowFacts);
+
+/* ---------- Konfetti ---------- */
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cols=['#2BB673','#FF6B6B','#7B61FF','#FFC93C','#3D8BFD','#FF9F43'];
+  const c=$('#fx'),x=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
+  c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,
+    r:Math.random()*7+5,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  const t0=performance.now();
+  (function f(now){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
+    x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(now-t0<2800)requestAnimationFrame(f);else{x.clearRect(0,0,W,H);c.hidden=true;}})(t0);
+}
+
+openHome();
+</script>
+</body>
+</html>
