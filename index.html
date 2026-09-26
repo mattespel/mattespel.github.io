@@ -150,6 +150,8 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     <a class="card" href="multiplikation/"><span class="tile" style="--c:#7B61FF">×</span><span class="txt"><b>Multiplikation</b><small>Tabellerna 1–10. Samla medaljer!</small><span class="badge" id="bMulti" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="division/"><span class="tile" style="--c:#FF5FA2">÷</span><span class="txt"><b>Division</b><small>Dela lika, med och utan rest.</small><span class="badge" id="bDiv" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="klockan/"><span class="tile" style="--c:#F7C531"><svg viewBox="0 0 40 40" width="46" height="46" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#1D2B53" stroke-width="3"/><line x1="20" y1="20" x2="20" y2="8" stroke="#3D5AFE" stroke-width="3" stroke-linecap="round"/><line x1="20" y1="20" x2="28" y2="23" stroke="#1D2B53" stroke-width="3.5" stroke-linecap="round"/><circle cx="20" cy="20" r="2.5" fill="#FFC93C"/></svg></span><span class="txt"><b>Klockan</b><small>Analog och digital tid, och att mäta tid.</small><span class="badge" id="bKlocka" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="geometri/"><span class="tile" style="--c:#2BB673"><svg viewBox="0 0 40 40" width="46" height="46" aria-hidden="true"><polygon points="11,6 20,20 2,20" fill="#fff"/><rect x="22" y="6" width="14" height="14" rx="2" fill="#FFC93C"/><circle cx="12" cy="30" r="7" fill="#FF9F43"/><polygon points="24,24 36,24 36,36 24,36" fill="none" stroke="#fff" stroke-width="3"/></svg></span><span class="txt"><b>Geometri</b><small>Former, kroppar, mönster, symmetri, omkrets och area.</small><span class="badge" id="bGeo" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="brak/"><span class="tile" style="--c:#FF9F43"><svg viewBox="0 0 40 40" width="46" height="46" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="#fff" stroke="#1D2B53" stroke-width="2.5"/><path d="M20 20 L20 4 A16 16 0 0 1 36 20 Z" fill="#FF5FA2" stroke="#1D2B53" stroke-width="2.5" stroke-linejoin="round"/><path d="M20 20 L36 20 A16 16 0 0 1 20 36 Z" fill="#FF5FA2" stroke="#1D2B53" stroke-width="2.5" stroke-linejoin="round"/><path d="M4 20H36M20 4V36" stroke="#1D2B53" stroke-width="2.5"/></svg></span><span class="txt"><b>Bråk</b><small>Halvor, fjärdedelar och andra delar. Dela, färglägg och jämför.</small><span class="badge" id="bBrak" hidden></span></span><span class="chev">›</span></a>
   </nav>
 
   <nav class="cards gap" aria-label="Fler övningar">
@@ -217,6 +219,10 @@ const sp=get("mattespel-spel-v1");S.spel=sp||{fly:{},played:0,perfect:false};
 {const s=[...Object.values(S.spel.fly||{}),...Object.values(S.spel.mem||{}),...Object.values(S.spel.car||{}),...Object.values(S.spel.space||{})].reduce((a,r)=>a+(r.stars||0),0);S.stars+=s;
  const best=Math.max(0,...[...Object.values(S.spel.fly||{}),...Object.values(S.spel.car||{}),...Object.values(S.spel.space||{})].map(r=>r.best||0));
  if(s)show("bSpel",`⭐ ${s} stjärnor`);else if(best)show("bSpel",`Rekord: ${best} rätt`);}
+const ge=get("mattespel-geometri-v1");S.geo=(ge&&ge.stars)||{};
+{const s=sum(S.geo);S.stars+=s;if(s)show("bGeo",`⭐ ${s} stjärnor`)}
+const br=get("mattespel-brak-v1");S.brak=(br&&br.stars)||{};
+{const s=sum(S.brak);S.stars+=s;if(s)show("bBrak",`⭐ ${s} stjärnor`)}
 const ti=get("mattespel-tiotal-v1");S.ti=(ti&&ti.stars)||{};
 {const s=sum(S.ti);S.stars+=s;if(s)show("bTiotal",`⭐ ${s} stjärnor`)}
 const ta=get("mattespel-taluppfattning-v1");S.ta=(ta&&ta.stars)||{};S.taDiag=Object.values((ta&&ta.diag)||{});
@@ -231,7 +237,7 @@ $("sStars").textContent=S.stars;
 /* ---------- Dagar i rad (en dag räknas när något har tränats) ---------- */
 const day=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const today=day(new Date()),yest=day(new Date(Date.now()-864e5));
-const snap=["mattespel-spel-v1","mattespel-multiplikation-v1","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat"].map(k=>localStorage.getItem(k)||"").join("|");
+const snap=["mattespel-brak-v1","mattespel-geometri-v1","mattespel-spel-v1","mattespel-multiplikation-v1","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat"].map(k=>localStorage.getItem(k)||"").join("|");
 let fp=0;for(let i=0;i<snap.length;i++)fp=(fp*31+snap.charCodeAt(i))|0;
 const st=get("matteportalen-dagar")||{fp:null,days:[]};
 if(st.fp!==null&&st.fp!==fp&&!st.days.includes(today))st.days.push(today);
@@ -358,6 +364,11 @@ const STICKERS=[
   ["runthalv","🕧","Runt halv-proffs","Få tre stjärnor på Runt halv i Klockan.",()=>(S.kl.runthalv||0)===3],
   ["tidtagare","⏱️","Tidtagaren","Få stjärnor på Mäta tid i Klockan.",()=>(S.kl.mata||0)>0],
   ["klockmastare","🕰️","Klockmästaren","Få stjärnor på alla nivåer i Klockan.",()=>["hel","halv","kvart","fem","runthalv","dig","mata","mix"].every(k=>(S.kl[k]||0)>0)],
+  ["former","🔺","Formfinnaren","Få stjärnor på Former i Geometri.",()=>(S.geo.former||0)>0],
+  ["spegel","🦋","Spegelmästaren","Få tre stjärnor på Symmetri i Geometri.",()=>(S.geo.symmetri||0)===3],
+  ["rutnat","📐","Rutnätsräknaren","Få stjärnor på Omkrets och area i Geometri.",()=>(S.geo.matt||0)>0],
+  ["pizza2","🥧","Halva kakan","Få stjärnor på Halva, tredjedel … i Bråk.",()=>(S.brak.enhet||0)>0],
+  ["brakmastare","🍰","Bråkmästaren","Få tre stjärnor på Jämför bråk.",()=>(S.brak.jamfor||0)===3],
   ["spanare","🔭","Talspanaren","Få stjärnor i Bedömningsstöd i taluppfattning.",()=>sum(S.ta)>0],
   ["diagnos","📋","Diagnosen klar","Gör en diagnos i Bedömningsstöd i taluppfattning.",()=>S.taDiag.length>0],
   ["allaratt","🏆","Alla rätt","Få alla rätt på en diagnos.",()=>S.taDiag.some(d=>d.ok===d.n)],
