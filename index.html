@@ -33,7 +33,9 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .owlwrap{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;width:clamp(110px,30vw,160px)}
 .bubble{position:relative;background:#fff;color:var(--ink);border-radius:16px;padding:8px 10px;font-weight:700;font-size:.85rem;line-height:1.25;text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.12)}
 .bubble::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);border:9px solid transparent;border-top-color:#fff;border-bottom:0}
+.owlbtn{display:block;width:100%;padding:0;border:0;background:none;cursor:pointer;position:relative;font:inherit}
 .owl{width:100%;height:auto;display:block;animation:tilt 5s ease-in-out infinite;transform-origin:50% 90%}
+.owltag{position:absolute;right:-4px;bottom:6px;background:#fff;color:var(--ink);border-radius:999px;padding:0 8px;font-weight:800;font-size:.75rem;box-shadow:0 3px 0 rgba(0,0,0,.15)}
 @keyframes tilt{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
 
 /* ---------- Framsteg ---------- */
@@ -63,6 +65,46 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .chev{flex:none;color:#B4C0D8;font-size:1.6rem;font-weight:800}
 .cards.gap{margin-top:34px}
 .foot{margin-top:26px;color:var(--muted);font-size:.85rem;text-align:center}
+.tools{display:flex;gap:10px;margin:0 0 18px}
+.tool{flex:1;display:flex;align-items:center;gap:10px;background:var(--card);border:0;border-radius:18px;padding:10px 12px;box-shadow:0 4px 0 var(--line);font:inherit;color:inherit;text-align:left;cursor:pointer;min-width:0}
+.tool:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.tool .ic{font-size:1.7rem;line-height:1;flex:none}
+.tool b{display:block;font-size:1.05rem;line-height:1.15}
+.tool small{display:block;color:var(--muted);font-weight:700;font-size:.8rem}
+.new{display:inline-block;background:#FF5FA2;color:#fff;border-radius:999px;padding:0 7px;font-size:.72rem;font-weight:800;margin-left:4px;vertical-align:middle}
+.new[hidden]{display:none}
+.soundbtn{display:inline-block;margin-top:10px;border:0;border-radius:999px;background:var(--card);box-shadow:0 3px 0 var(--line);padding:6px 14px;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
+.modal{position:fixed;inset:0;background:rgba(29,43,83,.55);display:grid;place-items:center;z-index:20;padding:14px}
+.modal[hidden]{display:none}
+.sheet{background:#fff;border-radius:24px;width:100%;max-width:520px;max-height:92vh;overflow:auto;padding:14px 16px 18px;box-shadow:0 8px 0 rgba(0,0,0,.15)}
+.sheet h2{margin:0;font-size:1.7rem;line-height:1.1}
+.sheet .top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.close{border:0;background:var(--bg);border-radius:999px;width:42px;height:42px;font-size:1.3rem;cursor:pointer;flex:none}
+.preview{width:150px;margin:0 auto 6px;display:block}
+.sheet .owl{animation:none}
+.tabsw{display:flex;gap:6px;margin:6px 0 10px;flex-wrap:wrap}
+.tabsw button{flex:1;border:0;border-radius:12px;background:var(--bg);padding:8px 4px;font:inherit;font-weight:800;font-size:.95rem;cursor:pointer;color:var(--ink)}
+.tabsw button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.items{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.item{border:0;border-radius:16px;background:var(--bg);padding:6px 4px 4px;cursor:pointer;font:inherit;color:var(--ink);box-shadow:0 3px 0 var(--line)}
+.item svg{width:100%;height:auto;display:block}
+.item small{display:block;font-weight:800;font-size:.8rem;line-height:1.2}
+.item.sel{outline:3px solid var(--accent,#3D5AFE);background:#EEF1FF}
+.item.locked{cursor:default}
+.item.locked svg{filter:grayscale(1);opacity:.35}
+.item.locked small{color:var(--muted)}
+.stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:10px;margin-top:8px}
+.stk{background:var(--bg);border-radius:16px;padding:8px 4px 6px;text-align:center}
+.stk .em{font-size:2.4rem;display:block;line-height:1.2}
+.stk b{font-size:.85rem;display:block;line-height:1.15;overflow-wrap:anywhere;hyphens:auto}
+.stk small{font-size:.72rem;color:var(--muted);display:block;line-height:1.15;margin-top:2px;overflow-wrap:anywhere;hyphens:auto}
+.stk.off .em{filter:grayscale(1);opacity:.25}
+.stk.off b{color:var(--muted)}
+.stk.fresh{background:#FFF4CC;animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+.newlist{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px 0}
+.newlist .stk{width:120px}
+.gobtn{display:block;width:100%;margin-top:12px;border:0;border-radius:16px;padding:12px;background:#1E9E5E;color:#fff;font:inherit;font-weight:800;font-size:1.2rem;box-shadow:0 5px 0 #157548;cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 </style>
 </head>
@@ -85,21 +127,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     </div>
     <div class="owlwrap">
       <div class="bubble" id="bubble">Hej!</div>
-      <svg class="owl" viewBox="0 0 120 120" role="img" aria-label="Matteugglan">
-        <ellipse cx="60" cy="112" rx="34" ry="5" fill="rgba(0,0,0,.18)"/>
-        <path d="M24 44 L30 16 L46 34 Z" fill="#6B4E9B"/><path d="M96 44 L90 16 L74 34 Z" fill="#6B4E9B"/>
-        <ellipse cx="60" cy="68" rx="40" ry="42" fill="#8A6BC6"/>
-        <ellipse cx="60" cy="80" rx="26" ry="28" fill="#F3E8FF"/>
-        <path d="M44 74q4 4 8 0M56 82q4 4 8 0M68 74q4 4 8 0M50 92q4 4 8 0M62 92q4 4 8 0" stroke="#C9B3EC" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <circle cx="42" cy="50" r="17" fill="#fff"/><circle cx="78" cy="50" r="17" fill="#fff"/>
-        <circle cx="42" cy="50" r="17" fill="none" stroke="#FFC93C" stroke-width="4"/><circle cx="78" cy="50" r="17" fill="none" stroke="#FFC93C" stroke-width="4"/>
-        <line x1="59" y1="50" x2="61" y2="50" stroke="#FFC93C" stroke-width="4"/>
-        <circle cx="45" cy="52" r="7" fill="#1D2B53"/><circle cx="75" cy="52" r="7" fill="#1D2B53"/>
-        <circle cx="47.5" cy="49.5" r="2.4" fill="#fff"/><circle cx="77.5" cy="49.5" r="2.4" fill="#fff"/>
-        <path d="M55 62 L65 62 L60 71 Z" fill="#FF9F43"/>
-        <path d="M22 72q-10 10 -2 24q8-6 10-16z" fill="#6B4E9B"/><path d="M98 72q10 10 2 24q-8-6-10-16z" fill="#6B4E9B"/>
-        <path d="M46 108h8M66 108h8" stroke="#FF9F43" stroke-width="5" stroke-linecap="round"/>
-      </svg>
+      <button class="owlbtn" id="owlBtn" aria-label="Öppna ugglans garderob"><span id="owlSlot"></span><span class="owltag">👗 Klä mig</span></button>
     </div>
   </div>
 </header>
@@ -110,11 +138,18 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     <div class="stat"><span class="ic">🔥</span><span><b id="sDays">0</b><small id="sDaysTxt">dagar i rad</small></span></div>
   </div>
 
+  <div class="tools">
+    <button class="tool" id="btnWard"><span class="ic">🦉</span><span><b>Garderoben<span class="new" id="newWard" hidden>Nytt!</span></b><small id="wardInfo">Klä ut ugglan</small></span></button>
+    <button class="tool" id="btnAlbum"><span class="ic">📒</span><span><b>Klistermärken<span class="new" id="newAlbum" hidden>Nytt!</span></b><small id="albumInfo">0 av 0</small></span></button>
+  </div>
+
   <nav class="cards" aria-label="Övningar">
+    <a class="card" href="spel/"><span class="tile" style="--c:linear-gradient(135deg,#3D5AFE,#17AFC4)">🎮</span><span class="txt"><b>Spelhörnan</b><small>Ugglans flygtur och Memory. Spela och räkna samtidigt!</small><span class="badge" id="bSpel" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="lillaplus/"><span class="tile sm" style="--c:#2BB673">+ −</span><span class="txt"><b>Lilla plus &amp; minus</b><small>Huvudräkning med tal upp till 10.</small><span class="badge" id="bLilla" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="tiotal/"><span class="tile" style="--c:#3D8BFD">10</span><span class="txt"><b>Tiotalsövergång</b><small>Räkna via tiotalet med tioruta och tallinje.</small><span class="badge" id="bTiotal" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="multiplikation/"><span class="tile" style="--c:#7B61FF">×</span><span class="txt"><b>Multiplikation</b><small>Tabellerna 1–10. Samla medaljer!</small><span class="badge" id="bMulti" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="division/"><span class="tile" style="--c:#FF5FA2">÷</span><span class="txt"><b>Division</b><small>Dela lika, med och utan rest.</small><span class="badge" id="bDiv" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="klockan/"><span class="tile" style="--c:#F7C531"><svg viewBox="0 0 40 40" width="46" height="46" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#1D2B53" stroke-width="3"/><line x1="20" y1="20" x2="20" y2="8" stroke="#3D5AFE" stroke-width="3" stroke-linecap="round"/><line x1="20" y1="20" x2="28" y2="23" stroke="#1D2B53" stroke-width="3.5" stroke-linecap="round"/><circle cx="20" cy="20" r="2.5" fill="#FFC93C"/></svg></span><span class="txt"><b>Klockan</b><small>Analog och digital tid, och att mäta tid.</small><span class="badge" id="bKlocka" hidden></span></span><span class="chev">›</span></a>
   </nav>
 
   <nav class="cards gap" aria-label="Fler övningar">
@@ -123,71 +158,250 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     <a class="card" href="tiobas/"><span class="tile sm" style="--c:#17AFC4">100</span><span class="txt"><b>Tiobasmaterial</b><small>Hundratal, tiotal och ental. Växla och räkna upp till 1000.</small></span><span class="chev">›</span></a>
   </nav>
 
-  <p class="foot">Dina stjärnor och rekord sparas i den här webbläsaren.</p>
+  <p class="foot">Dina stjärnor och rekord sparas i den här webbläsaren.<br><button class="soundbtn" id="soundBtn"></button></p>
 </main>
 
+<div class="modal" id="mWard" hidden><div class="sheet" role="dialog" aria-label="Ugglans garderob">
+  <div class="top"><h2>Ugglans garderob</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <div class="preview" id="wardPreview"></div>
+  <p style="text-align:center;margin:0;color:var(--muted);font-weight:700" id="wardStars"></p>
+  <div class="tabsw" id="wardTabs"></div>
+  <div class="items" id="wardItems"></div>
+  <button class="gobtn" data-close>Klar!</button>
+</div></div>
+
+<div class="modal" id="mAlbum" hidden><div class="sheet" role="dialog" aria-label="Klistermärken">
+  <div class="top"><h2>Klistermärken</h2><button class="close" data-close aria-label="Stäng">✕</button></div>
+  <p style="margin:0;color:var(--muted);font-weight:700" id="albumCount"></p>
+  <div class="stickers" id="albumGrid"></div>
+</div></div>
+
+<div class="modal" id="mNew" hidden><div class="sheet" role="dialog" aria-label="Nytt klistermärke" style="text-align:center">
+  <h2 id="newTitle">Nytt klistermärke!</h2>
+  <div class="newlist" id="newList"></div>
+  <p id="newMore" style="color:var(--muted);font-weight:700;margin:0"></p>
+  <button class="gobtn" id="newGo">Se albumet</button>
+  <button class="soundbtn" data-close style="margin-top:12px">Stäng</button>
+</div></div>
+
+<script src="ljud.js"></script>
 <script>
+const $=id=>document.getElementById(id);
 const get=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
 const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
-const show=(id,t)=>{const el=document.getElementById(id);if(t){el.textContent=t;el.hidden=false}};
+const show=(id,t)=>{const el=$(id);if(t){el.textContent=t;el.hidden=false}};
 const fmt=ms=>(ms/1000).toFixed(1).replace(".",",")+" s";
 const sum=o=>Object.values(o||{}).reduce((s,v)=>s+(typeof v==="number"?v:sum(v)),0);
-let stars=0;
+const T10=[1,2,3,4,5,6,7,8,9,10];
+const S={stars:0}; // allt som klistermärkena behöver veta
 
-/* Multiplikation: medaljer per tabell (brons 1, silver 2, guld 3) */
-const mu=get("mattespel-multiplikation-v1");
-if(mu&&mu.facts){
-  const h=(a,b)=>mu.facts[Math.min(a,b)+"x"+Math.max(a,b)]||[];
+/* ---------- Framsteg från alla övningar ---------- */
+function medalsFrom(h){
   const lv=(a,b)=>{const x=h(a,b);if(!x.length)return 0;const l=x.slice(-2);if(l.length===2&&l[0][0]&&l[1][0])return(l[0][1]<3000&&l[1][1]<3000)?3:2;return 1};
-  const md=T=>{const k=[1,2,3,4,5,6,7,8,9,10];if(k.every(n=>lv(n,T)===3))return 3;if(k.every(n=>lv(n,T)>=2))return 2;if(k.every(n=>h(n,T).some(x=>x[0])))return 1;return 0};
-  const m=[1,2,3,4,5,6,7,8,9,10].map(md),n=m.filter(Boolean).length,g=m.filter(x=>x===3).length;
-  stars+=m.reduce((s,x)=>s+x,0);
-  if(n)show("bMulti",`🏅 ${n} ${n===1?"medalj":"medaljer"}${g?` · ${g} guld`:""}`);
+  return T10.map(T=>{if(T10.every(n=>lv(n,T)===3))return 3;if(T10.every(n=>lv(n,T)>=2))return 2;if(T10.every(n=>h(n,T).some(x=>x[0])))return 1;return 0});
 }
-/* Division: medaljer per tabell (utan rest) */
-const dv=get("mattespel-division-v1");
-if(dv&&dv.facts){
-  const h=(d,q)=>dv.facts[d+":"+q+":0"]||[];
-  const lv=(d,q)=>{const x=h(d,q);if(!x.length)return 0;const l=x.slice(-2);if(l.length===2&&l[0][0]&&l[1][0])return(l[0][1]<3000&&l[1][1]<3000)?3:2;return 1};
-  const md=d=>{const k=[1,2,3,4,5,6,7,8,9,10];if(k.every(q=>lv(d,q)===3))return 3;if(k.every(q=>lv(d,q)>=2))return 2;if(k.every(q=>h(d,q).some(x=>x[0])))return 1;return 0};
-  const m=[1,2,3,4,5,6,7,8,9,10].map(md),n=m.filter(Boolean).length,g=m.filter(x=>x===3).length;
-  stars+=m.reduce((s,x)=>s+x,0);
-  if(n)show("bDiv",`🏅 ${n} ${n===1?"medalj":"medaljer"}${g?` · ${g} guld`:""}`);
-}
-/* Tiotalsövergång och Taluppfattning: stjärnor per nivå/område */
-const ti=get("mattespel-tiotal-v1");if(ti&&ti.stars){const s=sum(ti.stars);stars+=s;if(s)show("bTiotal",`⭐ ${s} stjärnor`)}
-const ta=get("mattespel-taluppfattning-v1");if(ta&&ta.stars){const s=sum(ta.stars);stars+=s;if(s)show("bTal",`⭐ ${s} stjärnor`)}
-/* Lilla plus & minus: bästa rekord */
-const lp=get("mattespel-lillaplus-v1");
-if(lp){const bl=Math.max(0,...Object.values(lp.blitz||{}));const rc=Object.values(lp.race||{}).map(r=>r.time);
-  if(bl)show("bLilla",`⚡ Rekord: ${bl} rätt på 60 s`);else if(rc.length)show("bLilla",`🏁 Rekord: ${fmt(Math.min(...rc))}`);}
-/* Nationella prov: senaste resultat */
-const np=get("np3-resultat");
-if(np){const last=Object.values(np).sort((a,b)=>b.d-a.d)[0];if(last)show("bNp",`Senast: ${last.r} av ${last.t} rätt`)}
-document.getElementById("sStars").textContent=stars;
+const medalTxt=m=>{const n=m.filter(Boolean).length,g=m.filter(x=>x===3).length;return n?`🏅 ${n} ${n===1?"medalj":"medaljer"}${g?` · ${g} guld`:""}`:""};
 
-/* Dagar i rad: en dag räknas när något har tränats (framstegen har ändrats sedan förra besöket) */
+const mu=get("mattespel-multiplikation-v1");
+S.mMed=mu&&mu.facts?medalsFrom((a,b)=>mu.facts[Math.min(a,b)+"x"+Math.max(a,b)]||[]):T10.map(()=>0);
+S.stars+=S.mMed.reduce((a,b)=>a+b,0);show("bMulti",medalTxt(S.mMed));
+
+const dv=get("mattespel-division-v1");
+S.dMed=dv&&dv.facts?medalsFrom((q,d)=>dv.facts[d+":"+q+":0"]||[]):T10.map(()=>0);
+S.stars+=S.dMed.reduce((a,b)=>a+b,0);show("bDiv",medalTxt(S.dMed));
+S.dRest=!!dv&&[...Object.keys(dv.race||{}),...Object.keys(dv.blitz||{})].some(k=>k[0]==="r");
+
+const kl=get("mattespel-klockan-v1");S.kl=(kl&&kl.stars)||{};
+{const s=sum(S.kl);S.stars+=s;if(s)show("bKlocka",`⭐ ${s} stjärnor`)}
+const sp=get("mattespel-spel-v1");S.spel=sp||{fly:{},played:0,perfect:false};
+{const s=[...Object.values(S.spel.fly||{}),...Object.values(S.spel.mem||{})].reduce((a,r)=>a+(r.stars||0),0);S.stars+=s;
+ const best=Math.max(0,...Object.values(S.spel.fly||{}).map(r=>r.best||0));
+ if(s)show("bSpel",`⭐ ${s} stjärnor`);else if(best)show("bSpel",`Rekord: ${best} rätt`);}
+const ti=get("mattespel-tiotal-v1");S.ti=(ti&&ti.stars)||{};
+{const s=sum(S.ti);S.stars+=s;if(s)show("bTiotal",`⭐ ${s} stjärnor`)}
+const ta=get("mattespel-taluppfattning-v1");S.ta=(ta&&ta.stars)||{};S.taDiag=Object.values((ta&&ta.diag)||{});
+{const s=sum(S.ta);S.stars+=s;if(s)show("bTal",`⭐ ${s} stjärnor`)}
+const lp=get("mattespel-lillaplus-v1");
+S.lpBlitz=lp?Math.max(0,...Object.values(lp.blitz||{})):0;S.lpRace=lp?Object.values(lp.race||{}).map(r=>r.time):[];
+if(S.lpBlitz)show("bLilla",`⚡ Rekord: ${S.lpBlitz} rätt på 60 s`);else if(S.lpRace.length)show("bLilla",`🏁 Rekord: ${fmt(Math.min(...S.lpRace))}`);
+const np=get("np3-resultat");S.np=Object.values(np||{});
+if(S.np.length){const last=S.np.slice().sort((a,b)=>b.d-a.d)[0];show("bNp",`Senast: ${last.r} av ${last.t} rätt`)}
+$("sStars").textContent=S.stars;
+
+/* ---------- Dagar i rad (en dag räknas när något har tränats) ---------- */
 const day=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const today=day(new Date()),yest=day(new Date(Date.now()-864e5));
-const snap=["mattespel-multiplikation-v1","mattespel-division-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat"].map(k=>localStorage.getItem(k)||"").join("|");
+const snap=["mattespel-spel-v1","mattespel-multiplikation-v1","mattespel-division-v1","mattespel-klockan-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat"].map(k=>localStorage.getItem(k)||"").join("|");
 let fp=0;for(let i=0;i<snap.length;i++)fp=(fp*31+snap.charCodeAt(i))|0;
 const st=get("matteportalen-dagar")||{fp:null,days:[]};
 if(st.fp!==null&&st.fp!==fp&&!st.days.includes(today))st.days.push(today);
 if(st.fp===null&&snap.replace(/\|/g,"")&&!st.days.includes(today))st.days.push(today);
-st.fp=fp;st.days=st.days.slice(-60);put("matteportalen-dagar",st);
-let streak=0;{const set=new Set(st.days);let d=new Date();if(!set.has(today))d=new Date(Date.now()-864e5);while(set.has(day(d))){streak++;d=new Date(d.getTime()-864e5)}}
-document.getElementById("sDays").textContent=streak;
-document.getElementById("sDaysTxt").textContent=streak===0?"dagar i rad. Börja idag!":streak===1?"dag i rad":"dagar i rad";
+st.fp=fp;st.days=st.days.slice(-400);put("matteportalen-dagar",st);
+const daySet=new Set(st.days);
+let streak=0;{let d=new Date();if(!daySet.has(today))d=new Date(Date.now()-864e5);while(daySet.has(day(d))){streak++;d=new Date(d.getTime()-864e5)}}
+S.bestStreak=0;{let run=0,prev=null;st.days.slice().sort().forEach(x=>{const t=new Date(x+"T12:00");run=prev&&Math.round((t-prev)/864e5)===1?run+1:1;prev=t;S.bestStreak=Math.max(S.bestStreak,run)})}
+$("sDays").textContent=streak;
+$("sDaysTxt").textContent=streak===0?"dagar i rad. Börja idag!":streak===1?"dag i rad":"dagar i rad";
 
-/* Ugglan hälsar */
+/* ---------- Ugglan ---------- */
+const WARD={
+  color:{name:"Färg",items:[
+    {id:"lila",name:"Lila",need:0,c:["#8A6BC6","#6B4E9B"]},{id:"bla",name:"Blå",need:2,c:["#4F8DF5","#2F63C9"]},
+    {id:"gron",name:"Grön",need:6,c:["#3FBF7F","#258A58"]},{id:"rosa",name:"Rosa",need:12,c:["#FF7EB6","#D94F8E"]},
+    {id:"orange",name:"Orange",need:20,c:["#FFA24C","#D9772A"]},{id:"rymd",name:"Rymd",need:35,c:["#2B3A67","#141D3D"]},
+    {id:"guld",name:"Guld",need:60,c:["#F2C230","#C99A0A"]}]},
+  glasses:{name:"Glasögon",items:[
+    {id:"runda",name:"Runda",need:0},{id:"inga",name:"Inga",need:0},{id:"stjarn",name:"Stjärnor",need:8},
+    {id:"sol",name:"Solglasögon",need:15},{id:"hjarta",name:"Hjärtan",need:40}]},
+  hat:{name:"Hatt",items:[
+    {id:"ingen",name:"Ingen",need:0},{id:"keps",name:"Keps",need:3},{id:"mossa",name:"Mössa",need:10},
+    {id:"party",name:"Partyhatt",need:16},{id:"troll",name:"Trollkarl",need:28},{id:"krona",name:"Krona",need:50}]},
+  neck:{name:"Halsband",items:[
+    {id:"ingen",name:"Inget",need:0},{id:"rosett",name:"Rosett",need:4},{id:"halsduk",name:"Halsduk",need:14},{id:"medalj",name:"Medalj",need:24}]}
+};
+const owlCfg=Object.assign({color:"lila",glasses:"runda",hat:"ingen",neck:"ingen",seen:[]},get("matteportalen-uggla")||{});
+const saveOwl=()=>put("matteportalen-uggla",owlCfg);
+const itemOf=(slot,id)=>WARD[slot].items.find(x=>x.id===id)||WARD[slot].items[0];
+const unlockedItem=it=>S.stars>=it.need;
+// Om stjärnorna har minskat (t.ex. efter nollställning) byts låsta saker ut
+Object.keys(WARD).forEach(k=>{if(!unlockedItem(itemOf(k,owlCfg[k])))owlCfg[k]=WARD[k].items[0].id});
+
+function owlSVG(cfg,cls){
+  const[c1,c2]=itemOf("color",cfg.color).c,dark=cfg.color==="rymd";
+  let s=`<svg class="owl ${cls||""}" viewBox="0 -20 120 140" role="img" aria-label="Matteugglan">`;
+  s+=`<ellipse cx="60" cy="112" rx="34" ry="5" fill="rgba(0,0,0,.18)"/>`;
+  s+=`<path d="M24 44 L30 16 L46 34 Z" fill="${c2}"/><path d="M96 44 L90 16 L74 34 Z" fill="${c2}"/>`;
+  s+=`<ellipse cx="60" cy="68" rx="40" ry="42" fill="${c1}"/><ellipse cx="60" cy="80" rx="26" ry="28" fill="${dark?"#DDE3F5":"#F3E8FF"}"/>`;
+  s+=`<path d="M44 74q4 4 8 0M56 82q4 4 8 0M68 74q4 4 8 0M50 92q4 4 8 0M62 92q4 4 8 0" stroke="rgba(0,0,0,.14)" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  s+=`<path d="M22 72q-10 10 -2 24q8-6 10-16z" fill="${c2}"/><path d="M98 72q10 10 2 24q-8-6-10-16z" fill="${c2}"/>`;
+  s+=`<path d="M46 108h8M66 108h8" stroke="#FF9F43" stroke-width="5" stroke-linecap="round"/>`;
+  // ögon
+  if(cfg.glasses==="sol"){
+    s+=`<rect x="24" y="38" width="34" height="24" rx="10" fill="#1D2B53"/><rect x="62" y="38" width="34" height="24" rx="10" fill="#1D2B53"/><path d="M56 46h8" stroke="#1D2B53" stroke-width="4"/><path d="M30 44l8-4M68 44l8-4" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-linecap="round"/>`;
+  }else{
+    s+=`<circle cx="42" cy="50" r="16" fill="#fff"/><circle cx="78" cy="50" r="16" fill="#fff"/><circle cx="45" cy="52" r="7" fill="#1D2B53"/><circle cx="75" cy="52" r="7" fill="#1D2B53"/><circle cx="47.5" cy="49.5" r="2.4" fill="#fff"/><circle cx="77.5" cy="49.5" r="2.4" fill="#fff"/>`;
+    if(cfg.glasses==="runda")s+=`<circle cx="42" cy="50" r="17" fill="none" stroke="#FFC93C" stroke-width="4"/><circle cx="78" cy="50" r="17" fill="none" stroke="#FFC93C" stroke-width="4"/><line x1="59" y1="50" x2="61" y2="50" stroke="#FFC93C" stroke-width="4"/>`;
+    if(cfg.glasses==="stjarn"){const star=(cx,cy)=>{let p=[];for(let i=0;i<10;i++){const r=i%2?11:22,a=-Math.PI/2+i*Math.PI/5;p.push((cx+r*Math.cos(a)).toFixed(1)+","+(cy+r*Math.sin(a)).toFixed(1))}return`<polygon points="${p.join(" ")}" fill="none" stroke="#FF5FA2" stroke-width="3.5" stroke-linejoin="round"/>`};s+=star(42,51)+star(78,51)}
+    if(cfg.glasses==="hjarta"){const heart=cx=>`<path d="M${cx} 66 C${cx-26} 50 ${cx-18} 30 ${cx} 42 C${cx+18} 30 ${cx+26} 50 ${cx} 66Z" fill="none" stroke="#E5484D" stroke-width="3.5"/>`;s+=heart(42)+heart(78)}
+  }
+  s+=`<path d="M55 62 L65 62 L60 71 Z" fill="#FF9F43"/>`;
+  // halsband
+  if(cfg.neck==="rosett")s+=`<path d="M60 80 L46 72 L46 88 Z M60 80 L74 72 L74 88 Z" fill="#E5484D"/><circle cx="60" cy="80" r="4.5" fill="#B8323A"/>`;
+  if(cfg.neck==="halsduk")s+=`<path d="M26 74 Q60 90 94 74 L94 83 Q60 99 26 83 Z" fill="#3D8BFD"/><path d="M70 86 L78 110 L88 106 L80 84 Z" fill="#3D8BFD"/><path d="M36 80 Q60 93 84 80" stroke="#fff" stroke-width="2.5" fill="none" stroke-dasharray="4 5"/>`;
+  if(cfg.neck==="medalj")s+=`<path d="M46 72 L60 92 L74 72" stroke="#3D5AFE" stroke-width="6" fill="none"/><circle cx="60" cy="96" r="9" fill="#F2C230" stroke="#C99A0A" stroke-width="2"/><path d="M60 90l2 4 4 .5-3 3 .8 4-3.8-2-3.8 2 .8-4-3-3 4-.5z" fill="#fff"/>`;
+  // hatt
+  if(cfg.hat==="keps")s+=`<path d="M34 32 Q60 0 86 32 Z" fill="#E5484D"/><path d="M58 30 Q86 25 104 32 Q88 38 58 34 Z" fill="#B8323A"/><circle cx="60" cy="13" r="3" fill="#B8323A"/>`;
+  if(cfg.hat==="mossa")s+=`<path d="M33 34 Q60 -6 87 34 Z" fill="#2BB673"/><rect x="31" y="27" width="58" height="10" rx="5" fill="#1E9E5E"/><circle cx="60" cy="12" r="8" fill="#fff"/>`;
+  if(cfg.hat==="party")s+=`<path d="M44 32 L60 -14 L76 32 Z" fill="#FFC93C"/><path d="M50 16 L70 16 M47 25 L73 25 M54 5 L66 5" stroke="#FF5FA2" stroke-width="3.5"/><circle cx="60" cy="-16" r="5" fill="#FF5FA2"/>`;
+  if(cfg.hat==="troll")s+=`<path d="M40 30 L66 -18 L80 30 Z" fill="#3D5AFE"/><ellipse cx="60" cy="31" rx="32" ry="6" fill="#2A44C9"/><path d="M58 6l1.5 3 3.3.4-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.4z M68 18l1.2 2.4 2.6.3-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.3z" fill="#FFC93C"/>`;
+  if(cfg.hat==="krona")s+=`<path d="M38 33 L38 12 L49 22 L60 4 L71 22 L82 12 L82 33 Z" fill="#F2C230" stroke="#C99A0A" stroke-width="2.5" stroke-linejoin="round"/><circle cx="60" cy="26" r="4" fill="#E5484D"/><circle cx="47" cy="27" r="3" fill="#3D8BFD"/><circle cx="73" cy="27" r="3" fill="#2BB673"/>`;
+  return s+"</svg>";
+}
+const allItems=()=>Object.entries(WARD).flatMap(([k,v])=>v.items.map(it=>k+":"+it.id));
+function drawOwl(){$("owlSlot").innerHTML=owlSVG(owlCfg);}
+function wardBadge(){
+  const newOnes=Object.entries(WARD).flatMap(([k,v])=>v.items.filter(it=>it.need>0&&unlockedItem(it)&&!owlCfg.seen.includes(k+":"+it.id)));
+  $("newWard").hidden=!newOnes.length;
+  const next=Object.values(WARD).flatMap(v=>v.items).filter(it=>!unlockedItem(it)).sort((a,b)=>a.need-b.need)[0];
+  $("wardInfo").textContent=next?`Nästa sak vid ${next.need} ⭐`:"Allt är upplåst!";
+}
+let wardTab="hat";
+function renderWard(){
+  $("wardPreview").innerHTML=owlSVG(owlCfg);
+  $("wardStars").textContent=`Du har ${S.stars} ⭐`;
+  $("wardTabs").innerHTML=Object.entries(WARD).map(([k,v])=>`<button data-tab="${k}" aria-pressed="${k===wardTab}">${v.name}</button>`).join("");
+  $("wardItems").innerHTML=WARD[wardTab].items.map(it=>{
+    const open=unlockedItem(it),cfg=Object.assign({},owlCfg,{[wardTab]:it.id});
+    return`<button class="item${owlCfg[wardTab]===it.id?" sel":""}${open?"":" locked"}" data-item="${it.id}">${owlSVG(cfg)}<small>${open?it.name:"🔒 "+it.need+" ⭐"}</small></button>`;
+  }).join("");
+}
+$("wardTabs").onclick=e=>{const b=e.target.closest("[data-tab]");if(b){wardTab=b.dataset.tab;renderWard();}};
+$("wardItems").onclick=e=>{const b=e.target.closest("[data-item]");if(!b)return;
+  const it=itemOf(wardTab,b.dataset.item);
+  if(!unlockedItem(it)){b.animate([{transform:"translateX(-5px)"},{transform:"translateX(5px)"},{transform:"translateX(0)"}],{duration:250});return;}
+  owlCfg[wardTab]=it.id;saveOwl();renderWard();drawOwl();window.Ljud&&Ljud.ok();};
+function openWard(){
+  owlCfg.seen=allItems();saveOwl();wardBadge();renderWard();$("mWard").hidden=false;
+  $("bubble").textContent=pickLine();
+}
+const pickLine=()=>["Vad fin jag blir!","Snyggt val!","Tack! Nu är jag redo att räkna."][Math.floor(Math.random()*3)];
+$("owlBtn").onclick=openWard;$("btnWard").onclick=openWard;
+
+/* ---------- Klistermärken ---------- */
+const anyTi=f=>Object.entries(S.ti).some(([k,v])=>f(k,v||{}));
+const STICKERS=[
+  ["forsta","⭐","Första stjärnan","Samla din första stjärna.",()=>S.stars>=1],
+  ["tio","🌟","Stjärnsamlare","Samla 10 stjärnor.",()=>S.stars>=10],
+  ["femtio","💫","Stjärnregn","Samla 50 stjärnor.",()=>S.stars>=50],
+  ["hundra","🌌","Stjärnhimmel","Samla 100 stjärnor.",()=>S.stars>=100],
+  ["tre","🔥","Tre i rad","Träna tre dagar i rad.",()=>S.bestStreak>=3],
+  ["vecka","🚀","En hel vecka","Träna sju dagar i rad.",()=>S.bestStreak>=7],
+  ["flygare","🦉","Flygaren","Spela Ugglans flygtur i Spelhörnan.",()=>(S.spel.played||0)>0],
+  ["molnkung","☁️","Molnkungen","Klara Ugglans flygtur utan att tappa ett hjärta.",()=>!!S.spel.perfect],
+  ["minne","🧠","Minnet","Spela Memory i Spelhörnan.",()=>(S.spel.memPlayed||0)>0],
+  ["minnesmastare","🃏","Minnesmästaren","Få tre stjärnor i Memory.",()=>!!S.spel.memPerfect],
+  ["groda","🐸","Plusgrodan","Kör Racet i Lilla plus & minus.",()=>S.lpRace.length>0],
+  ["blixt","⚡","Blixten","Få 20 rätt i Blixtrundan i Lilla plus & minus.",()=>S.lpBlitz>=20],
+  ["tiokompis","🔟","Tiokompis","Få stjärnor på nivå 1 i Tiotalsövergång.",()=>anyTi((k,v)=>v[1]>0)],
+  ["klattrare","🧗","Klättraren","Få tre stjärnor på nivå 3 i Tiotalsövergång.",()=>anyTi((k,v)=>v[3]===3)],
+  ["hundring","💯","Hundringen","Få stjärnor i Tiotalsövergång upp till 100.",()=>anyTi((k,v)=>k.startsWith("100")&&sum(v)>0)],
+  ["brons","🥉","Första medaljen","Få en medalj i Multiplikation.",()=>S.mMed.some(Boolean)],
+  ["guld","🥇","Guldtabellen","Få guld i en multiplikationstabell.",()=>S.mMed.includes(3)],
+  ["kung","👑","Tabellkungen","Få guld i alla multiplikationstabeller.",()=>S.mMed.every(x=>x===3)],
+  ["pizza","🍕","Dela lika","Få en medalj i Division.",()=>S.dMed.some(Boolean)],
+  ["kakor","🍪","Smulorna","Sätt ett rekord i Division med rest.",()=>S.dRest],
+  ["klocka","🕒","Klockan slår","Få stjärnor på Hel timme i Klockan.",()=>(S.kl.hel||0)>0],
+  ["runthalv","🕧","Runt halv-proffs","Få tre stjärnor på Runt halv i Klockan.",()=>(S.kl.runthalv||0)===3],
+  ["tidtagare","⏱️","Tidtagaren","Få stjärnor på Mäta tid i Klockan.",()=>(S.kl.mata||0)>0],
+  ["klockmastare","🕰️","Klockmästaren","Få stjärnor på alla nivåer i Klockan.",()=>["hel","halv","kvart","fem","runthalv","dig","mata","mix"].every(k=>(S.kl[k]||0)>0)],
+  ["spanare","🔭","Talspanaren","Få stjärnor i Bedömningsstöd i taluppfattning.",()=>sum(S.ta)>0],
+  ["diagnos","📋","Diagnosen klar","Gör en diagnos i Bedömningsstöd i taluppfattning.",()=>S.taDiag.length>0],
+  ["allaratt","🏆","Alla rätt","Få alla rätt på en diagnos.",()=>S.taDiag.some(d=>d.ok===d.n)],
+  ["prov","📝","Provtränaren","Rätta ett delprov i Nationella prov.",()=>S.np.length>0],
+  ["fullpott","🎯","Fullpott","Få alla rätt på ett delprov i Nationella prov.",()=>S.np.some(r=>r.r===r.t&&r.t>0)]
+];
+const got=STICKERS.filter(x=>x[4]()).map(x=>x[0]);
+const kst=Object.assign({seen:[]},get("matteportalen-klister")||{});
+const fresh=got.filter(id=>!kst.seen.includes(id));
+$("albumInfo").textContent=`${got.length} av ${STICKERS.length}`;
+$("newAlbum").hidden=!fresh.length;
+const stkHTML=(x,cls)=>`<div class="stk ${cls||""}"><span class="em">${x[1]}</span><b>${x[2]}</b><small>${x[3]}</small></div>`;
+function openAlbum(){
+  $("albumCount").textContent=`Du har ${got.length} av ${STICKERS.length} klistermärken.`;
+  $("albumGrid").innerHTML=STICKERS.map(x=>stkHTML(x,got.includes(x[0])?(fresh.includes(x[0])?"fresh":""):"off")).join("");
+  kst.seen=got.slice();put("matteportalen-klister",kst);$("newAlbum").hidden=true;
+  $("mAlbum").hidden=false;
+}
+$("btnAlbum").onclick=openAlbum;
+$("newGo").onclick=()=>{$("mNew").hidden=true;openAlbum();};
+if(fresh.length){
+  const list=STICKERS.filter(x=>fresh.includes(x[0]));
+  $("newTitle").textContent=list.length>1?"Nya klistermärken!":"Nytt klistermärke!";
+  $("newList").innerHTML=list.slice(0,3).map(x=>stkHTML(x,"fresh")).join("");
+  $("newMore").textContent=list.length>3?`… och ${list.length-3} till i albumet.`:"";
+  setTimeout(()=>{if(document.querySelector(".modal:not([hidden])"))return;$("mNew").hidden=false;window.Ljud&&Ljud.magic();},500);
+}
+
+/* ---------- Stäng rutor ---------- */
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m||e.target.closest("[data-close]"))m.hidden=true;}));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal").forEach(m=>m.hidden=true);});
+
+/* ---------- Ljud ---------- */
+function soundLabel(){$("soundBtn").textContent=window.Ljud&&Ljud.on?"🔊 Ljud: på":"🔇 Ljud: av";}
+$("soundBtn").onclick=()=>{if(!window.Ljud)return;Ljud.set(!Ljud.on);soundLabel();Ljud.ok();};
+soundLabel();
+
+/* ---------- Ugglan hälsar ---------- */
+drawOwl();wardBadge();
 const hr=new Date().getHours();
 const hi=hr<5?"Hej nattuggla!":hr<10?"God morgon!":hr<17?"Hej!":"God kväll!";
 let msg;
-if(streak>=1&&!st.days.includes(today))msg=`Träna idag så blir det ${streak+1} dagar i rad!`;
+if(!$("newWard").hidden)msg="Jag har fått nya kläder! Tryck på mig.";
+else if(streak>=1&&!daySet.has(today))msg=`Träna idag så blir det ${streak+1} dagar i rad!`;
 else if(streak>=2)msg=`${streak} dagar i rad. Snyggt!`;
-else if(stars>0)msg=`Du har ${stars} ⭐. Vad tränar vi idag?`;
+else if(S.stars>0)msg=`Du har ${S.stars} ⭐. Vad tränar vi idag?`;
 else msg="Vad vill du träna idag?";
-document.getElementById("bubble").textContent=`${hi} ${msg}`;
+$("bubble").textContent=`${hi} ${msg}`;
 </script>
 </body>
 </html>
