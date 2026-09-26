@@ -61,7 +61,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .badge{display:inline-block;margin-top:6px;background:#FFF4CC;color:#8A5A00;border-radius:999px;padding:1px 10px;font-weight:700;font-size:.85rem}
 .badge[hidden]{display:none}
 .chev{flex:none;color:#B4C0D8;font-size:1.6rem;font-weight:800}
-.more{margin:26px 0 10px;color:var(--muted);font-weight:800;font-size:1rem;text-transform:uppercase;letter-spacing:.06em}
+.cards.gap{margin-top:34px}
 .foot{margin-top:26px;color:var(--muted);font-size:.85rem;text-align:center}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 </style>
@@ -113,13 +113,12 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   <nav class="cards" aria-label="Övningar">
     <a class="card" href="lillaplus/"><span class="tile sm" style="--c:#2BB673">+ −</span><span class="txt"><b>Lilla plus &amp; minus</b><small>Huvudräkning med tal upp till 10.</small><span class="badge" id="bLilla" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="tiotal/"><span class="tile" style="--c:#3D8BFD">10</span><span class="txt"><b>Tiotalsövergång</b><small>Räkna via tiotalet med tioruta och tallinje.</small><span class="badge" id="bTiotal" hidden></span></span><span class="chev">›</span></a>
-    <a class="card" href="taluppfattning/"><span class="tile sm" style="--c:#FF9F43">123</span><span class="txt"><b>Taluppfattning</b><small>Tallinjer, talföljder, dela upp och problemlösning.</small><span class="badge" id="bTal" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="multiplikation/"><span class="tile" style="--c:#7B61FF">×</span><span class="txt"><b>Multiplikation</b><small>Tabellerna 1–10. Samla medaljer!</small><span class="badge" id="bMulti" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="division/"><span class="tile" style="--c:#FF5FA2">÷</span><span class="txt"><b>Division</b><small>Dela lika, med och utan rest.</small><span class="badge" id="bDiv" hidden></span></span><span class="chev">›</span></a>
   </nav>
 
-  <p class="more">Mer att träna på</p>
-  <nav class="cards" aria-label="Fler övningar">
+  <nav class="cards gap" aria-label="Fler övningar">
+    <a class="card" href="taluppfattning/"><span class="tile sm" style="--c:#FF9F43">123</span><span class="txt"><b>Bedömningsstöd i taluppfattning</b><small>Åk 1 och 2. Tallinjer, talföljder, dela upp och problemlösning.</small><span class="badge" id="bTal" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="np3/"><span class="tile sm" style="--c:#FF6B6B">NP</span><span class="txt"><b>Nationella prov</b><small>Träna inför proven i åk 3. Nya uppgifter varje gång.</small><span class="badge" id="bNp" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="tiobas/"><span class="tile sm" style="--c:#17AFC4">100</span><span class="txt"><b>Tiobasmaterial</b><small>Hundratal, tiotal och ental. Växla och räkna upp till 1000.</small></span><span class="chev">›</span></a>
   </nav>
