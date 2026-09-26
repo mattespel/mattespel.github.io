@@ -141,13 +141,12 @@ input.ans:focus{outline:none;background:#fff8dc;border-bottom-color:var(--pencil
 .padform input,.padform select{font:inherit;font-size:1.05rem;border:2px solid var(--ink);border-radius:8px;padding:3px 6px;background:#fff}
 .padrow{margin:.4rem 0 .6rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .padrow select{font:inherit;font-size:1.05rem;border:2px solid var(--ink);border-radius:8px;padding:3px 8px;background:#fff}
-.calcpad{display:flex;align-items:center;gap:.4em;font-size:1.35rem;margin:.4rem 0;flex-wrap:wrap}
-.calcpad input{font:inherit;font-size:1.35rem;text-align:center;border:2px solid var(--ink);border-radius:8px;padding:2px 4px;background:#fff;width:3.4em}
-.calcpad .mA,.calcpad .mB,.fracin input{width:4.6em}
-.calcpad input::placeholder{font-size:.6em;letter-spacing:0}
-.calcpad .monoans{color:var(--blue-d)}
-.calcpad input.dok{border-color:var(--ok);background:var(--ok-l)}
-.calcpad input.dbad{border-color:var(--err);background:var(--err-l)}
+.calcpad{display:flex;align-items:center;gap:.3em;font-size:1.3rem;margin:.4rem 0;flex-wrap:nowrap}
+.calcpad input{font:inherit;font-size:1.3rem;text-align:center;border:2px solid var(--ink);border-radius:8px;padding:2px 2px;background:#fff;width:3.2em;min-width:0}
+.calcpad .cR{color:var(--blue-d)}
+.fracin input{width:4.3em}
+.calcpad input::placeholder{font-size:.55em;letter-spacing:0}
+.padwrap.ok,.padwrap.bad{border:2px solid;border-radius:12px;padding:6px 10px}
 .fracin{display:inline-flex;flex-direction:column;align-items:center;gap:0}
 .fracin input{border-radius:8px 8px 0 0}
 .fracin input+input{border-top:3px solid var(--ink);border-radius:0 0 8px 8px;margin-top:2px}
@@ -793,16 +792,18 @@ function colWidget(x,y,op,attrs){
   const res=Array.from({length:w},(_,i)=>`<td class="dg"><input class="cin" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Svarssiffra, kolumn ${i+1}"></td>`).join("");
   return `<div class="colpad" ${attrs}><table class="calcgrid live"><tr class="mkrow"><td class="opcell"></td>${mk}</tr><tr><td class="opcell"></td>${top}</tr><tr class="opline"><td class="opcell">${op==="+"?"+":"−"}</td>${bot}</tr><tr class="resrow"><td class="opcell">=</td>${res}</tr></table></div>`;
 }
-const PAD=`<details class="padwrap"><summary>Välj räknesätt</summary><div class="padrow"><label>Räknesätt: <select class="pop" aria-label="Räknesätt"><option value="+">+</option><option value="-">−</option><option value="×">×</option><option value="÷">÷</option></select></label></div><div class="padbody"></div></details>`;
+const padHTML=g=>`<details class="padwrap"${g?' data-g="1"':""}><summary>Välj räknesätt</summary><div class="padrow"><label>Räknesätt: <select class="pop" aria-label="Räknesätt"><option value="+">+</option><option value="-">−</option><option value="×">×</option><option value="÷">÷</option></select></label></div><div class="padbody"></div></details>`;
 function wantPad(q,key){
   if(q.pad)return true;
   if(/Gör en beräkning|Visa hur du löser/.test(q.html))return q.fields.some(fd=>fd.k==="num");
   if(key&&/-(C|E)$/.test(key))return q.fields.some(fd=>fd.k==="num");
   return false;
 }
+// Beräkningen rättas när uppgiften säger "Gör en beräkning" och har ett enda svar.
+const gradedPad=q=>/Gör en beräkning/.test(q.html)&&q.fields.filter(fd=>fd.k==="num").length===1;
 function qHTML(q,qi,num,key){
   const body=q.html.replace(/@@(\d+)@@/g,(_,i)=>fieldHTML(q,qi,+i));
-  return `<li class="q" id="q${qi}"><span class="qn">${num}.</span><div>${body}${wantPad(q,key)?PAD:""}<div class="facit" hidden>${q.facit}</div></div></li>`;
+  return `<li class="q" id="q${qi}"><span class="qn">${num}.</span><div>${body}${wantPad(q,key)?padHTML(gradedPad(q)):""}<div class="facit" hidden>${q.facit}</div></div></li>`;
 }
 function fieldHTML(q,qi,fi){
   const fd=q.fields[fi];
@@ -865,6 +866,8 @@ function grade(){
     const vals=q.fields.map((_,fi)=>readVal(qi,fi)),r=gradeQ(q,vals);
     let allOk=true;const hasSelf=q.fields.some(fd=>fd.k==="self");
     r.forEach((ok,fi)=>{if(q.fields[fi].k==="self")return;const el=app.querySelector(`[data-q="${qi}"][data-f="${fi}"]`);el.classList.remove("ok","bad");el.classList.add(ok?"ok":"bad");total++;if(ok)right++;else allOk=false});
+    const pw=app.querySelector(`#q${qi} .padwrap[data-g="1"]`);
+    if(pw){const ok=calcOk(q,readCalc(pw));pw.classList.remove("ok","bad");pw.classList.add(ok?"ok":"bad");total++;if(ok)right++;else allOk=false}
     app.querySelector(`#q${qi} .facit`).hidden=allOk&&!hasSelf&&!cur.facit;
   });
   if(total===0){res.textContent="Här finns inget som rättas automatiskt. Jämför med facit.";return}
@@ -875,8 +878,7 @@ function grade(){
 app.addEventListener("click",e=>{
   const dgb=e.target.closest(".dgb");if(dgb){dgb.classList.toggle("struck");if(dgb.classList.contains("struck")){const td=dgb.closest("td"),idx=[...td.parentElement.children].indexOf(td);const mk=td.closest("table").querySelector(".mkrow").children[idx].querySelector("input");if(mk&&!mk.value)mk.focus()}return}
   const go=e.target.closest(".padgo");if(go){makePad(go.closest(".padwrap"));return}
-  const pc=e.target.closest(".padchk");if(pc){checkPad(pc.closest(".padwrap"));return}
-  const pc2=e.target.closest(".padchk2");if(pc2){checkCalc(pc2.closest(".padbody").querySelector(".calcpad"));return}
+  const pl=e.target.closest(".padline");if(pl){const w=pl.closest(".padwrap"),cp=w.querySelector(".colpad");renderPad(w,cp?[cp.dataset.pa,cp.dataset.pb]:null);return}
   const b=e.target.closest(".opt");if(!b)return;const g=b.parentElement;
   if(!g.classList.contains("multi"))g.querySelectorAll(".opt").forEach(o=>o!==b&&o.classList.remove("sel"));b.classList.toggle("sel");g.classList.remove("ok","bad");
 });
@@ -894,55 +896,52 @@ app.addEventListener("input",e=>{
     t.value=t.value.replace(/[^0-9]/g,"");const cp=t.closest(".colpad");if(cp){cp.classList.remove("ok","bad");cp.querySelectorAll(".cin").forEach(c=>c.classList.remove("dok","dbad"))}
     if(t.classList.contains("cin")&&t.value){const row=[...t.closest("tr").querySelectorAll(".cin")],i=row.indexOf(t);if(i>0)row[i-1].focus()}
   }
-  if(t.classList.contains("monoans")){t.value=t.value.replace(/[^0-9]/g,"");t.classList.remove("dok","dbad");const cp=t.closest(".colpad");if(cp)cp.classList.remove("ok","bad")}
-  if(t.classList.contains("mA")||t.classList.contains("mB")||t.classList.contains("dA")||t.classList.contains("dB")){t.value=t.value.replace(/[^0-9]/g,"");const cp=t.closest(".calcpad");if(cp){cp.querySelector(".monoans").classList.remove("dok","dbad")}}
+  if(t.classList.contains("cA")||t.classList.contains("cB")||t.classList.contains("cR"))t.value=t.value.replace(/[^0-9]/g,"");
+  const pw=t.closest(".padwrap");if(pw)pw.classList.remove("ok","bad");
 });
-function pmRow(op){
-  return `<div class="padform"><input class="pa" inputmode="numeric" aria-label="Första talet" placeholder="tal"><span class="opsign">${op==="+"?"+":"−"}</span><input class="pb" inputmode="numeric" aria-label="Andra talet" placeholder="tal"><button type="button" class="sm padgo">Ställ upp</button></div><div class="padarea"></div>`;
+function calcRow(op,pre){
+  const v=i=>pre&&pre[i]!=null?` value="${pre[i]}"`:"";
+  const inp=(c,ph,lab,i)=>`<input class="${c}" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="${lab}" placeholder="${ph}"${v(i)}>`;
+  const res=`<input class="cR" inputmode="numeric" maxlength="5" autocomplete="off" aria-label="Svar">`;
+  if(op==="÷")return `<div class="calcpad"><span class="fracin">${inp("cA","täljare","Täljare",0)}${inp("cB","nämnare","Nämnare",1)}</span><span>=</span>${res}</div>`;
+  const ph=op==="×"?"faktor":"term",sym=op==="×"?"·":op==="+"?"+":"−";
+  let h=`<div class="calcpad">${inp("cA",ph,ph[0].toUpperCase()+ph.slice(1),0)}<span>${sym}</span>${inp("cB",ph,ph[0].toUpperCase()+ph.slice(1),1)}<span>=</span>${res}</div>`;
+  if(op==="+"||op==="-")h+=`<div><button type="button" class="sm padgo">Ställ upp</button> <span class="padmsg"></span></div>`;
+  return h;
 }
-function mulRow(){
-  return `<div class="calcpad"><input class="mA" inputmode="numeric" maxlength="4" aria-label="Faktor" placeholder="faktor"><span>·</span><input class="mB" inputmode="numeric" maxlength="4" aria-label="Faktor" placeholder="faktor"><span>=</span><input class="monoans" inputmode="numeric" maxlength="6" aria-label="Svar"></div><div><button type="button" class="sm padchk2">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
-}
-function divRow(){
-  return `<div class="calcpad"><span class="fracin"><input class="dA" inputmode="numeric" maxlength="4" aria-label="Täljare" placeholder="täljare"><input class="dB" inputmode="numeric" maxlength="4" aria-label="Nämnare" placeholder="nämnare"></span><span>=</span><input class="monoans" inputmode="numeric" maxlength="6" aria-label="Svar"></div><div><button type="button" class="sm padchk2">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
-}
-function renderPad(details){
-  const op=details.querySelector(".pop").value,body=details.querySelector(".padbody");
-  body.innerHTML=op==="×"?mulRow():op==="÷"?divRow():pmRow(op);
+function renderPad(w,pre){
+  const op=w.querySelector(".pop").value;w.querySelector(".padbody").innerHTML=calcRow(op,pre);w.classList.remove("ok","bad");
 }
 function makePad(w){
-  const a=parseInt(w.querySelector(".pa").value),b=parseInt(w.querySelector(".pb").value),op=w.querySelector(".pop").value,area=w.querySelector(".padarea");
-  if(isNaN(a)||isNaN(b)||a<0||b<0||a>9999||b>9999){area.innerHTML=`<p class="padmsg bad">Skriv två tal först.</p>`;return}
-  if(op==="-"&&b>a){area.innerHTML=`<p class="padmsg bad">Vid minus ska det första talet vara störst.</p>`;return}
-  area.innerHTML=colWidget(a,b,op,`data-pa="${a}" data-pb="${b}" data-pop="${op}"`)+`<div><button type="button" class="sm padchk">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
-  const c=area.querySelectorAll(".cin");if(c.length)c[c.length-1].focus();
+  const body=w.querySelector(".padbody"),op=w.querySelector(".pop").value,msg=body.querySelector(".padmsg");
+  const a=parseInt(body.querySelector(".cA").value,10),b=parseInt(body.querySelector(".cB").value,10);
+  if(isNaN(a)||isNaN(b)){msg.textContent="Skriv de två talen först.";msg.className="padmsg bad";return}
+  if(op==="-"&&b>a){msg.textContent="Vid minus ska det första talet vara störst.";msg.className="padmsg bad";return}
+  body.innerHTML=colWidget(a,b,op,`data-pa="${a}" data-pb="${b}" data-pop="${op}"`)+`<div><button type="button" class="sm padline">Skriv på en rad i stället</button></div>`;
+  w.classList.remove("ok","bad");
+  const c=body.querySelectorAll(".cin");if(c.length)c[c.length-1].focus();
 }
-function checkCalc(cp){
-  const details=cp.closest(".padwrap"),msg=details.querySelector(".padmsg"),ans=cp.querySelector(".monoans");
-  ans.classList.remove("dok","dbad");
-  const isDiv=!!cp.querySelector(".dA");
-  const a=parseInt((isDiv?cp.querySelector(".dA"):cp.querySelector(".mA")).value,10);
-  const b=parseInt((isDiv?cp.querySelector(".dB"):cp.querySelector(".mB")).value,10);
-  if(isNaN(a)||isNaN(b)||a<0||b<0){msg.textContent="Skriv två tal först.";msg.className="padmsg bad";return}
-  if(isDiv&&b===0){msg.textContent="Det går inte att dela med 0.";msg.className="padmsg bad";return}
-  const got=parseInt(ans.value,10);
-  if(!isDiv){
-    const r=a*b,ok=got===r;ans.classList.add(ok?"dok":"dbad");
-    msg.textContent=ok?`Rätt räknat! ${a} · ${b} = ${r}. Skriv svaret på svarsraden.`:"Titta en gång till. Räkna hoppvis eller rita grupper om det är svårt.";
-    msg.className="padmsg "+(ok?"good":"bad");return
-  }
-  const q=Math.floor(a/b),rest=a-q*b,ok=got===q;ans.classList.add(ok?"dok":"dbad");
-  msg.textContent=ok?(rest?`Rätt räknat! ${a} ÷ ${b} = ${q} rest ${rest}. Skriv svaret på svarsraden.`:`Rätt räknat! ${a} ÷ ${b} = ${q}. Skriv svaret på svarsraden.`):"Titta en gång till. Hur många gånger får talet nedanför plats i talet ovanför?";
-  msg.className="padmsg "+(ok?"good":"bad");
+function readCalc(w){
+  const body=w.querySelector(".padbody");if(!body||!body.firstChild)return null;
+  const op=w.querySelector(".pop").value,col=body.querySelector(".colpad");
+  if(col){const z=readCol(col);if(!/^\d+$/.test(z))return null;return{op:col.dataset.pop,x:+col.dataset.pa,y:+col.dataset.pb,z:+z}}
+  const g=c=>{const el=body.querySelector(c);const n=el?parseInt(el.value,10):NaN;return n};
+  const x=g(".cA"),y=g(".cB"),z=g(".cR");if([x,y,z].some(isNaN))return null;
+  return{op,x,y,z};
 }
-function checkPad(w){
-  const cp=w.querySelector(".colpad");if(!cp)return;
-  const a=+cp.dataset.pa,b=+cp.dataset.pb,op=cp.dataset.pop;
-  const r=op==="+"?a+b:a-b,cins=[...cp.querySelectorAll(".cin")];
-  const exp=String(r).padStart(cins.length," ").split("");let ok=true;
-  cins.forEach((c,i)=>{c.classList.remove("dok","dbad");const want=exp[i]===" "?"":exp[i],got=c.value.trim();
-    if(want===""&&got==="")return;if(got===want)c.classList.add("dok");else{c.classList.add("dbad");ok=false}});
-  const m=w.querySelector(".padmsg");m.textContent=ok?`Rätt räknat! ${a} ${op==="+"?"+":"−"} ${b} = ${r}. Skriv svaret på svarsraden.`:"Titta på de röda rutorna och räkna en gång till.";m.className="padmsg "+(ok?"good":"bad");
+function numsOf(q){
+  const t=(q.html+" "+(q.facit||"")).replace(/<[^>]*>/g," ").replace(/@@\d+@@/g," ");
+  return new Set((t.match(/\d+/g)||[]).map(Number));
+}
+// Rätt beräkning: räkningen stämmer, svaret finns med, och de andra talen kommer från uppgiften.
+// Då godkänns t.ex. både 25 − 12 = 13 och 12 + 13 = 25, och 18 + 39 lika väl som 39 + 18.
+function calcOk(q,c){
+  if(!c)return false;const{op,x,y,z}=c;
+  const t=op==="+"?x+y===z:op==="-"?x-y===z:op==="×"?x*y===z:(y!==0&&x===y*z);
+  if(!t)return false;
+  const fd=q.fields.find(f=>f.k==="num");if(!fd)return false;
+  const A=fd.a,Ns=numsOf(q),arr=[x,y,z];
+  return arr.some((v,i)=>v===A&&arr.every((w,j)=>j===i||Ns.has(w)));
 }
 app.addEventListener("change",e=>{if(e.target.classList.contains("sel"))e.target.classList.remove("ok","bad")});
 app.addEventListener("keydown",e=>{
