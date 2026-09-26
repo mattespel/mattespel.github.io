@@ -131,7 +131,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
 <section id="home" class="screen">
   <a class="back" href="../">← Till huvudmenyn</a>
   <h1>Tiotalsövergång</h1>
-  <p class="lead">Addera först tiokompisarna, sedan resten. Klara en nivå för att låsa upp nästa.</p>
+  <p class="lead">Addera först tiokompisarna, sedan resten. Börja på nivå 1 och ta dig uppåt.</p>
   <div class="pick"><div class="lbl">Talområde</div>
     <div class="seg" id="segRange"><button data-v="20">Upp till 20</button><button data-v="100">Upp till 100</button></div></div>
   <div class="pick"><div class="lbl">Räknesätt</div>
@@ -139,7 +139,7 @@ h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
   <div class="pick" id="pickStrat"><div class="lbl">Strategi för minus</div>
     <div class="seg" id="segStrat"><button data-v="take">Ta bort till 10</button><button data-v="think">Tänk plus</button></div></div>
   <div class="levels" id="levels"></div>
-  <p class="note">Två stjärnor på en nivå låser upp nästa. Tre stjärnor får du om alla uppgifter blir rätt direkt.</p>
+  <p class="note">Tre stjärnor får du om alla uppgifter blir rätt direkt.</p>
 </section>
 
 <!-- Spel -->
@@ -204,7 +204,7 @@ const set=data.set;
 const unlockAll=new URLSearchParams(location.search).has('alla'); // lärarlänk: ?alla låser upp alla nivåer
 const pkey=()=>set.range+set.op;
 const starsOf=lv=>(data.stars[pkey()]||{})[lv]||0;
-const unlocked=lv=>unlockAll||lv===1||starsOf(lv-1)>=2;
+const unlocked=lv=>true; // alla nivåer är öppna
 const think=()=>set.op==='minus'&&set.range===20&&set.strat==='think';
 
 /* ---------- Startsida ---------- */
@@ -496,7 +496,7 @@ function finish(){
     const right=G.total-G.missed,st=right===G.total?3:right>=G.total-2?2:1;
     $('#rTitle').textContent=st===3?'Alla rätt direkt!':st===2?'Bra jobbat!':'Klart!';
     $('#rBig').innerHTML=starHtml(st);
-    $('#rSub').textContent=`${right} av ${G.total} uppgifter utan fel.`+(st<2?' Två stjärnor låser upp nästa nivå.':'');
+    $('#rSub').textContent=`${right} av ${G.total} uppgifter utan fel.`;
     if(!G.custom){
       const wasOpen=unlocked(G.lv+1),k=pkey();data.stars[k]=data.stars[k]||{};
       if(st>(data.stars[k][G.lv]||0)){data.stars[k][G.lv]=st;save();}
