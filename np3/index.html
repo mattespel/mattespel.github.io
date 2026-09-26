@@ -133,7 +133,7 @@ input.ans:focus{outline:none;background:#fff8dc;border-bottom-color:var(--pencil
 .dgb.struck::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid var(--err);transform:rotate(-12deg)}
 .sm{font:inherit;font-size:.95rem;border:2px solid var(--ink);background:#fff;border-radius:10px;padding:4px 12px;font-weight:700;cursor:pointer}
 .sm:hover{background:#fff8dc}
-.padwrap{margin-top:.6rem}
+.padwrap{margin:.6rem 0 .4rem}
 .padwrap summary{cursor:pointer;display:inline-block;font-weight:700;font-size:.95rem;color:var(--blue-d);border:2px dashed #9fbadc;border-radius:10px;padding:3px 12px;list-style:none}
 .padwrap summary::-webkit-details-marker{display:none}
 .padwrap[open] summary{border-style:solid}
@@ -792,7 +792,7 @@ function colWidget(x,y,op,attrs){
   const res=Array.from({length:w},(_,i)=>`<td class="dg"><input class="cin" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Svarssiffra, kolumn ${i+1}"></td>`).join("");
   return `<div class="colpad" ${attrs}><table class="calcgrid live"><tr class="mkrow"><td class="opcell"></td>${mk}</tr><tr><td class="opcell"></td>${top}</tr><tr class="opline"><td class="opcell">${op==="+"?"+":"−"}</td>${bot}</tr><tr class="resrow"><td class="opcell">=</td>${res}</tr></table></div>`;
 }
-const padHTML=g=>`<details class="padwrap"${g?' data-g="1"':""}><summary>Välj räknesätt</summary><div class="padrow"><label>Räknesätt: <select class="pop" aria-label="Räknesätt"><option value="+">+</option><option value="-">−</option><option value="×">×</option><option value="÷">÷</option></select></label></div><div class="padbody"></div></details>`;
+const padHTML=g=>`<details class="padwrap"${g?' data-g="1"':""}><summary>Välj räknesätt och beräkna</summary><div class="padrow"><label>Räknesätt: <select class="pop" aria-label="Räknesätt"><option value="+">+</option><option value="-">−</option><option value="×">×</option><option value="÷">÷</option></select></label></div><div class="padbody"></div></details>`;
 function wantPad(q,key){
   if(q.pad)return true;
   if(/Gör en beräkning|Visa hur du löser/.test(q.html))return q.fields.some(fd=>fd.k==="num");
@@ -802,8 +802,13 @@ function wantPad(q,key){
 // Beräkningen rättas när uppgiften säger "Gör en beräkning" och har ett enda svar.
 const gradedPad=q=>/Gör en beräkning/.test(q.html)&&q.fields.filter(fd=>fd.k==="num").length===1;
 function qHTML(q,qi,num,key){
-  const body=q.html.replace(/@@(\d+)@@/g,(_,i)=>fieldHTML(q,qi,+i));
-  return `<li class="q" id="q${qi}"><span class="qn">${num}.</span><div>${body}${wantPad(q,key)?padHTML(gradedPad(q)):""}<div class="facit" hidden>${q.facit}</div></div></li>`;
+  let body=q.html.replace(/@@(\d+)@@/g,(_,i)=>fieldHTML(q,qi,+i));
+  if(wantPad(q,key)){
+    // Beräkningen hamnar ovanför svarsraden, så att svaret kommer sist.
+    const pad=padHTML(gradedPad(q)),at=body.lastIndexOf('<div class="svar">');
+    body=at>=0?body.slice(0,at)+pad+body.slice(at):body+pad;
+  }
+  return `<li class="q" id="q${qi}"><span class="qn">${num}.</span><div>${body}<div class="facit" hidden>${q.facit}</div></div></li>`;
 }
 function fieldHTML(q,qi,fi){
   const fd=q.fields[fi];
