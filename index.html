@@ -144,7 +144,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   </div>
 
   <nav class="cards" aria-label="Övningar">
-    <a class="card" href="spel/"><span class="tile" style="--c:linear-gradient(135deg,#3D5AFE,#17AFC4)">🎮</span><span class="txt"><b>Spelhörnan</b><small>Ugglans flygtur och Memory. Spela och räkna samtidigt!</small><span class="badge" id="bSpel" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="spel/"><span class="tile" style="--c:linear-gradient(135deg,#3D5AFE,#17AFC4)">🎮</span><span class="txt"><b>Spelhörnan</b><small>Flygtur, Racerbanan, Asteroidjakten och Memory. Spela och räkna!</small><span class="badge" id="bSpel" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="lillaplus/"><span class="tile sm" style="--c:#2BB673">+ −</span><span class="txt"><b>Lilla plus &amp; minus</b><small>Huvudräkning med tal upp till 10.</small><span class="badge" id="bLilla" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="tiotal/"><span class="tile" style="--c:#3D8BFD">10</span><span class="txt"><b>Tiotalsövergång</b><small>Räkna via tiotalet med tioruta och tallinje.</small><span class="badge" id="bTiotal" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="multiplikation/"><span class="tile" style="--c:#7B61FF">×</span><span class="txt"><b>Multiplikation</b><small>Tabellerna 1–10. Samla medaljer!</small><span class="badge" id="bMulti" hidden></span></span><span class="chev">›</span></a>
@@ -214,8 +214,8 @@ S.dRest=!!dv&&[...Object.keys(dv.race||{}),...Object.keys(dv.blitz||{})].some(k=
 const kl=get("mattespel-klockan-v1");S.kl=(kl&&kl.stars)||{};
 {const s=sum(S.kl);S.stars+=s;if(s)show("bKlocka",`⭐ ${s} stjärnor`)}
 const sp=get("mattespel-spel-v1");S.spel=sp||{fly:{},played:0,perfect:false};
-{const s=[...Object.values(S.spel.fly||{}),...Object.values(S.spel.mem||{})].reduce((a,r)=>a+(r.stars||0),0);S.stars+=s;
- const best=Math.max(0,...Object.values(S.spel.fly||{}).map(r=>r.best||0));
+{const s=[...Object.values(S.spel.fly||{}),...Object.values(S.spel.mem||{}),...Object.values(S.spel.car||{}),...Object.values(S.spel.space||{})].reduce((a,r)=>a+(r.stars||0),0);S.stars+=s;
+ const best=Math.max(0,...[...Object.values(S.spel.fly||{}),...Object.values(S.spel.car||{}),...Object.values(S.spel.space||{})].map(r=>r.best||0));
  if(s)show("bSpel",`⭐ ${s} stjärnor`);else if(best)show("bSpel",`Rekord: ${best} rätt`);}
 const ti=get("mattespel-tiotal-v1");S.ti=(ti&&ti.stars)||{};
 {const s=sum(S.ti);S.stars+=s;if(s)show("bTiotal",`⭐ ${s} stjärnor`)}
@@ -338,6 +338,10 @@ const STICKERS=[
   ["vecka","🚀","En hel vecka","Träna sju dagar i rad.",()=>S.bestStreak>=7],
   ["flygare","🦉","Flygaren","Spela Ugglans flygtur i Spelhörnan.",()=>(S.spel.played||0)>0],
   ["molnkung","☁️","Molnkungen","Klara Ugglans flygtur utan att tappa ett hjärta.",()=>!!S.spel.perfect],
+  ["ratt","🏎️","Rattkungen","Kör i mål på Racerbanan i Spelhörnan.",()=>!!S.spel.carWon],
+  ["fulltos","🏁","Fullt ös","Kör i mål på Racerbanan utan att tappa ett däck.",()=>!!S.spel.carPerfect],
+  ["rymd","🚀","Rymdkadetten","Rädda rymden i Asteroidjakten.",()=>!!S.spel.spaceWon],
+  ["kapten","☄️","Asteroidkaptenen","Rädda rymden utan att tappa en sköld.",()=>!!S.spel.spacePerfect],
   ["minne","🧠","Minnet","Spela Memory i Spelhörnan.",()=>(S.spel.memPlayed||0)>0],
   ["minnesmastare","🃏","Minnesmästaren","Få tre stjärnor i Memory.",()=>!!S.spel.memPerfect],
   ["groda","🐸","Plusgrodan","Kör Racet i Lilla plus & minus.",()=>S.lpRace.length>0],
