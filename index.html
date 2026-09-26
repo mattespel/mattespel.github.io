@@ -115,6 +115,7 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
     <a class="card" href="tiotal/"><span class="tile" style="--c:#3D8BFD">10</span><span class="txt"><b>Tiotalsövergång</b><small>Räkna via tiotalet med tioruta och tallinje.</small><span class="badge" id="bTiotal" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="taluppfattning/"><span class="tile sm" style="--c:#FF9F43">123</span><span class="txt"><b>Taluppfattning</b><small>Tallinjer, talföljder, dela upp och problemlösning.</small><span class="badge" id="bTal" hidden></span></span><span class="chev">›</span></a>
     <a class="card" href="multiplikation/"><span class="tile" style="--c:#7B61FF">×</span><span class="txt"><b>Multiplikation</b><small>Tabellerna 1–10. Samla medaljer!</small><span class="badge" id="bMulti" hidden></span></span><span class="chev">›</span></a>
+    <a class="card" href="division/"><span class="tile" style="--c:#FF5FA2">÷</span><span class="txt"><b>Division</b><small>Dela lika, med och utan rest.</small><span class="badge" id="bDiv" hidden></span></span><span class="chev">›</span></a>
   </nav>
 
   <p class="more">Mer att träna på</p>
@@ -144,6 +145,16 @@ if(mu&&mu.facts){
   stars+=m.reduce((s,x)=>s+x,0);
   if(n)show("bMulti",`🏅 ${n} ${n===1?"medalj":"medaljer"}${g?` · ${g} guld`:""}`);
 }
+/* Division: medaljer per tabell (utan rest) */
+const dv=get("mattespel-division-v1");
+if(dv&&dv.facts){
+  const h=(d,q)=>dv.facts[d+":"+q+":0"]||[];
+  const lv=(d,q)=>{const x=h(d,q);if(!x.length)return 0;const l=x.slice(-2);if(l.length===2&&l[0][0]&&l[1][0])return(l[0][1]<3000&&l[1][1]<3000)?3:2;return 1};
+  const md=d=>{const k=[1,2,3,4,5,6,7,8,9,10];if(k.every(q=>lv(d,q)===3))return 3;if(k.every(q=>lv(d,q)>=2))return 2;if(k.every(q=>h(d,q).some(x=>x[0])))return 1;return 0};
+  const m=[1,2,3,4,5,6,7,8,9,10].map(md),n=m.filter(Boolean).length,g=m.filter(x=>x===3).length;
+  stars+=m.reduce((s,x)=>s+x,0);
+  if(n)show("bDiv",`🏅 ${n} ${n===1?"medalj":"medaljer"}${g?` · ${g} guld`:""}`);
+}
 /* Tiotalsövergång och Taluppfattning: stjärnor per nivå/område */
 const ti=get("mattespel-tiotal-v1");if(ti&&ti.stars){const s=sum(ti.stars);stars+=s;if(s)show("bTiotal",`⭐ ${s} stjärnor`)}
 const ta=get("mattespel-taluppfattning-v1");if(ta&&ta.stars){const s=sum(ta.stars);stars+=s;if(s)show("bTal",`⭐ ${s} stjärnor`)}
@@ -159,7 +170,7 @@ document.getElementById("sStars").textContent=stars;
 /* Dagar i rad: en dag räknas när något har tränats (framstegen har ändrats sedan förra besöket) */
 const day=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const today=day(new Date()),yest=day(new Date(Date.now()-864e5));
-const snap=["mattespel-multiplikation-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat"].map(k=>localStorage.getItem(k)||"").join("|");
+const snap=["mattespel-multiplikation-v1","mattespel-division-v1","mattespel-tiotal-v1","mattespel-taluppfattning-v1","mattespel-lillaplus-v1","np3-resultat"].map(k=>localStorage.getItem(k)||"").join("|");
 let fp=0;for(let i=0;i<snap.length;i++)fp=(fp*31+snap.charCodeAt(i))|0;
 const st=get("matteportalen-dagar")||{fp:null,days:[]};
 if(st.fp!==null&&st.fp!==fp&&!st.days.includes(today))st.days.push(today);
