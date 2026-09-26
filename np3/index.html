@@ -143,11 +143,13 @@ input.ans:focus{outline:none;background:#fff8dc;border-bottom-color:var(--pencil
 .padrow select{font:inherit;font-size:1.05rem;border:2px solid var(--ink);border-radius:8px;padding:3px 8px;background:#fff}
 .calcpad{display:flex;align-items:center;gap:.4em;font-size:1.35rem;margin:.4rem 0;flex-wrap:wrap}
 .calcpad input{font:inherit;font-size:1.35rem;text-align:center;border:2px solid var(--ink);border-radius:8px;padding:2px 4px;background:#fff;width:3.4em}
+.calcpad .mA,.calcpad .mB,.fracin input{width:4.6em}
+.calcpad input::placeholder{font-size:.6em;letter-spacing:0}
 .calcpad .monoans{color:var(--blue-d)}
 .calcpad input.dok{border-color:var(--ok);background:var(--ok-l)}
 .calcpad input.dbad{border-color:var(--err);background:var(--err-l)}
 .fracin{display:inline-flex;flex-direction:column;align-items:center;gap:0}
-.fracin input{width:3.4em;border-radius:8px 8px 0 0}
+.fracin input{border-radius:8px 8px 0 0}
 .fracin input+input{border-top:3px solid var(--ink);border-radius:0 0 8px 8px;margin-top:2px}
 .padform input{width:4.6em;text-align:center}
 .padmsg{font-size:.9rem;font-weight:700}
@@ -899,10 +901,10 @@ function pmRow(op){
   return `<div class="padform"><input class="pa" inputmode="numeric" aria-label="Första talet" placeholder="tal"><span class="opsign">${op==="+"?"+":"−"}</span><input class="pb" inputmode="numeric" aria-label="Andra talet" placeholder="tal"><button type="button" class="sm padgo">Ställ upp</button></div><div class="padarea"></div>`;
 }
 function mulRow(){
-  return `<div class="calcpad"><input class="mA" inputmode="numeric" maxlength="4" aria-label="Första talet" placeholder="tal"><span>·</span><input class="mB" inputmode="numeric" maxlength="4" aria-label="Andra talet" placeholder="tal"><span>=</span><input class="monoans" inputmode="numeric" maxlength="6" aria-label="Svar"></div><div><button type="button" class="sm padchk2">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
+  return `<div class="calcpad"><input class="mA" inputmode="numeric" maxlength="4" aria-label="Faktor" placeholder="faktor"><span>·</span><input class="mB" inputmode="numeric" maxlength="4" aria-label="Faktor" placeholder="faktor"><span>=</span><input class="monoans" inputmode="numeric" maxlength="6" aria-label="Svar"></div><div><button type="button" class="sm padchk2">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
 }
 function divRow(){
-  return `<div class="calcpad"><span class="fracin"><input class="dA" inputmode="numeric" maxlength="4" aria-label="Täljare" placeholder="tal"><input class="dB" inputmode="numeric" maxlength="4" aria-label="Nämnare" placeholder="tal"></span><span>=</span><input class="monoans" inputmode="numeric" maxlength="6" aria-label="Svar"></div><div><button type="button" class="sm padchk2">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
+  return `<div class="calcpad"><span class="fracin"><input class="dA" inputmode="numeric" maxlength="4" aria-label="Täljare" placeholder="täljare"><input class="dB" inputmode="numeric" maxlength="4" aria-label="Nämnare" placeholder="nämnare"></span><span>=</span><input class="monoans" inputmode="numeric" maxlength="6" aria-label="Svar"></div><div><button type="button" class="sm padchk2">Kolla uträkningen</button> <span class="padmsg"></span></div>`;
 }
 function renderPad(details){
   const op=details.querySelector(".pop").value,body=details.querySelector(".padbody");
