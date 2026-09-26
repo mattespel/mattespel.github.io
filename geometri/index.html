@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Geometri – Matte-Portalen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF3FF; --ink:#1D2B53; --muted:#56668F; --card:#FFFFFF; --line:#C6D6F2;
+  --good:#1E9E5E; --good-dark:#157548; --bad:#E5484D; --accent:#3D5AFE; --gold:#F2B707;
+  --font:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:560px;margin:0 auto;padding:12px 16px 48px}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;border:0;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+[hidden]{display:none !important}
+.back{display:inline-block;color:var(--muted);font-weight:700;text-decoration:none;padding:6px 0;font-size:1rem}
+h1{font-size:2.6rem;line-height:1;margin:14px 0 4px;font-weight:800}
+h2{font-size:2rem;line-height:1.1;margin:10px 0 6px;font-weight:800}
+.lead{margin:0 0 16px;color:var(--muted);font-size:1.1rem}
+.stars{color:var(--gold);letter-spacing:1px}
+.stars .off{color:#D5DDEC}
+.areas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acard{background:var(--card);border-radius:18px;padding:10px 10px 8px;box-shadow:0 4px 0 var(--line);display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
+.acard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.acard .ico{width:70px;height:62px}
+.acard .ico svg{width:100%;height:100%}
+.acard b{font-size:1.1rem;line-height:1.15}
+.acard small{color:var(--muted);font-size:.82rem;line-height:1.2}
+.acard .ak{font-size:.72rem;font-weight:800;color:#fff;background:var(--c,#3D8BFD);border-radius:999px;padding:0 8px}
+.note{color:var(--muted);font-size:.95rem;margin-top:18px}
+
+.gtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.info{font-weight:800;font-size:1.2rem}
+.progress{height:10px;border-radius:5px;background:var(--card);overflow:hidden;margin-top:6px;box-shadow:inset 0 0 0 2px var(--line)}
+.progress i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.task{background:var(--card);border-radius:22px;padding:12px 14px 12px;box-shadow:0 5px 0 var(--line);margin:12px 0;transition:background .15s}
+.task.ok{background:#DDF5E7}
+.instr{display:flex;gap:10px;align-items:center;font-weight:700;font-size:1.15rem;line-height:1.3}
+.spk{flex:none;width:46px;height:46px;border-radius:50%;background:var(--bg);font-size:1.4rem;box-shadow:0 3px 0 var(--line)}
+.content{margin-top:10px;text-align:center}
+.content>svg{width:min(70vw,260px);height:auto}
+.feedback{min-height:1.4em;font-weight:800;font-size:1.1rem;margin-top:6px;text-align:center;color:var(--good)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.opts button{background:var(--bg);border-radius:14px;padding:10px 6px;font-weight:800;font-size:1.2rem;box-shadow:0 3px 0 var(--line);min-height:58px}
+.opts.emo button{font-size:2.3rem;min-height:70px}
+.opts.pics button{padding:6px}
+.opts.pics svg{width:56px;height:56px}
+.opts button.bad{background:#FDE4E4;color:var(--bad)}
+.opts button.right{background:#DDF5E7;color:var(--good-dark)}
+.tapgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+.tapit{background:var(--bg);border-radius:14px;aspect-ratio:1;display:grid;place-items:center;border:3px solid transparent;box-shadow:0 3px 0 var(--line)}
+.tapit svg{width:88%;height:88%}
+.tapit.sel{border-color:var(--accent);background:#EEF1FF}
+.tapit.right{border-color:var(--good);background:#DDF5E7}
+.tapit.bad{border-color:var(--bad);background:#FDE4E4}
+.go{display:block;width:100%;margin-top:12px;padding:13px;border-radius:18px;background:var(--good);color:#fff;font-size:1.3rem;font-weight:800;box-shadow:0 5px 0 var(--good-dark)}
+.row{display:flex;justify-content:center;align-items:center;gap:4px;flex-wrap:wrap;margin:6px 0}
+.row svg{width:44px;height:44px}
+.row .qm{width:44px;height:44px;border:3px dashed var(--accent);border-radius:10px;display:grid;place-items:center;font-weight:800;color:var(--accent);font-size:1.5rem}
+.scene{display:grid;grid-template-columns:repeat(4,1fr);gap:0;max-width:340px;margin:0 auto;border-bottom:6px solid #C99A6B}
+.scene div{font-size:2.6rem;height:64px;display:grid;place-items:center;border-top:6px solid #C99A6B;position:relative}
+.scene div.hx{outline:4px solid #3D8BFD;outline-offset:-4px;border-radius:12px}
+.scene div.ha{outline:4px solid #1E9E5E;outline-offset:-4px;border-radius:12px;background:#DDF5E7}
+.mgrid{display:inline-grid;gap:2px;background:#C6D6F2;padding:2px;border-radius:8px;position:relative}
+.mgrid i{width:min(9.5vw,40px);aspect-ratio:1;background:#fff;display:block}
+.mgrid i.f{background:#3D8BFD}
+.mgrid i.tap{cursor:pointer;background:#F5F8FF}
+.mgrid i.tap.f{background:#FF9F43}
+.mgrid i.miss{background:#FDE4E4;box-shadow:inset 0 0 0 3px #E5484D}
+.mgrid i.extra{background:#E5484D}
+.mgrid i.okc{background:#1E9E5E}
+.mgrid .ml{position:absolute;top:-6px;bottom:-6px;width:4px;background:#E5484D;border-radius:2px}
+.box1{display:inline-block;min-width:2.2em;font-size:2.4rem;font-weight:800;border-radius:12px;border:3px solid var(--accent);color:var(--accent);background:#EEF1FF;margin-top:8px;line-height:1.2}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pad button{height:56px;border-radius:16px;background:var(--card);font-size:1.8rem;font-weight:800;box-shadow:0 4px 0 var(--line)}
+.pad .okbtn{background:var(--good);color:#fff;box-shadow:0 4px 0 var(--good-dark);font-size:1.4rem}
+.help{background:var(--card);border-radius:22px;padding:12px 14px 16px;box-shadow:0 5px 0 var(--line);text-align:center}
+.help .said{color:var(--muted);margin:0 0 6px;font-weight:700}
+.help .vis>svg{width:min(70vw,260px);height:auto}
+.help .tapgrid{max-width:320px;margin:0 auto}
+.help .tip{background:#FFF4CC;border-radius:12px;padding:8px 12px;margin:10px 0 0;font-size:1.05rem;text-align:left}
+.result{text-align:center;padding-top:20px}
+.rbig{font-size:clamp(3.2rem,16vw,4.6rem);font-weight:800;line-height:1;margin:6px 0}
+.rsub{color:var(--muted);font-size:1.15rem;margin:0 0 14px}
+.big{display:block;width:100%;padding:12px 16px;border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--line);font-weight:800;font-size:1.2rem;margin-top:12px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:14px;font-weight:700;z-index:6;max-width:90vw;text-align:center}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:7}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section id="home" class="screen">
+  <a class="back" href="../">← Till huvudmenyn</a>
+  <h1>Geometri</h1>
+  <p class="lead">Former, kroppar, mönster, symmetri och mycket mer.</p>
+  <div class="areas" id="areas"></div>
+  <p class="note">Tre stjärnor får du om alla tio uppgifter blir rätt direkt.</p>
+</section>
+<section id="game" class="screen" hidden>
+  <div class="gtop"><button class="back" id="quit">← Avsluta</button><span class="info" id="info"></span></div>
+  <div class="progress"><i id="prog"></i></div>
+  <div class="task" id="task">
+    <div class="instr"><button class="spk" id="spk" aria-label="Läs upp">🔊</button><span id="instr"></span></div>
+    <div class="content" id="content"></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+  </div>
+  <div class="pad" id="pad" hidden>
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="del" aria-label="Sudda">⌫</button><button data-k="0">0</button><button data-k="ok" class="okbtn">OK</button>
+  </div>
+  <div class="help" id="help" hidden>
+    <p class="said" id="helpSaid"></p>
+    <div class="vis" id="helpVis"></div>
+    <p class="tip" id="helpTip"></p>
+    <button class="go" id="helpGo">Fortsätt</button>
+  </div>
+</section>
+<section id="result" class="screen result" hidden>
+  <h2 id="rTitle"></h2>
+  <div class="rbig" id="rBig"></div>
+  <p class="rsub" id="rSub"></p>
+  <button class="go" id="rAgain">Spela igen</button>
+  <button class="big" id="rHome">Välj något annat</button>
+</section>
+</div>
+<div class="toast" id="toast" hidden></div>
+<canvas id="fx" hidden></canvas>
+<script src="../ljud.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickOne=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const KEY="mattespel-geometri-v1";
+const data=(()=>{try{return Object.assign({stars:{}},JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return{stars:{}}}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const COLS=["#3D8BFD","#FF6B6B","#2BB673","#FF9F43","#7B61FF","#FF5FA2","#17AFC4","#F7C531"];
+
+/* ---------- Former (2D) ---------- */
+const svg=(inner,vb="0 0 100 100")=>`<svg viewBox="${vb}" aria-hidden="true">${inner}</svg>`;
+const pts=a=>a.map(p=>p.map(v=>v.toFixed(1)).join(",")).join(" ");
+function regPoly(n,cx,cy,r,rot,jit){const p=[];for(let i=0;i<n;i++){const a=rot+i*2*Math.PI/n,rr=r*(1-(jit||0)*Math.random());p.push([cx+rr*Math.cos(a),cy+rr*Math.sin(a)]);}return p;}
+function shape2D(kind,col,o={}){
+  const s=o.s||1,st=`fill="${col}" stroke="#1D2B53" stroke-width="3" stroke-linejoin="round"`,rot=o.rot||0;
+  let el;
+  if(kind==="cirkel")el=`<circle cx="50" cy="50" r="${36*s}" ${st}/>`;
+  else if(kind==="triangel"){const t=o.tri||[[50,14],[88,84],[12,84]];el=`<polygon points="${pts(t.map(([x,y])=>[50+(x-50)*s,50+(y-50)*s]))}" ${st}/>`;}
+  else if(kind==="kvadrat"){const a=62*s;el=`<rect x="${50-a/2}" y="${50-a/2}" width="${a}" height="${a}" ${st} transform="rotate(${rot} 50 50)"/>`;}
+  else if(kind==="rektangel"){const w=80*s,h=(o.ratio?80/o.ratio:42)*s;el=`<rect x="${50-w/2}" y="${50-h/2}" width="${w}" height="${h}" ${st} transform="rotate(${rot} 50 50)"/>`;}
+  else if(kind==="stjärna"){const p=[];for(let i=0;i<10;i++){const r=(i%2?16:38)*s,a=-Math.PI/2+i*Math.PI/5;p.push([50+r*Math.cos(a),50+r*Math.sin(a)]);}el=`<polygon points="${pts(p)}" ${st}/>`;}
+  return el;
+}
+function randTri(){const t=pickOne([[[50,12],[90,86],[10,86]],[[14,86],[86,86],[20,18]],[[50,14],[88,72],[12,72]],[[30,14],[86,80],[12,86]]]);return t;}
+const SHAPES2=["cirkel","triangel","kvadrat","rektangel"];
+const PROPS={cirkel:"En cirkel är helt rund. Den har inga hörn och inga raka sidor.",triangel:"En triangel har 3 raka sidor och 3 hörn. Den kan vara spetsig, bred eller sned.",
+  kvadrat:"En kvadrat har 4 lika långa sidor och 4 räta hörn.",rektangel:"En rektangel har 4 sidor och 4 räta hörn. Två sidor är längre än de andra två."};
+const SING={cirkel:"cirkel",triangel:"triangel",kvadrat:"kvadrat",rektangel:"rektangel"},PLUR={cirkel:"cirklar",triangel:"trianglar",kvadrat:"kvadrater",rektangel:"rektanglar"};
+function randShape(kind){return svg(shape2D(kind,pickOne(COLS),{s:.75+Math.random()*.25,rot:kind==="kvadrat"||kind==="rektangel"?pickOne([0,0,15,-20]):0,tri:randTri(),ratio:1.6+Math.random()*.8}));}
+function genFormer(){
+  if(Math.random()<.5){
+    const k=pickOne(SHAPES2),vis=randShape(k);
+    return{kind:"opts",instr:"Vad heter formen?",speak:"Vad heter formen?",html:vis,options:shuffle(SHAPES2.map(cap)),answer:cap(k),
+      help:()=>({vis,tip:PROPS[k]})};
+  }
+  const k=pickOne(SHAPES2),nT=rnd(2,4),items=shuffle([...Array(nT).fill(k),...Array(8-nT).fill(0).map(()=>pickOne(SHAPES2.filter(x=>x!==k)))]);
+  const pics=items.map(randShape);
+  return{kind:"tap",instr:`Tryck på alla ${PLUR[k]}.`,speak:`Tryck på alla ${PLUR[k]}. Tryck sedan på Klar.`,items:pics,correct:items.map((x,i)=>x===k?i:-1).filter(i=>i>=0),
+    help:()=>({vis:`<div class="tapgrid">${pics.map((p,i)=>`<div class="tapit${items[i]===k?" right":""}">${p}</div>`).join("")}</div>`,tip:PROPS[k]})};
+}
+
+/* ---------- Kroppar (3D) ---------- */
+function solid(k,col){
+  const d="#1D2B53",L=`stroke="${d}" stroke-width="2.5" stroke-linejoin="round"`,sh="rgba(0,0,0,.18)",hl="rgba(255,255,255,.35)";
+  if(k==="kub")return svg(`<polygon points="22,38 62,38 62,82 22,82" fill="${col}" ${L}/><polygon points="22,38 38,22 78,22 62,38" fill="${col}" ${L}/><polygon points="22,38 38,22 78,22 62,38" fill="${hl}"/><polygon points="62,38 78,22 78,66 62,82" fill="${col}" ${L}/><polygon points="62,38 78,22 78,66 62,82" fill="${sh}"/>`);
+  if(k==="rätblock")return svg(`<polygon points="10,44 70,44 70,82 10,82" fill="${col}" ${L}/><polygon points="10,44 26,30 86,30 70,44" fill="${col}" ${L}/><polygon points="10,44 26,30 86,30 70,44" fill="${hl}"/><polygon points="70,44 86,30 86,68 70,82" fill="${col}" ${L}/><polygon points="70,44 86,30 86,68 70,82" fill="${sh}"/>`);
+  if(k==="klot")return svg(`<defs><radialGradient id="g${col.slice(1)}" cx="38%" cy="35%"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="${col}"/><stop offset="1" stop-color="${col}"/></radialGradient></defs><circle cx="50" cy="52" r="36" fill="url(#g${col.slice(1)})" ${L}/><path d="M14 52 Q50 66 86 52" fill="none" stroke="${d}" stroke-width="1.5" stroke-dasharray="4 4" opacity=".5"/>`);
+  if(k==="cylinder")return svg(`<path d="M24 24 V78 A26 9 0 0 0 76 78 V24" fill="${col}" ${L}/><path d="M50 24 V78 A26 9 0 0 0 76 78 V24" fill="${sh}"/><ellipse cx="50" cy="24" rx="26" ry="9" fill="${col}" ${L}/><ellipse cx="50" cy="24" rx="26" ry="9" fill="${hl}"/>`);
+  if(k==="kon")return svg(`<path d="M50 12 L78 78 A28 9 0 0 1 22 78 Z" fill="${col}" ${L}/><path d="M50 12 L78 78 A28 9 0 0 1 50 87 Z" fill="${sh}"/>`);
+  return svg(`<polygon points="14,74 60,86 86,70 40,60" fill="${col}" ${L}/><polygon points="14,74 60,86 50,14" fill="${col}" ${L}/><polygon points="60,86 86,70 50,14" fill="${col}" ${L}/><polygon points="60,86 86,70 50,14" fill="${sh}"/>`);
+}
+const SOLIDS=["kub","rätblock","klot","cylinder","kon","pyramid"];
+const SPROPS={kub:"En kub ser ut som en tärning. Alla sidor är lika stora kvadrater.",rätblock:"Ett rätblock ser ut som en låda eller ett mjölkpaket. Sidorna är rektanglar.",
+  klot:"Ett klot är runt åt alla håll, som en boll.",cylinder:"En cylinder ser ut som en burk. Den har två runda ytor, en upptill och en nertill.",
+  kon:"En kon ser ut som en glasstrut. Den har en rund botten och en spets.",pyramid:"En pyramid har en botten och trekantiga sidor som möts i en spets."};
+const THINGS=[["🎲","kub"],["⚽","klot"],["🥫","cylinder"],["🍦","kon"],["📦","rätblock"],["🏀","klot"],["🕯️","cylinder"]];
+function genKroppar(){
+  const col=pickOne(COLS);
+  if(Math.random()<.65){const k=pickOne(SOLIDS),o=shuffle([k,...shuffle(SOLIDS.filter(x=>x!==k)).slice(0,3)]).map(cap),vis=solid(k,col);
+    return{kind:"opts",instr:"Vad heter kroppen?",speak:"Vad heter kroppen?",html:vis,options:o,answer:cap(k),help:()=>({vis,tip:SPROPS[k]})};}
+  const [e,k]=pickOne(THINGS),o=shuffle([k,...shuffle(SOLIDS.filter(x=>x!==k)).slice(0,3)]);
+  return{kind:"opts",instr:"Vilken kropp liknar saken?",speak:"Vilken kropp liknar saken?",html:`<div style="font-size:5rem;line-height:1.1">${e}</div>`,
+    options:o.map(cap),answer:cap(k),help:()=>({vis:`<div style="display:flex;justify-content:center;align-items:center;gap:10px"><span style="font-size:4rem">${e}</span><span style="font-size:2rem">=</span>${solid(k,col).replace("<svg",'<svg style="width:110px"')}</div>`,tip:SPROPS[k]})};
+}
+
+/* ---------- Hörn och sidor ---------- */
+const NAMES={3:"triangel",4:"fyrhörning",5:"femhörning",6:"sexhörning",7:"sjuhörning",8:"åttahörning"};
+function genHorn(){
+  const n=rnd(3,8),p=regPoly(n,50,52,38,Math.random()*6.28,.25),col=pickOne(COLS),what=Math.random()<.5?"hörn":"sidor";
+  const base=`<polygon points="${pts(p)}" fill="${col}" stroke="#1D2B53" stroke-width="3" stroke-linejoin="round"/>`;
+  return{kind:"keys",instr:`Hur många ${what} har formen?`,speak:`Hur många ${what} har formen?`,html:svg(base),answer:n,
+    help:()=>({vis:svg(base+p.map((q,i)=>`<circle cx="${q[0]}" cy="${q[1]}" r="7" fill="#FFC93C" stroke="#1D2B53" stroke-width="1.5"/><text x="${q[0]}" y="${q[1]+3.5}" text-anchor="middle" font-size="9" font-weight="800" fill="#1D2B53">${i+1}</text>`).join("")),
+      tip:`Räkna hörnen ett i taget, de gula prickarna. Formen har ${n} hörn och lika många sidor, ${n}. Den kallas en ${NAMES[n]}.`})};
+}
+
+/* ---------- Mönster ---------- */
+const ITEMS=[["cirkel","#FF6B6B"],["triangel","#3D8BFD"],["kvadrat","#F7C531"],["stjärna","#2BB673"]];
+const itemSVG=i=>svg(shape2D(ITEMS[i][0],ITEMS[i][1],{s:.9}));
+const UNITS=[[0,1],[0,1,2],[0,0,1],[0,1,1],[0,0,1,1],[0,1,2,3]];
+function genMonster(){
+  const u=pickOne(UNITS),map=shuffle([0,1,2,3]),unit=u.map(x=>map[x]),len=unit.length*2+rnd(0,unit.length-1);
+  const seq=Array.from({length:len},(_,i)=>unit[i%unit.length]),ans=unit[len%unit.length];
+  const opts=shuffle([...new Set([ans,...shuffle([0,1,2,3].filter(x=>x!==ans)).slice(0,2)])]);
+  return{kind:"opts",pics:true,instr:"Vad kommer sedan i mönstret?",speak:"Titta på mönstret. Vad kommer sedan?",
+    html:`<div class="row">${seq.map(itemSVG).join("")}<span class="qm">?</span></div>`,options:opts.map(String),labels:opts.map(itemSVG),answer:String(ans),
+    help:()=>{let h='<div class="row">';seq.concat([ans]).forEach((x,i)=>{if(i%unit.length===0)h+=`<span style="display:inline-flex;gap:2px;padding:3px;border:3px solid ${i<len?"#FFC93C":"#1E9E5E"};border-radius:10px">`;h+=itemSVG(x);if(i%unit.length===unit.length-1||i===len)h+="</span>";});
+      return{vis:h+"</div>",tip:`Mönstret upprepar sig. En del av mönstret är ${unit.length} saker lång, se de gula ramarna. Efter sista delen börjar mönstret om.`}}};
+}
+
+/* ---------- Lägesord ---------- */
+const OBJ=[["🐱","katten"],["🐶","hunden"],["🐰","kaninen"],["🐸","grodan"],["🍎","äpplet"],["⚽","bollen"],["🚗","bilen"],["🧸","nallen"],["🎈","ballongen"],["🦆","ankan"],["🌟","stjärnan"],["📚","böckerna"]];
+function genLage(){
+  const o=shuffle(OBJ.slice()).slice(0,8),cell=(r,c)=>o[r*4+c];
+  const t=pickOne(["vänster","höger","ovanför","under","mellan"]);let x,a,q,r,c,x2;
+  if(t==="vänster"){r=rnd(0,1);c=rnd(1,3);x=cell(r,c);a=cell(r,c-1);q=`Vad finns till vänster om ${x[1]} ${x[0]}?`;}
+  else if(t==="höger"){r=rnd(0,1);c=rnd(0,2);x=cell(r,c);a=cell(r,c+1);q=`Vad finns till höger om ${x[1]} ${x[0]}?`;}
+  else if(t==="ovanför"){c=rnd(0,3);x=cell(1,c);a=cell(0,c);q=`Vad finns ovanför ${x[1]} ${x[0]}?`;}
+  else if(t==="under"){c=rnd(0,3);x=cell(0,c);a=cell(1,c);q=`Vad finns under ${x[1]} ${x[0]}?`;}
+  else{r=rnd(0,1);c=rnd(0,1);x=cell(r,c);x2=cell(r,c+2);a=cell(r,c+1);q=`Vad finns mellan ${x[1]} ${x[0]} och ${x2[1]} ${x2[0]}?`;}
+  const scene=(hl)=>`<div class="scene">${o.map(e=>`<div class="${hl&&(e===x||e===x2)?"hx":""}${hl&&e===a?" ha":""}">${e[0]}</div>`).join("")}</div>`;
+  const opts=shuffle([a,...shuffle(o.filter(e=>e!==a&&e!==x&&e!==x2)).slice(0,3)]);
+  return{kind:"opts",emo:true,instr:q,speak:q.replace(/\s\S+\?$/,"?").replace(/ och \S+ /," och "),html:scene(false),options:opts.map(e=>e[0]),answer:a[0],
+    help:()=>({vis:scene(true),tip:`${cap(a[1])} ${a[0]} finns ${t==="mellan"?`mellan ${x[1]} och ${x2[1]}`:`${t==="vänster"?"till vänster om":t==="höger"?"till höger om":t} ${x[1]}`}. ${t==="vänster"||t==="höger"?"Vänster är den sida där du har tummen till vänster när du håller upp händerna.":""}`})};
+}
+
+/* ---------- Symmetri ---------- */
+function mirrorTask(){
+  const R=6,C=8,half=4,left=new Set();let r=rnd(1,4),c=rnd(1,3);left.add(r+","+c);
+  const N=rnd(5,8);let g=0;while(left.size<N&&g++<200){const[rr,cc]=pickOne([...left]).split(",").map(Number),[dr,dc]=pickOne([[1,0],[-1,0],[0,1],[0,-1]]),nr=rr+dr,nc=cc+dc;if(nr>=0&&nr<R&&nc>=0&&nc<half)left.add(nr+","+nc);}
+  const want=new Set([...left].map(k=>{const[a,b]=k.split(",").map(Number);return a+","+(C-1-b);}));
+  const grid=(state,mark)=>{let h=`<div class="mgrid" style="grid-template-columns:repeat(${C},auto)">`;
+    for(let a=0;a<R;a++)for(let b=0;b<C;b++){const k=a+","+b;let cls="";
+      if(b<half)cls=left.has(k)?"f":"";else{cls="tap";if(mark){if(want.has(k)&&state.has(k))cls="okc";else if(want.has(k))cls="miss";else if(state.has(k))cls="extra";}else if(state.has(k))cls+=" f";}
+      h+=`<i class="${cls}" data-k="${k}"></i>`;}
+    return h+`<span class="ml" style="left:calc(50% - 2px)"></span></div>`;};
+  return{kind:"grid",instr:"Spegla figuren. Tryck på rutorna på andra sidan linjen.",speak:"Spegla figuren i den röda linjen. Tryck på rutorna på andra sidan linjen. Tryck sedan på Klar.",
+    grid,want,help:(st)=>({vis:grid(st,true),tip:"En spegelbild är lika långt från linjen på andra sidan. En ruta som ligger precis intill linjen hamnar också precis intill linjen. Gröna rutor är rätt, rödmarkerade saknades och röda var fel."})};
+}
+function symYesNo(){
+  const R=5,C=6,left=new Set();let g=0;while(left.size<6&&g++<200)left.add(rnd(0,R-1)+","+rnd(0,2));
+  const cells=new Set([...left,...[...left].map(k=>{const[a,b]=k.split(",").map(Number);return a+","+(C-1-b);})]);
+  const yes=Math.random()<.5;if(!yes){const k=pickOne([...cells].filter(k=>+k.split(",")[1]>=3));cells.delete(k);if(Math.random()<.5)cells.add(rnd(0,R-1)+","+rnd(3,5));}
+  const isSym=[...cells].every(k=>{const[a,b]=k.split(",").map(Number);return cells.has(a+","+(C-1-b));});
+  const grid=()=>{let h=`<div class="mgrid" style="grid-template-columns:repeat(${C},auto)">`;for(let a=0;a<R;a++)for(let b=0;b<C;b++)h+=`<i class="${cells.has(a+","+b)?"f":""}"></i>`;return h+`<span class="ml" style="left:calc(50% - 2px)"></span></div>`;};
+  return{kind:"opts",instr:"Är den röda linjen en symmetrilinje?",speak:"Är den röda linjen en symmetrilinje? Blir båda sidorna likadana om man viker längs linjen?",html:grid(),options:["Ja","Nej"],answer:isSym?"Ja":"Nej",
+    help:()=>({vis:grid(),tip:isSym?"Ja! Om du viker längs linjen hamnar alla blå rutor exakt på varandra. Båda sidorna är spegelbilder.":"Nej. Om du viker längs linjen hamnar inte alla blå rutor på varandra. Jämför rad för rad, så hittar du skillnaden."})};
+}
+const genSym=()=>Math.random()<.6?mirrorTask():symYesNo();
+
+/* ---------- Omkrets och area ---------- */
+function gridFig(cells,C,R,o={}){
+  const s=30;let h=`<svg viewBox="-4 -4 ${C*s+8} ${R*s+8}" aria-hidden="true">`;
+  for(let a=0;a<=R;a++)h+=`<line x1="0" y1="${a*s}" x2="${C*s}" y2="${a*s}" stroke="#C6D6F2" stroke-width="1"/>`;
+  for(let b=0;b<=C;b++)h+=`<line x1="${b*s}" y1="0" x2="${b*s}" y2="${R*s}" stroke="#C6D6F2" stroke-width="1"/>`;
+  let n=0;cells.forEach(k=>{const[a,b]=k.split(",").map(Number);h+=`<rect x="${b*s}" y="${a*s}" width="${s}" height="${s}" fill="#9CC3FF"/>`;if(o.num)h+=`<text x="${b*s+s/2}" y="${a*s+s/2+5}" text-anchor="middle" font-size="14" font-weight="800" fill="#1D2B53">${++n}</text>`;});
+  cells.forEach(k=>{const[a,b]=k.split(",").map(Number),has=(x,y)=>cells.has(x+","+y);const col=o.edge?"#FF9F43":"#1D2B53",w=o.edge?5:3.5;
+    if(!has(a-1,b))h+=`<line x1="${b*s}" y1="${a*s}" x2="${b*s+s}" y2="${a*s}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
+    if(!has(a+1,b))h+=`<line x1="${b*s}" y1="${a*s+s}" x2="${b*s+s}" y2="${a*s+s}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
+    if(!has(a,b-1))h+=`<line x1="${b*s}" y1="${a*s}" x2="${b*s}" y2="${a*s+s}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
+    if(!has(a,b+1))h+=`<line x1="${b*s+s}" y1="${a*s}" x2="${b*s+s}" y2="${a*s+s}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;});
+  if(o.labels){const{x0,y0,w,hh}=o.labels;h+=`<text x="${(x0+w/2)*s}" y="${y0*s-6}" text-anchor="middle" font-size="15" font-weight="800" fill="#C96A0C">${w} cm</text><text x="${(x0+w)*s+6}" y="${(y0+hh/2)*s+5}" font-size="15" font-weight="800" fill="#C96A0C">${hh} cm</text>`;}
+  return h+"</svg>";
+}
+function genMatt(){
+  const C=7,R=5;
+  if(Math.random()<.5){
+    const cells=new Set();let a=rnd(1,3),b=rnd(1,5);cells.add(a+","+b);const N=rnd(4,11);let g=0;
+    while(cells.size<N&&g++<300){const[x,y]=pickOne([...cells]).split(",").map(Number),[dx,dy]=pickOne([[1,0],[-1,0],[0,1],[0,-1]]);if(x+dx>=0&&x+dx<R&&y+dy>=0&&y+dy<C)cells.add((x+dx)+","+(y+dy));}
+    return{kind:"keys",instr:"Hur stor är arean? Hur många rutor täcker figuren?",speak:"Hur stor är arean? Räkna hur många rutor figuren täcker.",html:gridFig(cells,C,R),answer:cells.size,unit:"rutor",
+      help:()=>({vis:gridFig(cells,C,R,{num:true}),tip:`Arean är hur mycket yta figuren täcker. Räkna rutorna en i taget. Figuren täcker ${cells.size} rutor.`})};
+  }
+  const w=rnd(1,5),hh=rnd(1,4),x0=rnd(0,C-w),y0=rnd(0,R-hh),cells=new Set();if(w===1&&hh===1)return genMatt();
+  for(let a=y0;a<y0+hh;a++)for(let b=x0;b<x0+w;b++)cells.add(a+","+b);
+  const P=2*(w+hh);
+  return{kind:"keys",instr:"Hur lång är omkretsen? Varje ruta är 1 cm.",speak:"Hur lång är omkretsen, alltså sträckan runt hela figuren? Varje ruta är en centimeter.",html:gridFig(cells,C,R),answer:P,unit:"cm",
+    help:()=>({vis:gridFig(cells,C,R,{edge:true,labels:{x0,y0,w,hh}}),tip:`Omkretsen är sträckan runt hela figuren, det orange. Gå runt och lägg ihop alla sidor: ${w} + ${hh} + ${w} + ${hh} = ${P} cm.`})};
+}
+
+/* ---------- Områden ---------- */
+const ICON={
+  former:svg(shape2D("triangel","#FF6B6B",{s:.8})),kroppar:solid("kub","#3D8BFD"),horn:svg(`<polygon points="${pts(regPoly(5,50,54,38,-Math.PI/2))}" fill="#2BB673" stroke="#1D2B53" stroke-width="3"/>`),
+  monster:svg(`<circle cx="18" cy="50" r="14" fill="#FF6B6B"/><rect x="38" y="36" width="26" height="26" fill="#F7C531"/><circle cx="84" cy="50" r="14" fill="#FF6B6B"/>`),
+  lage:`<span style="font-size:2.6rem">🐱</span>`,symmetri:svg(`<path d="M50 20 C20 5 5 45 50 85 C95 45 80 5 50 20Z" fill="#FF5FA2" stroke="#1D2B53" stroke-width="3"/><line x1="50" y1="8" x2="50" y2="94" stroke="#E5484D" stroke-width="3" stroke-dasharray="6 5"/>`),
+  matt:svg(`<rect x="14" y="26" width="72" height="48" fill="#9CC3FF" stroke="#1D2B53" stroke-width="3"/><path d="M38 26V74M62 26V74M14 50H86" stroke="#1D2B53" stroke-width="1.5"/>`)
+};
+const AREAS=[
+  {id:"former",name:"Former",desc:"Cirkel, triangel, kvadrat och rektangel.",ak:"Åk 1",c:"#FF6B6B",gen:genFormer},
+  {id:"kroppar",name:"Kroppar",desc:"Kub, klot, cylinder, kon …",ak:"Åk 1–2",c:"#3D8BFD",gen:genKroppar},
+  {id:"horn",name:"Hörn och sidor",desc:"Räkna hörn och sidor.",ak:"Åk 1–2",c:"#2BB673",gen:genHorn},
+  {id:"monster",name:"Mönster",desc:"Vad kommer sedan?",ak:"Åk 1",c:"#FF9F43",gen:genMonster},
+  {id:"lage",name:"Lägesord",desc:"Vänster, höger, ovanför, under, mellan.",ak:"Åk 1",c:"#7B61FF",gen:genLage},
+  {id:"symmetri",name:"Symmetri",desc:"Spegla och hitta symmetrilinjer.",ak:"Åk 2–3",c:"#FF5FA2",gen:genSym},
+  {id:"matt",name:"Omkrets och area",desc:"Räkna rutor och sträckan runt om.",ak:"Åk 3",c:"#17AFC4",gen:genMatt}
+];
+const starHtml=n=>`<span class="stars">${[1,2,3].map(i=>i<=n?"★":'<span class="off">★</span>').join("")}</span>`;
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);}
+function openHome(){G=null;if("speechSynthesis" in window)speechSynthesis.cancel();
+  $("areas").innerHTML=AREAS.map(a=>`<button class="acard" data-a="${a.id}" style="--c:${a.c}"><span class="ico">${ICON[a.id]}</span><b>${a.name}</b><small>${a.desc}</small><span class="ak">${a.ak}</span>${starHtml(data.stars[a.id]||0)}</button>`).join("");
+  show("home");}
+$("areas").onclick=e=>{const b=e.target.closest("[data-a]");if(b)start(AREAS.find(a=>a.id===b.dataset.a));};
+
+/* ---------- Uppläsning ---------- */
+let svVoice=null;function loadVoices(){try{svVoice=speechSynthesis.getVoices().find(v=>/^sv/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+let toastT;function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600);}
+function speak(text){if(!("speechSynthesis" in window))return toast("Uppläsning fungerar inte i den här webbläsaren.");loadVoices();
+  if(!svVoice&&speechSynthesis.getVoices().length)return toast("Den här datorn har ingen svensk röst för uppläsning.");
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="sv-SE";if(svVoice)u.voice=svVoice;u.rate=.9;speechSynthesis.speak(u);}
+$("spk").onclick=()=>{if(G&&G.t)speak(G.t.speak);};
+
+/* ---------- Spelet ---------- */
+const ROUND=10;let G=null;
+function start(area){G={area,n:ROUND,i:-1,missed:0,pending:[]};show("game");next();}
+function next(){
+  G.i++;if(G.i>=G.n)return finish();
+  let t=null;if(G.pending.length&&G.pending[0].at<=G.i)t=G.pending.shift().t;
+  if(!t){for(let k=0;k<6;k++){t=G.area.gen();if(t.instr+t.answer!==G.lastKey)break;}}
+  G.lastKey=t.instr+t.answer;G.t=t;G.first=true;G.input="";G.busy=false;
+  if("speechSynthesis" in window)speechSynthesis.cancel();
+  $("info").textContent=`${G.i+1} av ${G.n}`;$("prog").style.width=(G.i/G.n*100)+"%";
+  $("instr").textContent=t.instr;$("feedback").textContent="";$("task").className="task";$("help").hidden=true;$("task").hidden=false;
+  render();
+}
+function render(){
+  const t=G.t,c=$("content");$("pad").hidden=t.kind!=="keys";
+  if(t.kind==="opts"){
+    c.innerHTML=t.html+`<div class="opts${t.emo?" emo":""}${t.pics?" pics":""}">${t.options.map((o,i)=>`<button data-o="${o}">${t.labels?t.labels[i]:o}</button>`).join("")}</div>`;
+    c.querySelectorAll(".opts button").forEach(b=>b.onclick=()=>{if(G.busy)return;if(b.dataset.o===String(t.answer)){b.classList.add("right");done();}else{b.classList.add("bad");wrong(b.dataset.o,t.labels?b.innerHTML:null);}});
+  }else if(t.kind==="keys"){
+    c.innerHTML=t.html+`<div><span class="box1" id="box">?</span>${t.unit?` <b>${t.unit}</b>`:""}</div>`;
+  }else if(t.kind==="tap"){
+    c.innerHTML=`<div class="tapgrid">${t.items.map((p,i)=>`<button class="tapit" data-i="${i}">${p}</button>`).join("")}</div><button class="go" id="done">Klar</button>`;
+    c.querySelectorAll(".tapit").forEach(b=>b.onclick=()=>{if(!G.busy)b.classList.toggle("sel");});
+    $("done").onclick=()=>{if(G.busy)return;const sel=[...c.querySelectorAll(".tapit.sel")].map(b=>+b.dataset.i);
+      const ok=sel.length===t.correct.length&&t.correct.every(i=>sel.includes(i));ok?done():wrong(sel.length?`${sel.length} former`:"ingen form");};
+  }else{
+    G.state=new Set();const draw=()=>{c.innerHTML=t.grid(G.state,false)+`<button class="go" id="done">Klar</button>`;
+      c.querySelectorAll("i.tap").forEach(el=>el.onclick=()=>{if(G.busy)return;const k=el.dataset.k;G.state.has(k)?G.state.delete(k):G.state.add(k);draw();});
+      $("done").onclick=()=>{if(G.busy)return;const ok=G.state.size===t.want.size&&[...t.want].every(k=>G.state.has(k));ok?done():wrong("din spegling");};};
+    draw();
+  }
+}
+function press(k){if(!G||G.busy||G.t.kind!=="keys")return;if(k==="del")G.input=G.input.slice(0,-1);else if(k==="ok"){if(G.input!==""){+G.input===G.t.answer?done():wrong(G.input);}return;}else if(G.input.length<3)G.input+=k;$("box").textContent=G.input||"?";}
+document.querySelectorAll("#pad button").forEach(b=>b.onclick=()=>press(b.dataset.k));
+document.addEventListener("keydown",e=>{if($("game").hidden||!G)return;if(!$("help").hidden){if(e.key==="Enter"){e.preventDefault();$("helpGo").click();}return;}
+  if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==="Backspace"){e.preventDefault();press("del");}else if(e.key==="Enter"){e.preventDefault();press("ok");}});
+const PRAISE=["Rätt!","Snyggt!","Bra!","Toppen!","Klockrent!"];
+function done(){G.busy=true;window.Ljud&&Ljud.ok();$("task").className="task ok";$("feedback").textContent=G.first?pickOne(PRAISE):"Nu blev det rätt!";setTimeout(next,900);}
+function wrong(given,givenHTML){
+  G.busy=true;window.Ljud&&Ljud.bad();if(G.first)G.missed++;G.first=false;
+  const hp=G.t.help(G.state);
+  $("helpSaid").innerHTML=givenHTML?`Du svarade <span style="display:inline-block;width:32px;vertical-align:middle">${givenHTML}</span>. Så här är det:`:`Du svarade: ${given}. Så här är det:`;
+  $("helpVis").innerHTML=hp.vis;$("helpTip").textContent="Tips: "+hp.tip;
+  setTimeout(()=>{$("task").hidden=true;$("pad").hidden=true;$("help").hidden=false;$("helpGo").focus({preventScroll:true});},450);
+}
+$("helpGo").onclick=()=>{G.pending.push({t:G.t,at:G.i+3});G.n++;next();};
+$("quit").onclick=openHome;
+
+function finish(){
+  const right=Math.max(0,ROUND-G.missed),st=right===ROUND?3:right>=ROUND-2?2:1,id=G.area.id;
+  if(st>(data.stars[id]||0)){data.stars[id]=st;save();}
+  $("rTitle").textContent=st===3?"Alla rätt direkt!":st===2?"Bra jobbat!":"Klart!";
+  $("rBig").innerHTML=starHtml(st);$("rSub").textContent=`${right} av ${ROUND} rätt på första försöket.`;
+  show("result");if(st===3){window.Ljud&&Ljud.fanfare();confetti();}
+}
+$("rAgain").onclick=()=>start(G.area);$("rHome").onclick=openHome;
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const c=$("fx"),x=c.getContext("2d"),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);c.hidden=false;
+  const P=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*120,y:H*.3,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+5,c:pickOne(COLS),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  const t0=performance.now();(function f(now){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+    if(now-t0<2800)requestAnimationFrame(f);else{x.clearRect(0,0,W,H);c.hidden=true;}})(t0);
+}
+openHome();
+</script>
+</body>
+</html>
